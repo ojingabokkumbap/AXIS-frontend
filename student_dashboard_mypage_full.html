@@ -1,0 +1,438 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{display:flex;gap:0;min-height:700px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.sidebar{width:180px;flex-shrink:0;background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);padding:16px 0}
+.sb-user{padding:12px 16px 16px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:8px}
+.sb-avatar{width:36px;height:36px;border-radius:50%;background:#185FA5;color:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;margin-bottom:8px}
+.sb-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.sb-email{font-size:11px;color:var(--color-text-secondary)}
+.sb-item{padding:9px 16px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);display:flex;align-items:center;gap:8px;border-left:2px solid transparent}
+.sb-item:hover{background:var(--color-background-primary);color:var(--color-text-primary)}
+.sb-item.active{background:var(--color-background-primary);color:#185FA5;border-left-color:#185FA5;font-weight:500}
+.sb-dot{width:6px;height:6px;border-radius:50%;background:#E24B4A;margin-left:auto}
+.sb-section{font-size:10px;color:var(--color-text-tertiary);padding:12px 16px 4px;letter-spacing:0.5px}
+.content{flex:1;padding:20px;overflow:auto;min-width:0}
+.section{display:none}
+.section.active{display:block}
+.sec-title{font-size:16px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.sec-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:16px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px;margin-bottom:10px}
+.card-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.card-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:500}
+.b-green{background:#EAF3DE;color:#3B6D11}
+.b-orange{background:#FAEEDA;color:#854F0B}
+.b-red{background:#FCEBEB;color:#A32D2D}
+.b-blue{background:#E6F1FB;color:#185FA5}
+.b-gray{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.row{display:flex;align-items:center;gap:8px;padding:9px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px;color:var(--color-text-secondary)}
+.row:last-child{border-bottom:none}
+.row-main{flex:1;color:var(--color-text-primary)}
+.btn{padding:5px 12px;border-radius:4px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.btn-primary{background:#185FA5;border-color:#185FA5;color:#E6F1FB}
+.btn-danger{background:#FCEBEB;border-color:#F7C1C1;color:#A32D2D}
+.btn-green{background:#EAF3DE;border-color:#C0DD97;color:#3B6D11}
+.btn-orange{background:#FAEEDA;border-color:#FAC775;color:#854F0B}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.stat-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px}
+.stat-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.stat-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.stat-val span{font-size:11px;font-weight:400;color:var(--color-text-secondary);margin-left:4px}
+.detail-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.detail-row:last-child{border-bottom:none}
+.dl{color:var(--color-text-secondary)}
+.dr{color:var(--color-text-primary);font-weight:500}
+.step-bar{display:flex;align-items:center;gap:0;margin-bottom:16px}
+.step{display:flex;align-items:center;gap:6px;font-size:11px}
+.step-num{width:20px;height:20px;border-radius:50%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--color-text-secondary)}
+.step-num.done{background:#185FA5;border-color:#185FA5;color:#E6F1FB}
+.step-num.active{background:#FAEEDA;border-color:#FAC775;color:#854F0B}
+.step-line{flex:1;height:0.5px;background:var(--color-border-secondary);margin:0 6px}
+.inq-item{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px}
+.inq-hd{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.inq-title{font-size:13px;font-weight:500;flex:1;color:var(--color-text-primary)}
+.inq-body{font-size:12px;color:var(--color-text-secondary);margin-bottom:6px}
+.inq-reply{background:var(--color-background-secondary);border-radius:4px;padding:8px;font-size:12px;color:var(--color-text-secondary);border-left:2px solid #185FA5}
+.cert-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.cert-icon{width:44px;height:44px;border-radius:var(--border-radius-md);background:#E6F1FB;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cert-info{flex:1}
+.cert-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.cert-meta{font-size:11px;color:var(--color-text-secondary)}
+.cert-actions{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.demo-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:16px;margin-bottom:10px}
+.demo-hd{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.demo-icon{width:40px;height:40px;border-radius:var(--border-radius-md);display:flex;align-items:center;justify-content:center;font-size:16px}
+.demo-axis{background:#E6F1FB}
+.demo-axisc{background:#EAF3DE}
+.demo-axish{background:#EEEDFE}
+.demo-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.demo-desc{font-size:12px;color:var(--color-text-secondary)}
+.demo-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.tag{display:inline-flex;padding:2px 8px;border-radius:3px;font-size:10px;background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.notice-banner{background:#E6F1FB;border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:#185FA5;margin-bottom:12px;display:flex;gap:8px;align-items:center}
+.partial-banner{background:#FAEEDA;border-radius:var(--border-radius-md);padding:10px 14px;font-size:12px;color:#854F0B;margin-bottom:12px}
+.score-bar-wrap{margin:6px 0}
+.score-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.score-bar{height:6px;background:var(--color-background-secondary);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;background:#185FA5}
+.score-fill.fail{background:#E24B4A}
+.score-fill.pass{background:#639922}
+</style>
+
+<h2 class="sr-only">AXIS student dashboard — My Page with full section details</h2>
+
+<div class="wrap">
+  <div class="sidebar">
+    <div class="sb-user">
+      <div class="sb-avatar">KJ</div>
+      <div class="sb-name">Kim Jiyeon</div>
+      <div class="sb-email">kim@example.com</div>
+    </div>
+    <div class="sb-section">EXAM</div>
+    <div class="sb-item active" onclick="show('registrations',this)">Registrations</div>
+    <div class="sb-item" onclick="show('schedule',this)">My Schedule</div>
+    <div class="sb-item" onclick="show('taken',this)">Exam History</div>
+    <div class="sb-item" onclick="show('demo',this)">Demo / Free Trial</div>
+    <div class="sb-section">RESULTS</div>
+    <div class="sb-item" onclick="show('scores',this)">Score Lookup</div>
+    <div class="sb-item" onclick="show('partial',this)">Partial Pass Status</div>
+    <div class="sb-item" onclick="show('certs',this)">Certificates</div>
+    <div class="sb-section">SUPPORT</div>
+    <div class="sb-item" onclick="show('inquiry',this)">1:1 Inquiry<div class="sb-dot"></div></div>
+    <div class="sb-item" onclick="show('alerts',this)">Alerts & Notices</div>
+    <div class="sb-section">ACCOUNT</div>
+    <div class="sb-item" onclick="show('profile',this)">Edit Profile</div>
+  </div>
+
+  <div class="content">
+
+    <div class="section active" id="sec-registrations">
+      <div class="sec-title">Registrations & Exam Voucher</div>
+      <div class="sec-sub">Manage your registered exams, payments, and admission tickets</div>
+      <div class="grid2">
+        <div class="stat-card"><div class="stat-label">Total Registered</div><div class="stat-val">3<span>exams</span></div></div>
+        <div class="stat-card"><div class="stat-label">Awaiting Payment</div><div class="stat-val">1<span>pending</span></div></div>
+      </div>
+      <div class="card">
+        <div class="row">
+          <span class="badge b-green">Confirmed</span>
+          <span class="row-main">AXIS L3 Starter · Session 1 · 2026.09.05 (Sat) 10:00</span>
+          <button class="btn btn-primary">Print Voucher</button>
+          <button class="btn btn-danger">Cancel</button>
+        </div>
+        <div class="row">
+          <span class="badge b-orange">Payment Pending</span>
+          <span class="row-main">AXIS L2 Practitioner · Session 1 · 2026.09.06 (Sun) 14:00</span>
+          <button class="btn btn-orange">Pay Now</button>
+          <button class="btn btn-danger">Cancel</button>
+        </div>
+        <div class="row">
+          <span class="badge b-red">Cancelled</span>
+          <span class="row-main">AXIS-C L3 · Session 2 · 2026.08.10 — Refunded KRW 60,000</span>
+          <button class="btn">Receipt</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px">Payment Details — AXIS L2 (Pending)</div>
+        <div class="detail-row"><span class="dl">Amount Due</span><span class="dr">KRW 120,000</span></div>
+        <div class="detail-row"><span class="dl">Payment Methods</span><span class="dr">Card · Bank Transfer · KakaoPay · NaverPay · Toss</span></div>
+        <div class="detail-row"><span class="dl">Deadline</span><span class="dr">2026.08.20 23:59 (Registration closes)</span></div>
+        <div class="detail-row"><span class="dl">Refund Policy</span><span class="dr">Full refund before D-10 · 50% before D-5 · None after</span></div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn btn-primary" style="flex:1">Pay Now — KRW 120,000</button>
+          <button class="btn">View Refund Policy</button>
+        </div>
+      </div>
+      <div class="notice-banner">Exam Voucher (admission ticket) can be printed up to 1 day before the exam date.</div>
+    </div>
+
+    <div class="section" id="sec-schedule">
+      <div class="sec-title">My Upcoming Exam Schedule</div>
+      <div class="sec-sub">Registered exams and open session alerts you have set</div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">Confirmed Exams</span><button class="btn btn-primary">+ Register New Exam</button></div>
+        <div class="row">
+          <span class="badge b-blue">D-40</span>
+          <span class="row-main"><strong>AXIS L3</strong> · Session 1 · 2026.09.05 10:00 · Online (Proctored)</span>
+          <button class="btn">Voucher</button>
+          <button class="btn btn-primary">Enter Exam</button>
+        </div>
+        <div class="row">
+          <span class="badge b-gray">D-41</span>
+          <span class="row-main"><strong>AXIS L2</strong> · Session 1 · 2026.09.06 14:00 · Online (Proctored)</span>
+          <span style="font-size:11px;color:#854F0B">Pay First</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px">Session Alerts I Set</div>
+        <div class="row">
+          <span class="badge b-purple">Alert ON</span>
+          <span class="row-main">AXIS-H L3 · Session 2 (Registration opens 2026.09.15)</span>
+          <button class="btn btn-danger">Cancel Alert</button>
+        </div>
+        <div class="row">
+          <span class="badge b-purple">Alert ON</span>
+          <span class="row-main">AXIS-C L2 · Session 1 (Registration opens 2026.10.01)</span>
+          <button class="btn btn-danger">Cancel Alert</button>
+        </div>
+        <div style="margin-top:10px"><button class="btn" style="width:100%">+ Browse All Sessions & Set Alert</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px">Exam Environment Checklist</div>
+        <div class="detail-row"><span class="dl">Device</span><span class="dr">PC / laptop required (mobile not supported)</span></div>
+        <div class="detail-row"><span class="dl">Browser</span><span class="dr">Chrome 90+ (latest recommended)</span></div>
+        <div class="detail-row"><span class="dl">Camera & Mic</span><span class="dr">Required — AI proctoring system</span></div>
+        <div class="detail-row"><span class="dl">Entry Window</span><span class="dr">Opens 30 min before exam, closes 10 min after start</span></div>
+        <div style="margin-top:10px"><button class="btn btn-green" style="width:100%">Full Environment Check Guide</button></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-taken">
+      <div class="sec-title">Exam History</div>
+      <div class="sec-sub">All exams you have taken, with results and detailed scores</div>
+      <div class="grid2">
+        <div class="stat-card"><div class="stat-label">Total Attempts</div><div class="stat-val">4</div></div>
+        <div class="stat-card"><div class="stat-label">Passed</div><div class="stat-val">2<span>/ 4</span></div></div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">AXIS L3 Starter · Session 2 · 2026.03.15</span>
+          <span class="badge b-green">Pass</span>
+        </div>
+        <div class="detail-row"><span class="dl">Total Score</span><span class="dr">82 / 100</span></div>
+        <div class="detail-row"><span class="dl">AI Fundamentals (Subj 1)</span><span class="dr">44/50 · Pass</span></div>
+        <div class="detail-row"><span class="dl">AI Tools & Ethics (Subj 2)</span><span class="dr">38/50 · Pass</span></div>
+        <div style="margin-top:8px">
+          <div class="score-bar-wrap">
+            <div class="score-bar-label"><span>Total</span><span>82%</span></div>
+            <div class="score-bar"><div class="score-fill pass" style="width:82%"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn btn-primary">Download Certificate</button>
+          <button class="btn">Confirmation PDF</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd">
+          <span class="card-title">AXIS L2 Practitioner · Session 1 · 2025.09.10</span>
+          <span class="badge b-orange">Partial Pass</span>
+        </div>
+        <div class="detail-row"><span class="dl">Written</span><span class="dr">68/100 · Pass</span></div>
+        <div class="detail-row"><span class="dl">Practical</span><span class="dr">52/100 · Fail (min. 60)</span></div>
+        <div class="partial-banner">Written section exempted for 1 attempt within 12 months — expires 2026.09.10</div>
+        <div style="margin-top:8px">
+          <div class="score-bar-wrap">
+            <div class="score-bar-label"><span>Written</span><span>68%</span></div>
+            <div class="score-bar"><div class="score-fill" style="width:68%"></div></div>
+          </div>
+          <div class="score-bar-wrap">
+            <div class="score-bar-label"><span>Practical</span><span>52%</span></div>
+            <div class="score-bar"><div class="score-fill fail" style="width:52%"></div></div>
+          </div>
+        </div>
+        <div style="margin-top:10px"><button class="btn btn-orange" style="width:100%">Re-register for Practical Only</button></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-demo">
+      <div class="sec-title">Demo Exam / Free Trial</div>
+      <div class="sec-sub">Try a sample exam before registering — no login or payment required for L3 demo</div>
+      <div class="notice-banner">Demo exams are not scored. They let you experience the real CBT environment and question formats.</div>
+      <div class="demo-card">
+        <div class="demo-hd">
+          <div class="demo-icon demo-axis">A</div>
+          <div><div class="demo-title">AXIS L3 — Free Demo</div><div class="demo-desc">10 sample MCQ questions · 10 minutes · No login needed</div></div>
+          <button class="btn btn-primary">Start Demo</button>
+        </div>
+        <div class="demo-meta">
+          <span class="tag">MCQ only</span><span class="tag">40 min format preview</span><span class="tag">Timer active</span><span class="tag">No proctoring</span>
+        </div>
+        <div class="detail-row"><span class="dl">What you see</span><span class="dr">Real question layout, answer flagging, timer, submission screen</span></div>
+        <div class="detail-row"><span class="dl">What's excluded</span><span class="dr">AI proctoring, webcam, actual scoring, certificate</span></div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-hd">
+          <div class="demo-icon demo-axisc">C</div>
+          <div><div class="demo-title">AXIS-C L3 — Free Demo</div><div class="demo-desc">Sample questions + code sandbox preview · Login required</div></div>
+          <button class="btn btn-green">Start Demo</button>
+        </div>
+        <div class="demo-meta">
+          <span class="tag">MCQ + code sandbox</span><span class="tag">Login required</span><span class="tag">Python / JS sandbox</span>
+        </div>
+        <div class="detail-row"><span class="dl">What you see</span><span class="dr">Code editor, AI-assisted auto-complete preview, run & test panel</span></div>
+        <div class="detail-row"><span class="dl">What's excluded</span><span class="dr">Similarity check, actual grading, proctoring</span></div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-hd">
+          <div class="demo-icon demo-axish">H</div>
+          <div><div class="demo-title">AXIS-H L3 — Free Demo</div><div class="demo-desc">Healthcare AI scenario sample · Login required</div></div>
+          <button class="btn" style="color:#3C3489;border-color:#AFA9EC">Start Demo</button>
+        </div>
+        <div class="demo-meta">
+          <span class="tag">Healthcare scenario</span><span class="tag">Login required</span><span class="tag">EMR context</span>
+        </div>
+        <div class="detail-row"><span class="dl">What you see</span><span class="dr">Medical AI use-case questions, patient data scenario prompts</span></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-scores">
+      <div class="sec-title">Score Lookup</div>
+      <div class="sec-sub">All session results across every certification and level</div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">AXIS L3 · Session 2 · 2026.03.15</span><span class="badge b-green">Pass</span></div>
+        <div class="detail-row"><span class="dl">Written Total</span><span class="dr">82 / 100 (Pass threshold: 60)</span></div>
+        <div class="detail-row"><span class="dl">Subject 1 — AI Fundamentals</span><span class="dr">44 / 50</span></div>
+        <div class="detail-row"><span class="dl">Subject 2 — AI Tools & Ethics</span><span class="dr">38 / 50</span></div>
+        <div class="detail-row"><span class="dl">Subject Min. Rule</span><span class="dr">Both subjects above 40% — OK</span></div>
+        <div class="detail-row"><span class="dl">Result Published</span><span class="dr">2026.03.20 (immediately after written)</span></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">AXIS L2 · Session 1 · 2025.09.10</span><span class="badge b-orange">Partial Pass</span></div>
+        <div class="detail-row"><span class="dl">Written</span><span class="dr">68/100 · Pass</span></div>
+        <div class="detail-row"><span class="dl">Practical</span><span class="dr">52/100 · Fail</span></div>
+        <div class="detail-row"><span class="dl">Practical Result Date</span><span class="dr">2025.09.24 (within 14 days after exam)</span></div>
+        <div class="detail-row"><span class="dl">Score Objection</span><span class="dr"><button class="btn">File Score Appeal</button></span></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-partial">
+      <div class="sec-title">Partial Pass Status</div>
+      <div class="sec-sub">Track your active partial pass exemptions (valid 12 months, 1 re-attempt)</div>
+      <div class="partial-banner">
+        <strong>Active Exemption:</strong> AXIS L2 — Written section passed. You may take Practical only on your next attempt. Expires 2026.09.10.
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">AXIS L2 — Practical Exemption</span><span class="badge b-orange">Active · Expires 2026.09.10</span></div>
+        <div class="detail-row"><span class="dl">Passed Section</span><span class="dr">Written (68/100)</span></div>
+        <div class="detail-row"><span class="dl">Remaining Exemptions</span><span class="dr">1 attempt left</span></div>
+        <div class="detail-row"><span class="dl">Next Attempt Scope</span><span class="dr">Practical section only (Written exempt)</span></div>
+        <div class="detail-row"><span class="dl">Validity</span><span class="dr">12 months from 2025.09.10 — expires 2026.09.10</span></div>
+        <div style="margin-top:10px"><button class="btn btn-orange" style="width:100%">Register for Partial Re-exam (Practical Only)</button></div>
+      </div>
+      <div class="notice-banner">Partial pass applies to L2 and L1 only. L3 has no partial pass — written result is final.</div>
+    </div>
+
+    <div class="section" id="sec-certs">
+      <div class="sec-title">My Certificates</div>
+      <div class="sec-sub">Download PDF, issue digital badge, or request physical copy</div>
+      <div class="cert-card">
+        <div class="cert-icon">A</div>
+        <div class="cert-info">
+          <div class="cert-name">AXIS L3 Starter</div>
+          <div class="cert-meta">Cert No: AXIS-2026-L3-002-0114 · Issued 2026.03.22 · Valid until 2029.03.22</div>
+          <div class="cert-meta" style="margin-top:2px">Issuing org: AiNex Inc. · Renewal via exam or continuing education</div>
+        </div>
+        <div class="cert-actions">
+          <button class="btn btn-primary">PDF Download</button>
+          <button class="btn btn-blue" style="color:#185FA5;border-color:#B5D4F4">Digital Badge</button>
+          <button class="btn">Physical Copy</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:4px">
+        <div class="card-title" style="margin-bottom:8px">Certificate Contents</div>
+        <div class="detail-row"><span class="dl">Holder name</span><span class="dr">Kim Jiyeon</span></div>
+        <div class="detail-row"><span class="dl">Date of birth</span><span class="dr">1993.05.14</span></div>
+        <div class="detail-row"><span class="dl">Certification</span><span class="dr">AXIS L3 Starter (AI Practical Competency)</span></div>
+        <div class="detail-row"><span class="dl">Certificate number</span><span class="dr">AXIS-2026-L3-002-0114</span></div>
+        <div class="detail-row"><span class="dl">Issue date</span><span class="dr">2026.03.22</span></div>
+        <div class="detail-row"><span class="dl">Validity</span><span class="dr">3 years (until 2029.03.22)</span></div>
+      </div>
+      <div class="notice-banner">Physical copy ships with separate shipping fee (TBD). Digital PDF and badge are free.</div>
+    </div>
+
+    <div class="section" id="sec-inquiry">
+      <div class="sec-title">1:1 Inquiry History</div>
+      <div class="sec-sub">Track all support tickets and admin replies</div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:10px"><button class="btn btn-primary">+ New Inquiry</button></div>
+      <div class="inq-item">
+        <div class="inq-hd">
+          <span class="badge b-green">Replied</span>
+          <span class="inq-title">Can I cancel my L2 registration for a full refund?</span>
+          <span style="font-size:11px;color:var(--color-text-secondary)">2026.07.14</span>
+        </div>
+        <div class="inq-body">Category: Registration / Payment · My exam is on 2026.09.06. I registered on 07.10. Is a full refund available?</div>
+        <div class="inq-reply">Admin reply (2026.07.15): Refunds before D-10 of the exam date receive a full refund. Your exam is 09.06, so the full-refund deadline is 08.27. You are eligible for a full refund if cancelled before then.</div>
+      </div>
+      <div class="inq-item">
+        <div class="inq-hd">
+          <span class="badge b-orange">Awaiting Reply</span>
+          <span class="inq-title">Score objection — AXIS L2 Practical (Session 1)</span>
+          <span style="font-size:11px;color:var(--color-text-secondary)">2026.07.20</span>
+        </div>
+        <div class="inq-body">Category: Score / Results · I believe my practical deliverable score (52pts) is lower than expected based on the rubric. Requesting review with attached PDF.</div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:4px">Attachment: practical_submission_proof.pdf</div>
+      </div>
+      <div class="inq-item">
+        <div class="inq-hd">
+          <span class="badge b-green">Replied</span>
+          <span class="inq-title">L1 eligibility — can I use AiNexEdu course completion?</span>
+          <span style="font-size:11px;color:var(--color-text-secondary)">2026.06.05</span>
+        </div>
+        <div class="inq-body">Category: Certification Guide · I completed the AiNex Edu L2 course. Does this qualify as an L1 eligibility document?</div>
+        <div class="inq-reply">Admin reply (2026.06.06): Yes — an AiNexEdu designated course completion certificate is an accepted L1 eligibility document. Please upload it during Step 3 of the registration flow.</div>
+      </div>
+      <div class="notice-banner">Inquiry categories: Registration · Payment · Score/Results · Certification · System/Technical · Other</div>
+    </div>
+
+    <div class="section" id="sec-alerts">
+      <div class="sec-title">Alerts & Notices</div>
+      <div class="sec-sub">Session open alerts, result announcements, and system notices</div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">My Session Alerts</span><button class="btn">+ Add Alert</button></div>
+        <div class="row"><span class="badge b-purple">On</span><span class="row-main">AXIS-H L3 · Session 2 opens 2026.09.15</span><button class="btn btn-danger">Remove</button></div>
+        <div class="row"><span class="badge b-purple">On</span><span class="row-main">AXIS-C L2 · Session 1 opens 2026.10.01</span><button class="btn btn-danger">Remove</button></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">System Notifications</span></div>
+        <div class="row"><span class="badge b-green">New</span><span class="row-main">AXIS L2 Session 1 results published — check Score Lookup</span><span style="font-size:11px;color:var(--color-text-secondary)">07.20</span></div>
+        <div class="row"><span class="badge b-blue">Info</span><span class="row-main">Your AXIS L3 exam voucher is ready to print (exam: 09.05)</span><span style="font-size:11px;color:var(--color-text-secondary)">07.18</span></div>
+        <div class="row"><span class="badge b-gray">Read</span><span class="row-main">Payment confirmed — AXIS L3 Session 1 registration complete</span><span style="font-size:11px;color:var(--color-text-secondary)">07.01</span></div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><span class="card-title">Notification Settings</span></div>
+        <div class="detail-row"><span class="dl">Email alerts</span><span class="dr"><button class="btn btn-green">On</button></span></div>
+        <div class="detail-row"><span class="dl">SMS alerts</span><span class="dr"><button class="btn">Off</button></span></div>
+        <div class="detail-row"><span class="dl">Result announcements</span><span class="dr"><button class="btn btn-green">On</button></span></div>
+        <div class="detail-row"><span class="dl">Marketing / promotions</span><span class="dr"><button class="btn">Off</button></span></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-profile">
+      <div class="sec-title">Edit Profile</div>
+      <div class="sec-sub">Update your contact info, password, and account settings</div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px">Personal Info</div>
+        <div class="detail-row"><span class="dl">Name</span><span class="dr">Kim Jiyeon <span style="font-size:11px;color:var(--color-text-secondary)">(contact Support to change)</span></span></div>
+        <div class="detail-row"><span class="dl">Date of birth</span><span class="dr">1993.05.14 <span style="font-size:11px;color:var(--color-text-secondary)">(contact Support to change)</span></span></div>
+        <div class="detail-row"><span class="dl">Email (ID)</span><span class="dr">kim@example.com <button class="btn" style="margin-left:8px">Change</button></span></div>
+        <div class="detail-row"><span class="dl">Phone</span><span class="dr">010-****-5678 <button class="btn" style="margin-left:8px">Change</button></span></div>
+        <div class="detail-row"><span class="dl">Password</span><span class="dr"><button class="btn">Change Password</button></span></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:10px">Linked Accounts</div>
+        <div class="detail-row"><span class="dl">Kakao</span><span class="dr"><span class="badge b-gray">Not linked</span> <button class="btn" style="margin-left:8px">Link</button></span></div>
+        <div class="detail-row"><span class="dl">Naver</span><span class="dr"><span class="badge b-green">Linked</span> <button class="btn btn-danger" style="margin-left:8px">Unlink</button></span></div>
+        <div class="detail-row"><span class="dl">Google</span><span class="dr"><span class="badge b-gray">Not linked</span> <button class="btn" style="margin-left:8px">Link</button></span></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="margin-bottom:8px">Danger Zone</div>
+        <div class="detail-row"><span class="dl" style="color:var(--color-text-secondary);font-size:12px">All exam history, scores, and certificates will be permanently deleted. This action cannot be undone.</span></div>
+        <div style="margin-top:10px"><button class="btn btn-danger">Delete My Account</button></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function show(id, el){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  el.classList.add('active');
+}
+</script>

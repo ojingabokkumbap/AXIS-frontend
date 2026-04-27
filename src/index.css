@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Primary */
+  --color-primary: #0B1D3A;
+  --color-accent: #0077B6;
+  --color-accent-light: #00B4D8;
+
+  /* Neutrals */
+  --color-gray: #6B7280;
+  --color-gray-text: #4B5563;
+  --color-gray-light: #F5F7FA;
+  --color-gray-border: #E2E8F0;
+
+  /* Series */
+  --color-axis-blue: #2563EB;
+  --color-axis-green: #16A34A;
+  --color-axis-purple: #7C3AED;
+
+  /* Semantic */
+  --color-warning: #F59E0B;
+  --color-danger: #EF4444;
+  --color-success: #0D9488;
+
+  /* Font */
+  --font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Base reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-gray-text);
+  background-color: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-axis-blue);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
