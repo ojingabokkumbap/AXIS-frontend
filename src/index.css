@@ -1,51 +1,264 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
-@theme {
-  /* Primary */
-  --color-primary: #0B1D3A;
-  --color-accent: #0077B6;
-  --color-accent-light: #00B4D8;
+/* CBT 러너 다크모드: [data-theme="dark"] 조상 아래에서 dark: 유틸리티 활성화.
+   대부분의 색은 .exam-root 시맨틱 변수로 처리하고, dark:는 예외 케이스 탈출구. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-  /* Neutrals */
-  --color-gray: #6B7280;
-  --color-gray-text: #4B5563;
-  --color-gray-light: #F5F7FA;
-  --color-gray-border: #E2E8F0;
-
-  /* Series */
-  --color-axis-blue: #2563EB;
-  --color-axis-green: #16A34A;
-  --color-axis-purple: #7C3AED;
-
-  /* Semantic */
-  --color-warning: #F59E0B;
-  --color-danger: #EF4444;
-  --color-success: #0D9488;
-
-  /* Font */
-  --font-sans: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+/* ── Pretendard ── */
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Thin.woff2') format('woff2');
+  font-weight: 100;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraLight.woff2') format('woff2');
+  font-weight: 200;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-ExtraBold.woff2') format('woff2');
+  font-weight: 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/pretendard@1.0/Pretendard-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-display: swap;
 }
 
-/* Base reset */
+@theme {
+  /* ── New DS v1.1 tokens ── */
+  --color-ink: #0A0E1A;
+  --color-body: #4B5563;
+  --color-muted: #8B95B0;
+  --color-light: #B0B8CC;
+  --color-faint: #D1D5DB;
+  --color-border: #E0E4ED;
+  --color-surface: #F3F5F9;
+  --color-bg: #F9FAFB;
+  --color-footer-bg: #060A14;
+
+  /* Accent */
+  --color-blue: #0066FF;
+  --color-blue-hover: #0052CC;
+
+  /* Semantic — text only */
+  --color-status-open: #0066FF;
+  --color-status-upcoming: #8B95B0;
+  --color-status-closed: #D1D5DB;
+  --color-status-success: #059669;
+  --color-status-grading: #D97706;
+  --color-status-danger: #DC2626;
+
+  /* Cert accent — 2px left rule only */
+  --color-cert-axis: #0066FF;
+  --color-cert-axis-c: #059669;
+  --color-cert-axis-h: #7C3AED;
+
+  /* CBT dark theme */
+  --color-cbt-bg: #0F1724;
+  --color-cbt-surface: #0B1220;
+  --color-cbt-border: rgba(255, 255, 255, 0.08);
+  --color-cbt-text: #F1F5F9;
+  --color-cbt-text-muted: rgba(255, 255, 255, 0.55);
+  --color-cbt-accent: #00B4D8;
+
+  /* Typography */
+  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+  --font-en: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Layout */
+  --spacing-content-w: 1280px;
+  --spacing-max-w: 1280px;
+  --spacing-gnb-h: 68px;
+
+  /* Radius */
+  --radius-default: 8px;
+  --radius-lg: 14px;
+}
+
+/* ── CBT 러너 시맨틱 색 토큰 ──
+   exam 러너(ExamRunnerPage)는 .exam-root 컨테이너에 data-theme="light|dark"를
+   달고, 내부 색은 전부 아래 --exam-* 변수를 거친다. 토큰(tokens.ts)과 인라인
+   className 모두 var(--exam-*)를 참조하므로, 테마 전환은 이 attribute 한 줄로 끝.
+   다크 값은 위 @theme의 --color-cbt-* 팔레트를 재사용. */
+.exam-root {
+  --exam-bg: #F8FAFC;          /* 페이지 배경 */
+  --exam-surface: #FFFFFF;     /* 카드 / 헤더 / 푸터 / 팝오버 */
+  --exam-surface-2: #F8FAFC;   /* 살짝 들뜬 면 (hover, 화살표, 팝오버 헤더) */
+  --exam-border: #E5E7EB;      /* 보더 / 구분선 */
+  --exam-text: #0F172A;        /* 본문 강조 텍스트 (ink) */
+  --exam-text-body: #475569;   /* 본문 보통 */
+  --exam-text-muted: #64748B;  /* 라벨 / 옅은 텍스트 */
+  --exam-text-helper: #6B7280; /* 헬프 / placeholder */
+  --exam-accent: #2563EB;      /* 브랜드 파랑 */
+  --exam-accent-hover: #1D4ED8;
+  --exam-accent-bg: #EFF6FF;   /* 활성 탭 / 아이콘 배경 */
+  --exam-accent-text: #1D4ED8; /* 활성 탭 텍스트 */
+  --exam-header: #2563EB;      /* 상단 헤더 바 (ExamPageHeader) — 라이트는 브랜드 블루 */
+  /* 스크롤바 등장/소멸 시 레이아웃 점프 완화 */
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  /* Firefox 라이트 스크롤바 */
+  scrollbar-color: #94A3B8 var(--exam-bg);
+}
+/* 테마 전환 동안 라이브 DOM 의 모든 트랜지션 정지 → 색이 한 번에 즉시 스왑(버벅임 방지).
+   페이드는 아래 View Transitions 크로스페이드가 담당한다.
+   handleThemeChange 가 전환 동안만 이 클래스를 붙였다 뗀다. */
+.exam-root.theme-switching,
+.exam-root.theme-switching * {
+  transition: none !important;
+}
+
+/* exam 테마 전환 부드러운 크로스페이드 (View Transitions API).
+   document.startViewTransition 은 handleThemeChange(테마 토글)에서만 호출하므로
+   이 규칙은 사실상 테마 전환에만 적용된다. 화면 전체를 스냅샷 떠 old→new 를
+   GPU 합성으로 페이드하므로 DOM 노드 수와 무관하게 비용이 일정하다. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.3s;
+  animation-timing-function: ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+.exam-root[data-theme="dark"] {
+  --exam-bg: var(--color-cbt-bg);            /* #0F1724 */
+  --exam-surface: var(--color-cbt-surface);  /* #0B1220 */
+  --exam-surface-2: rgba(255, 255, 255, 0.04);
+  --exam-border: var(--color-cbt-border);    /* rgba(255,255,255,.08) */
+  --exam-text: var(--color-cbt-text);        /* #F1F5F9 */
+  --exam-text-body: rgba(255, 255, 255, 0.78);
+  --exam-text-muted: var(--color-cbt-text-muted); /* rgba(255,255,255,.55) */
+  --exam-text-helper: rgba(255, 255, 255, 0.45);
+  --exam-accent: var(--color-cbt-accent);    /* #00B4D8 */
+  --exam-accent-hover: #0096B7;
+  --exam-accent-bg: rgba(0, 180, 216, 0.12);
+  --exam-accent-text: #38D6F0;
+  --exam-header: var(--color-cbt-surface); /* 다크는 어두운 표면 바 (#0B1220) */
+}
+
+/* ── CBT 러너 라이트 스크롤바 ── */
+.exam-root::-webkit-scrollbar,
+.exam-root *::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.exam-root::-webkit-scrollbar-track,
+.exam-root *::-webkit-scrollbar-track {
+  background: var(--exam-bg);
+}
+
+.exam-root::-webkit-scrollbar-thumb,
+.exam-root *::-webkit-scrollbar-thumb {
+  background: #94A3B8;
+  border-radius: 999px;
+  border: 2px solid var(--exam-bg);
+}
+
+.exam-root::-webkit-scrollbar-thumb:hover,
+.exam-root *::-webkit-scrollbar-thumb:hover {
+  background: #64748B;
+}
+
+/* ── CBT 러너 다크 스크롤바 ──
+   다크모드에서 기본(밝은) 스크롤바 대비로 인한 시각적 튐을 줄인다. */
+.exam-root[data-theme="dark"],
+.exam-root[data-theme="dark"] * {
+  scrollbar-color: rgba(148, 163, 184, 0.45) rgba(255, 255, 255, 0.04);
+  scrollbar-width: thin;
+}
+
+.exam-root[data-theme="dark"]::-webkit-scrollbar,
+.exam-root[data-theme="dark"] *::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.exam-root[data-theme="dark"]::-webkit-scrollbar-track,
+.exam-root[data-theme="dark"] *::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.exam-root[data-theme="dark"]::-webkit-scrollbar-thumb,
+.exam-root[data-theme="dark"] *::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45);
+  border-radius: 999px;
+  border: 2px solid transparent;
+}
+
+.exam-root[data-theme="dark"]::-webkit-scrollbar-thumb:hover,
+.exam-root[data-theme="dark"] *::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.65);
+}
+
+/* ── Base reset ── */
 *, *::before, *::after {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.7;
-  color: var(--color-gray-text);
+  font-size: 16.5px;
+  line-height: 1.8;
+  color: var(--color-body);
   background-color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+
 /* Focus visible for accessibility */
 :focus-visible {
-  outline: 2px solid var(--color-axis-blue);
+  outline: 2px solid var(--color-blue);
   outline-offset: 2px;
 }
 
@@ -55,5 +268,220 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ── DS v1.1 shared component classes ── */
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 32px;
+  background: var(--color-blue);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background .2s var(--ease, ease);
+}
+.btn-primary:hover { background: var(--color-blue-hover); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 52px;
+  padding: 0 32px;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-default);
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.btn-secondary:hover { border-color: var(--color-ink); background: var(--color-bg); }
+
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: var(--color-blue);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-text:hover { text-decoration: underline; }
+
+.btn-sm {
+  height: 35px;
+  padding: 0 20px;
+  font-size: 13.5px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+/* Keep login inputs white even when browser autofill is active */
+.login-autofill-input:-webkit-autofill,
+.login-autofill-input:-webkit-autofill:hover,
+.login-autofill-input:-webkit-autofill:focus,
+.login-autofill-input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset !important;
+  -webkit-text-fill-color: #0a0e1a !important;
+  caret-color: #0a0e1a;
+}
+
+.info-box {
+  padding: 20px 24px;
+  border-left: 2px solid var(--color-blue);
+  background: rgba(0,102,255,.04);
+  border-radius: 0 var(--radius-default) var(--radius-default) 0;
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--color-body);
+}
+.info-box.neutral {
+  border-left-color: var(--color-border);
+  background: var(--color-bg);
+}
+.info-box.important {
+  border-left-color: var(--color-status-danger);
+  background: rgba(220,38,38,.03);
+}
+.info-box strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.cert-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  border-left: 2px solid var(--color-border);
+  transition: border-color .25s;
+}
+.cert-card:hover {
+  border-color: var(--color-faint);
+}
+.cert-card.axis { border-left-color: var(--color-cert-axis); }
+.cert-card.axis-c { border-left-color: var(--color-cert-axis-c); }
+.cert-card.axis-h { border-left-color: var(--color-cert-axis-h); }
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15.5px;
+}
+.data-table th {
+  text-align: left;
+  padding: 14px 20px;
+  background: var(--color-bg);
+  color: var(--color-muted);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: .5px;
+  border-bottom: 1px solid var(--color-border);
+}
+.data-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-body);
+  line-height: 1.7;
+}
+.data-table td strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.page-hero {
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  padding: 48px 0 40px;
+  text-align: left;
+}
+.page-hero h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: -.5px;
+  margin-bottom: 8px;
+}
+.page-hero p {
+  font-size: 15.5px;
+  color: var(--color-light);
+}
+
+.page-breadcrumb {
+  font-family: var(--font-en);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-light);
+  letter-spacing: .5px;
+  margin-bottom: 16px;
+}
+.page-breadcrumb a:hover { color: var(--color-blue); }
+
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Animations ── */
+@keyframes fadeZoomIn {
+  from { opacity: 0; transform: scale(0.75); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ── MyPage modal print: layer is a sibling of #root (see index.html) ── */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm;
+  }
+
+  body.mypage-print-active #root {
+    display: none !important;
+  }
+
+  body.mypage-print-active #mypage-print-layer {
+    position: static !important;
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  body.mypage-print-active #mypage-print-layer #mypage-print-region,
+  body.mypage-print-active #mypage-print-layer #mypage-print-region * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body.mypage-print-active #mypage-print-layer .formal-certificate-root,
+  body.mypage-print-active #mypage-print-layer .formal-certificate-root * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

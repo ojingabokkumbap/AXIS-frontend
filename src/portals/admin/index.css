@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+/* ─── AXIS Admin design tokens (lifted from design_handoff_axis_admin/styles.css) ─── */
+:root {
+  --primary: #0F172A;
+  --blue: #2563EB;
+  --blue-50: #EFF6FF;
+  --blue-100: #DBEAFE;
+  --green: #16A34A;
+  --green-50: #F0FDF4;
+  --purple: #7C3AED;
+  --purple-50: #F5F3FF;
+  --teal: #0D9488;
+  --teal-50: #F0FDFA;
+  --accent: #00B4D8;
+  --orange: #F97316;
+  --orange-50: #FFF7ED;
+  --red: #DC2626;
+  --red-50: #FEF2F2;
+  --gray: #64748B;
+  --gray-text: #374151;
+  --gray-light: #F8FAFC;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-border: #d5dee9;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  --white: #FFFFFF;
+
+  /* ─── Image palette (Primary / Secondary / Contents) ─── */
+  /* Primary — Blue */
+  --blue-0: #2865FF;
+  --blue-1: #387CFF;
+  --blue-2: #609FFF;
+  --blue-3: #87B0FF;
+  --blue-4: #CFE0FF;
+  --blue-5: #E7EFFF;
+
+  /* Secondary — Navy */
+  --navy-0: #132650;
+  --navy-1: #2A3B6E;
+  --navy-2: #405289;
+
+  /* Contents — Gray */
+  --content-0: #21293A;
+  --content-1: #333D52;
+  --content-2: #454D5F;
+  --content-3: #50596C;
+  --content-4: #646D80;
+  --content-5: #8B92A1;
+
+  --cbt-bg: #0B1220;
+  --cbt-surface: rgba(255,255,255,0.04);
+  --cbt-surface-2: rgba(255,255,255,0.07);
+  --cbt-border: rgba(255,255,255,0.10);
+  --cbt-text: #F1F5F9;
+  --cbt-text-muted: rgba(241,245,249,0.55);
+
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+  --r-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.05);
+  --shadow-md: 0 2px 4px rgba(15,23,42,0.04), 0 6px 16px rgba(15,23,42,0.06);
+  --shadow-lg: 0 8px 24px rgba(15,23,42,0.10);
+
+  --sidebar-w: 232px;
+  --topbar-h: 56px;
+
+  font-family: 'PyeojinGothic', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; margin: 0; padding: 0; }
+body {
+  background: var(--gray-light);
+  color: var(--gray-text);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+button { font-family: inherit; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+
+.tabular-nums { font-variant-numeric: tabular-nums; }
+.font-mono-axis { font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace; }
+
+/* ─── Tailwind v4 arbitrary value safelist (kept for old pages still using these) ─── */
+@layer utilities {
+  .w-\[220px\]  { width: 220px; }
+  .w-\[232px\]  { width: 232px; }
+  .w-\[120px\]  { width: 120px; }
+  .w-\[96px\]   { width: 96px; }
+  .w-\[48px\]   { width: 48px; }
+  .max-w-\[1480px\] { max-width: 1480px; }
+  .max-w-\[1440px\] { max-width: 1440px; }
+  .min-w-\[240px\]  { min-width: 240px; }
+
+  .text-\[8px\]  { font-size: 8px; }
+  .text-\[9px\]  { font-size: 9px; }
+  .text-\[10px\] { font-size: 10px; }
+  .text-\[11px\] { font-size: 11px; }
+  .text-\[12px\] { font-size: 12px; }
+  .text-\[13px\] { font-size: 13px; }
+  .text-\[14px\] { font-size: 14px; }
+  .text-\[20px\] { font-size: 20px; }
+  .text-\[28px\] { font-size: 28px; line-height: 1.1; }
+
+  .shadow-\[0_1px_2px_rgba\(15\,23\,42\,0\.04\)\] {
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+
+  .-top-12   { top: -3rem; }
+  .-right-12 { right: -3rem; }
+
+  .bg-amber-50\/60   { background-color: rgb(255 251 235 / 0.6); }
+  .bg-amber-50\/40   { background-color: rgb(255 251 235 / 0.4); }
+  .bg-amber-100\/40  { background-color: rgb(254 243 199 / 0.4); }
+  .bg-indigo-100\/40 { background-color: rgb(224 231 255 / 0.4); }
+}
+
+/* ─── Animations ─── */
+@keyframes ping  { 75%, 100% { transform: scale(2); opacity: 0; } }
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes pulse-dot { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(2.4); opacity: 0; } }
+@keyframes axisFadeIn  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes axisSlideIn { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes axisRailPop {
+  0% { transform: scale(0.9); }
+  55% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+.axis-pulse-dot::after {
+  content: ""; position: absolute; inset: -3px; border-radius: 50%;
+  background: var(--red); opacity: 0.35;
+  animation: pulse-dot 1.6s ease-out infinite;
+}
+
+.axis-card {
+  border: 1px solid var(--gray-border);
+  color: var(--cbt-text);
+}
+
+/* ─── Focus ring (a11y) ─── */
+.axis-focus:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}

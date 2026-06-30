@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>영상정보 처리 안내 | AXIS 검정</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0E1A;--body:#4B5563;--muted:#8B95B0;--light:#B0B8CC;--border:#E0E4ED;--bg:#F9FAFB;--white:#FFF;--blue:#0066FF;--warn:#D97706;
+  --font-en:'Outfit',sans-serif;--font-kr:'Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-kr);color:var(--body);background:var(--white);font-size:15px;line-height:1.9}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+.doc{max-width:760px;margin:0 auto;padding:56px 32px 72px}
+.doc-header{border-bottom:2px solid var(--ink);padding-bottom:24px;margin-bottom:32px}
+.doc-label{font-family:var(--font-en);font-size:12px;font-weight:700;letter-spacing:1.8px;color:var(--light);text-transform:uppercase;margin-bottom:10px}
+h1{font-size:30px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1.35;margin-bottom:8px}
+.doc-sub{font-size:14px;color:var(--muted)}
+.legal-notice{border-left:3px solid var(--warn);background:rgba(217,119,6,.045);padding:15px 18px;margin:0 0 32px;font-size:14px;color:var(--body);line-height:1.8}
+.legal-notice strong{color:var(--ink);font-weight:700}
+h2{font-size:17px;font-weight:800;color:var(--ink);margin:38px 0 12px;padding-top:18px;border-top:1px solid var(--border);letter-spacing:-.2px}
+h2:first-of-type{border-top:none;margin-top:0}
+h3{font-size:15px;font-weight:700;color:var(--ink);margin:20px 0 8px}
+p{margin-bottom:10px;color:var(--body)}
+ol,ul{margin:8px 0 14px 22px;color:var(--body)}
+li{margin:4px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:14px;table-layout:auto}
+th{background:var(--bg);color:var(--ink);border:1px solid var(--border);padding:9px 11px;text-align:left;font-weight:700;vertical-align:top}
+td{border:1px solid var(--border);padding:9px 11px;color:var(--body);vertical-align:top;line-height:1.7}
+.doc-end{border-top:1px solid var(--border);margin-top:44px;padding-top:16px;font-size:12px;color:var(--light);text-align:center}
+@media(max-width:767px){.doc{padding:36px 20px 56px}h1{font-size:25px}table{font-size:13px}th,td{padding:8px}}
+@media print{.doc{max-width:none;padding:0}body{font-size:12pt}a{color:inherit;text-decoration:none}}
+</style>
+</head>
+<body>
+<main class="doc">
+  <header class="doc-header">
+    <div class="doc-label">AXIS Policy Document</div>
+    <h1>영상정보 처리 안내</h1>
+    <div class="doc-sub">시행일: 2026년 ○월 ○일</div>
+  </header>
+  
+<div class="legal-notice">
+<strong>법무 검토용 초안</strong><br/>
+  이 문서는 AXIS 온라인 원격검정(CBT) 과정에서 수집되는 영상정보의 처리에 관한 안내 초안입니다. 개인정보보호법, 영상정보처리기기 운영·관리에 관한 가이드라인 등을 검토하여 법무 확정이 필요합니다. ○ 표시된 항목은 법무 검토 후 확정합니다.
+</div>
+<p>㈜아이넥스(이하 "회사")는 AXIS 온라인 원격검정(CBT) 과정에서 시험의 공정성 확보를 위해 영상정보를 수집·이용하고 있으며, 개인정보보호법 등 관련 법령에 따라 이를 안전하게 관리합니다. 이 안내는 영상정보의 수집 항목, 목적, 보관, 이용자 권리 등을 알려드립니다.</p>
+<h2>제1조 (영상정보의 수집 항목 및 목적)</h2>
+<table>
+<tr><th>수집 단계</th><th>수집 항목</th><th>목적</th><th>수집 방식</th></tr>
+<tr>
+<td><strong>신분증 촬영</strong></td>
+<td>신분증 전면 촬영(본인확인용), OCR 인식 결과(성명, 생년월일). <strong>신분증 이미지는 저장하지 않으며</strong>, 본인확인 완료 후 즉시 폐기</td>
+<td>응시자 본인 여부 확인</td>
+<td>응시자가 웹캠 또는 카메라로 직접 촬영</td>
+</tr>
+<tr>
+<td><strong>얼굴 등록 및 대조</strong></td>
+<td>실시간 얼굴 촬영 이미지(DB 저장), 신분증 사진과의 대조 결과(일치/불일치). 시험 중 지속적 얼굴 매칭에 활용</td>
+<td>신분증 소유자와 응시자의 동일인 여부 확인</td>
+<td>웹캠을 통한 실시간 촬영 + AI 대조</td>
+</tr>
+<tr>
+<td><strong>시험 중 모니터링</strong></td>
+<td>웹캠 영상(로컬 실시간 + 10초 주기 서버 전송), 전체 모니터 화면 공유 영상(3초 주기 썸네일, 저장 안 됨), 화면 이탈·시선 이탈·얼굴 불일치·금지 물품·음성 감지 로그, 스트라이크 이벤트 기록</td>
+<td>수검 상태 확인, 부정행위 감지, 시험 무효 판정 근거 확보</td>
+<td>웹캠을 통한 연속 영상 수집 + AI 분석</td>
+</tr>
+</table>
+<p>위 영상정보는 시험의 공정성 확보 및 부정행위 판정 목적으로만 수집·이용되며, 이 외의 목적(마케팅, 프로파일링, 제3자 제공 등)으로 이용되지 않습니다.</p>
+<h2>제2조 (수집 시점 및 동의)</h2>
+<ol>
+<li>영상정보 수집은 CBT 시스템(cbt.axisexam.com)에서 시험 입장 시 시작되고, 시험 종료(답안 제출 또는 시간 만료) 시 종료됩니다.</li>
+<li>응시자는 시험접수 시 영상정보 수집·이용에 대해 동의합니다. 동의 내용에는 수집 항목, 목적, 보관 기간이 포함됩니다.</li>
+<li>영상정보 수집에 동의하지 않는 경우 온라인 원격검정(CBT)에 응시할 수 없습니다.</li>
+<li>시험 입장 직전에 카메라·마이크 접근 권한을 허용해야 하며, 권한을 허용하지 않는 경우 시험 진행이 불가합니다.</li>
+</ol>
+<h2>제3조 (AI 분석의 범위 및 원칙)</h2>
+<ol>
+<li>AXIS 검정의 AI 감독은 <strong>2단계 파이프라인</strong>과 <strong>로컬 감지기</strong>로 구성됩니다.
+    <ul>
+<li><strong>로컬 감지기 (응시자 기기, 실시간):</strong> 응시자의 웹캠에서 얼굴 수, 머리 방향(요/피치/롤), 눈 개방 여부, 시선 방향을 실시간으로 분석합니다. 즉각적인 경고 표시에 활용됩니다.</li>
+<li><strong>1단계 서버 AI (10초 주기):</strong> 웹캠 프레임과 화면 프레임을 서버로 전송하여 금지 물품 감지, 복수 인물 감지, 이상 행동 분석 등을 수행합니다.</li>
+<li><strong>2단계 정밀 검증:</strong> 1단계에서 의심 사안이 감지된 경우, 추가 AI 모델이 정밀 검증하여 오탐을 줄이고 최종 심각도를 판정합니다.</li>
+</ul>
+</li>
+<li>AI 분석의 범위는 다음으로 한정됩니다.
+    <ul>
+<li>응시자 존재 확인 (화면 내 얼굴 감지, 이탈 시 경고)</li>
+<li>시선 추적 (머리 방향, 눈 시선이 화면 밖을 향하는 경우 감지)</li>
+<li>실시간 얼굴 매칭 (입실 시 등록된 기준 얼굴과 지속 비교, 연속 2회 불일치 시 스트라이크)</li>
+<li>복수 인물 감지 (프레임 내 2인 이상)</li>
+<li>금지 물품 감지 (휴대폰, 교재, 스마트워치 등)</li>
+<li>마이크 음성 모니터링 (기준 소음 대비 임계값 초과 시 감지, 마이크 연결 해제 감지)</li>
+<li>전체화면 이탈, 탭 전환, 창 포커스 이탈 감지</li>
+<li>화면 공유 모니터링 (전체 모니터 공유 상태 지속 확인)</li>
+<li>외부 디스플레이 연결 감지 (다중 모니터 차단)</li>
+</ul>
+</li>
+<li><strong>투명성 원칙:</strong> 응시자는 감독 시스템의 작동에 대해 항상 정보를 제공받습니다. 무음 감시는 적용되지 않으며, 마이크 상태 표시, 스트라이크 카운터, 경고 배너가 시험 화면에 항상 표시됩니다. 모든 위반은 즉각적인 시각적 경고(화면 블러, 경고 배너, 모달)로 응시자에게 고지됩니다.</li>
+<li>위반 유형별로 가중치가 부여되며, 총 가중치가 기준에 도달하면 시험이 종료됩니다. 세부 처리 기준은 <a href="/misconduct-policy">부정행위 처리기준</a>에 따릅니다. 위반 발생 시 웹캠 프레임과 화면 프레임이 자동 캡처되어 증거로 보관됩니다.</li>
+<li>AI 분석은 응시자의 감정, 성별, 인종, 건강 상태 등을 판단하지 않으며, 시험 공정성과 무관한 정보는 수집·분석하지 않습니다.</li>
+</ol>
+<h2>제4조 (영상정보의 보관 기간)</h2>
+<table>
+<tr><th>영상 유형</th><th>보관 기간</th><th>파기 시점</th></tr>
+<tr>
+<td>신분증 촬영 이미지</td>
+<td>저장하지 않음</td>
+<td>본인확인 완료 즉시 폐기</td>
+</tr>
+<tr>
+<td>얼굴 대조 이미지</td>
+<td>시험 세션 종료 후 90일</td>
+<td>보관 기간 종료 후 지체 없이 파기</td>
+</tr>
+<tr>
+<td>시험 중 웹캠 영상</td>
+<td>시험 세션 종료 후 90일</td>
+<td>보관 기간 종료 후 지체 없이 파기</td>
+</tr>
+<tr>
+<td>화면 이탈·이상 행동 로그</td>
+<td>시험 세션 종료 후 90일</td>
+<td>보관 기간 종료 후 지체 없이 파기</td>
+</tr>
+<tr>
+<td>부정행위 판정 관련 영상·로그</td>
+<td>해당 처분 확정일로부터 2년</td>
+<td>보관 기간 종료 후 지체 없이 파기</td>
+</tr>
+<tr>
+<td>이의신청 관련 영상·로그</td>
+<td>이의신청 처리 완료일로부터 90일</td>
+<td>보관 기간 종료 후 지체 없이 파기</td>
+</tr>
+</table>
+<div class="legal-notice">
+<strong>법무 확정 필요:</strong> 위 ○ 표시 보관 기간은 개인정보보호법, 영상정보처리기기 운영 지침, 검정 운영규정의 분쟁 대비 기간 등을 종합 검토하여 확정해야 합니다.
+</div>
+<h2>제5조 (영상정보의 열람·확인)</h2>
+<ol>
+<li>응시자는 본인의 영상정보에 대해 열람을 요청할 수 있습니다.</li>
+<li>열람 요청은 <a href="/support/ask">고객센터 1:1 문의</a> 또는 개인정보 보호책임자(privacy@axisexam.com)에게 신청합니다.</li>
+<li>회사는 요청 접수 후 10일 이내에 열람 가능 여부를 통보합니다.</li>
+<li>다음의 경우 열람이 제한될 수 있습니다.
+    <ul>
+<li>보관 기간이 경과하여 이미 파기된 경우</li>
+<li>다른 응시자의 개인정보가 포함되어 있어 분리가 곤란한 경우</li>
+<li>부정행위 조사가 진행 중인 경우 (조사 완료 후 열람 가능)</li>
+<li>법령에 따라 열람이 제한되는 경우</li>
+</ul>
+</li>
+</ol>
+<h2>제6조 (영상정보의 삭제 요청)</h2>
+<ol>
+<li>응시자는 본인의 영상정보 삭제를 요청할 수 있습니다.</li>
+<li>회사는 삭제 요청을 접수한 후, 보관 기간 내라 하더라도 수집 목적이 달성된 경우 지체 없이 삭제합니다.</li>
+<li>다만, 다음의 경우 삭제가 제한될 수 있습니다.
+    <ul>
+<li>성적 확정 전으로, 채점·합격 판정에 영상이 필요한 경우</li>
+<li>부정행위 조사 또는 이의신청이 진행 중인 경우</li>
+<li>법령에 따라 보관이 의무화된 경우</li>
+</ul>
+</li>
+<li>삭제 제한 사유가 해소된 경우 지체 없이 삭제합니다.</li>
+</ol>
+<h2>제7조 (영상정보의 제3자 제공)</h2>
+<ol>
+<li>회사는 원칙적으로 영상정보를 제3자에게 제공하지 않습니다.</li>
+<li>다만, 다음의 경우에는 예외로 합니다.
+    <ul>
+<li>응시자가 사전에 동의한 경우</li>
+<li>법령의 규정에 의하거나, 수사·조사 목적으로 법령에 정해진 절차에 따라 요청이 있는 경우</li>
+</ul>
+</li>
+<li>제3자 제공 시 제공받는 자, 제공 항목, 제공 목적, 보유 기간을 응시자에게 고지합니다.</li>
+</ol>
+<h2>제8조 (안전성 확보 조치)</h2>
+<p>회사는 영상정보의 안전한 관리를 위해 다음과 같은 조치를 취합니다.</p>
+<ol>
+<li><strong>접근 권한 관리:</strong> 영상정보에 접근할 수 있는 담당자를 최소화하고, 접근 권한을 관리합니다.</li>
+<li><strong>접근 기록 보관:</strong> 영상정보에 대한 접근 기록(열람, 다운로드, 삭제 등)을 기록하고 보관합니다.</li>
+<li><strong>전송 구간 암호화:</strong> 영상정보의 수집(응시자 → 서버) 및 전송 구간에 암호화(SSL/TLS)를 적용합니다.</li>
+<li><strong>저장 시 암호화:</strong> 저장된 영상정보는 암호화하여 보관합니다.</li>
+<li><strong>파기 절차:</strong> 보관 기간 경과 후 복구가 불가능한 방법으로 영구 삭제합니다.</li>
+</ol>
+<h2>제9조 (영상정보 처리 관리책임자)</h2>
+<table>
+<tr><td style="width:140px"><strong>성명</strong></td><td>○○○</td></tr>
+<tr><td><strong>직위</strong></td><td>○○○</td></tr>
+<tr><td><strong>연락처</strong></td><td>전화: 1811-9530<br/>이메일: privacy@axisexam.com</td></tr>
+</table>
+<p>영상정보 처리와 관련한 문의, 열람·삭제 요청, 불만 등은 위 관리책임자에게 연락하실 수 있습니다.</p>
+<div class="legal-notice">
+<strong>확정 필요:</strong> 관리책임자의 성명 및 직위는 실제 담당자 정보로 교체해야 합니다.
+</div>
+<h2>제10조 (다른 규정과의 관계)</h2>
+<ol>
+<li>이 안내에서 정하지 않은 개인정보 처리에 관한 사항은 <a href="/privacy">개인정보처리방침</a>에 따릅니다.</li>
+<li>시험 응시 중 부정행위 판정 기준은 <a href="/misconduct-policy">부정행위 처리기준</a>에 따릅니다.</li>
+<li>시험 응시 조건, 무효 처리 기준 등 검정 운영에 관한 사항은 <a href="/exam-policy">검정운영규정</a>에 따릅니다.</li>
+</ol>
+<h2>부칙</h2>
+<p>이 영상정보 처리 안내는 2026년 ○월 ○일부터 시행합니다.</p>
+
+  <div class="doc-end">AXIS 영상정보 처리 안내 · ㈜아이넥스</div>
+</main>
+</body>
+</html>

@@ -1,0 +1,243 @@
+import { useEffect, useState } from 'react';
+import { UserPlus, Loader2, ShieldCheck } from 'lucide-react';
+import {
+  Card,
+  PageHeader,
+  SectionHeader,
+  Button,
+  Input,
+  CertTag,
+  certCodeOf,
+  TableWrap,
+  Table,
+  Th,
+  Td,
+  pushToast,
+} from '@admin/components/shared/ui-kit';
+import { adminApi, type CertType, type ExpertRow, type CreateExpertInput } from '@admin/services/api';
+import { AxiosError } from 'axios';
+
+const CERT_OPTIONS: { value: CertType; label: string; hint: string }[] = [
+  { value: 'AXIS', label: 'AXIS', hint: '일반 업무' },
+  { value: 'AXIS_C', label: 'AXIS-C', hint: '코딩·자동화' },
+  { value: 'AXIS_H', label: 'AXIS-H', hint: '의료기관 비임상' },
+];
+
+const EMPTY_FORM: CreateExpertInput = {
+  userId: '',
+  password: '',
+  name: '',
+  phone: '',
+  email: '',
+  competencies: [],
+};
+
+export default function ExpertsPage() {
+  const [experts, setExperts] = useState<ExpertRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [form, setForm] = useState<CreateExpertInput>(EMPTY_FORM);
+  const [submitting, setSubmitting] = useState(false);
+
+  const load = () => {
+    setLoading(true);
+    adminApi
+      .getExperts()
+      .then((res) => setExperts(res.data))
+      .catch(() => pushToast('채점위원 목록을 불러오지 못했습니다', 'red'))
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(load, []);
+
+  const setField = <K extends keyof CreateExpertInput>(key: K, value: CreateExpertInput[K]) =>
+    setForm((f) => ({ ...f, [key]: value }));
+
+  const toggleCompetency = (ct: CertType) =>
+    setForm((f) => ({
+      ...f,
+      competencies: f.competencies.includes(ct)
+        ? f.competencies.filter((c) => c !== ct)
+        : [...f.competencies, ct],
+    }));
+
+  const canSubmit =
+    form.userId.trim().length >= 4 &&
+    form.password.length >= 8 &&
+    form.name.trim().length >= 1 &&
+    form.phone.replace(/\D/g, '').length >= 9 &&
+    form.competencies.length > 0 &&
+    !submitting;
+
+  const submit = async () => {
+    if (!canSubmit) return;
+    setSubmitting(true);
+    try {
+      const payload: CreateExpertInput = {
+        ...form,
+        email: form.email?.trim() ? form.email.trim() : undefined,
+      };
+      const res = await adminApi.createExpert(payload);
+      pushToast(`채점위원 "${res.data.name}" 계정이 생성되었습니다`, 'green');
+      setForm(EMPTY_FORM);
+      setExperts((prev) => [res.data, ...prev]);
+    } catch (err) {
+      const msg =
+        (err as AxiosError<{ message?: string | string[] }>)?.response?.data?.message;
+      pushToast(
+        Array.isArray(msg) ? msg.join(', ') : msg || '계정 생성에 실패했습니다',
+        'red',
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div>
+      <PageHeader
+        title="채점위원 관리"
+        subtitle="채점위원(EXPERT) 계정을 생성하고 담당 분야를 지정합니다. 코딩 전문가는 코딩 과제만, 의료 전문가는 의료 과제만 채점 큐에서 보게 됩니다."
+      />
+
+      {/* ── Create form ── */}
+      <Card className="mb-6 p-5">
+        <SectionHeader
+          title={
+            <span className="inline-flex items-center gap-2">
+              <UserPlus className="h-4 w-4" /> 채점위원 계정 생성
+            </span>
+          }
+          subtitle="아이디·비밀번호·정보를 직접 지정합니다 (본인인증 불필요)."
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Field label="아이디 *">
+            <Input
+              value={form.userId}
+              onChange={(e) => setField('userId', e.target.value)}
+              placeholder="영문/숫자 4~30자"
+              autoComplete="off"
+            />
+          </Field>
+          <Field label="비밀번호 *">
+            <Input
+              type="password"
+              value={form.password}
+              onChange={(e) => setField('password', e.target.value)}
+              placeholder="8자 이상"
+              autoComplete="new-password"
+            />
+          </Field>
+          <Field label="이름 *">
+            <Input value={form.name} onChange={(e) => setField('name', e.target.value)} placeholder="홍길동" />
+          </Field>
+          <Field label="연락처 *">
+            <Input
+              value={form.phone}
+              onChange={(e) => setField('phone', e.target.value)}
+              placeholder="01012345678"
+            />
+          </Field>
+          <Field label="이메일">
+            <Input
+              type="email"
+              value={form.email ?? ''}
+              onChange={(e) => setField('email', e.target.value)}
+              placeholder="(선택)"
+            />
+          </Field>
+        </div>
+
+        <div className="mt-5">
+          <div className="text-[13px] font-semibold text-[var(--gray-600)] mb-2">담당 분야 * (복수 선택 가능)</div>
+          <div className="flex flex-wrap gap-2.5">
+            {CERT_OPTIONS.map((opt) => {
+              const active = form.competencies.includes(opt.value);
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => toggleCompetency(opt.value)}
+                  className={[
+                    'axis-focus flex items-center gap-2 rounded-lg border px-3 py-2 text-[13px] transition-colors',
+                    active
+                      ? 'border-[var(--blue)] bg-[var(--blue-50)] text-[var(--gray-900)]'
+                      : 'border-[var(--gray-border)] bg-white text-[var(--gray-600)] hover:bg-[var(--gray-50)]',
+                  ].join(' ')}
+                >
+                  <CertTag code={certCodeOf(opt.value)} />
+                  <span className="text-[var(--gray-500)]">{opt.hint}</span>
+                  {active && <ShieldCheck className="h-3.5 w-3.5 text-[var(--blue)]" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="mt-5 flex justify-end">
+          <Button onClick={submit} disabled={!canSubmit}>
+            {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <UserPlus className="h-4 w-4" />}
+            계정 생성
+          </Button>
+        </div>
+      </Card>
+
+      {/* ── Existing experts ── */}
+      <Card className="p-5">
+        <SectionHeader title="채점위원 목록" subtitle={`총 ${experts.length}명`} />
+        {loading ? (
+          <div className="flex items-center justify-center py-12 text-[var(--gray-500)]">
+            <Loader2 className="h-5 w-5 animate-spin" />
+          </div>
+        ) : experts.length === 0 ? (
+          <div className="py-12 text-center text-[var(--gray-500)] text-[14px]">
+            등록된 채점위원이 없습니다.
+          </div>
+        ) : (
+          <TableWrap>
+            <Table>
+              <thead>
+                <tr>
+                  <Th align="left">아이디</Th>
+                  <Th align="left">이름</Th>
+                  <Th align="left">연락처</Th>
+                  <Th>담당 분야</Th>
+                  <Th>상태</Th>
+                  <Th>최근 로그인</Th>
+                </tr>
+              </thead>
+              <tbody>
+                {experts.map((e) => (
+                  <tr key={e.id}>
+                    <Td align="left" mono>{e.userId}</Td>
+                    <Td align="left" strong>{e.name}</Td>
+                    <Td align="left">{e.phone || '—'}</Td>
+                    <Td>
+                      <div className="flex flex-wrap gap-1 justify-center">
+                        {e.competencies.length === 0 ? (
+                          <span className="text-[var(--gray-400)]">미지정</span>
+                        ) : (
+                          e.competencies.map((c) => <CertTag key={c} code={certCodeOf(c)} />)
+                        )}
+                      </div>
+                    </Td>
+                    <Td muted>{e.accountStatus}</Td>
+                    <Td muted>{e.lastLoginAt ? new Date(e.lastLoginAt).toLocaleDateString() : '—'}</Td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </TableWrap>
+        )}
+      </Card>
+    </div>
+  );
+}
+
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="flex flex-col gap-1.5">
+      <span className="text-[13px] font-semibold text-[var(--gray-600)]">{label}</span>
+      {children}
+    </label>
+  );
+}

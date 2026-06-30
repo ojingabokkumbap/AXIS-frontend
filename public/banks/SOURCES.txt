@@ -1,0 +1,13 @@
+Bank marks in this folder are third-party trademarks. Verify licensing with your counsel before production use.
+
+Sources (downloaded 2026-05-15 unless noted):
+- kb.svg — Wikimedia Commons, Special:FilePath/KB_logo.svg
+- shinhan.svg — Wikimedia Commons, Special:FilePath/Shinhan Bank Logo (ENG).svg
+- woori.svg — Wikimedia Commons, Special:FilePath/Logo of Woori Bank.svg
+- ibk.svg — Wikimedia Commons, Special:FilePath/Industrial Bank of Korea Logo.svg
+- nh.svg — Wikimedia Commons, Special:FilePath/Nonghyup financial logo.svg
+- kakao.svg — Wikimedia Commons, Special:FilePath/KakaoBank logo.svg
+- toss.svg — Wikimedia Commons, Special:FilePath/Toss-logo.svg
+- hana.svg — Vector paths from @icongo/bl BLHanabankRect (MIT); see https://github.com/jaywcjlove/icongo
+
+Commons files may require attribution (e.g. CC BY-SA). See each file’s description page on commons.wikimedia.org for license terms.
