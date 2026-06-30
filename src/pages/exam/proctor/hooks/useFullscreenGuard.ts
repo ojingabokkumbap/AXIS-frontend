@@ -95,6 +95,14 @@ export function useFullscreenGuard({
   const LEAVE_STRIKE_COOLDOWN_MS = 1500;
   const lastFsExitAtRef = useRef(0);
   const lastLeaveStrikeAtRef = useRef(0);
+  // Window can briefly blur when Chrome surfaces its own UI (the "you are
+  // sharing your screen" toolbar, permission re-prompts, the screen-share
+  // picker, the Hide/Stop button on that toolbar). Focus snaps back in
+  // ~50–200 ms in those cases. Real Cmd+Tab to another app keeps the page
+  // blurred for seconds. We defer the WINDOW_BLUR strike by this many ms and
+  // cancel it if focus returns first.
+  const BLUR_STRIKE_DEBOUNCE_MS = 1000;
+  const pendingBlurTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // 의도된 풀스크린 exit (예: getDisplayMedia 가 picker 다이얼로그를 띄우면서
   // 강제로 exit 시키는 경우)을 표시해두는 deadline. 이 시각 이전에 발생하는
   // fullscreenchange(false) 는 server 로 FULLSCREEN_EXIT strike 를 보내지
@@ -168,6 +176,10 @@ export function useFullscreenGuard({
     ) => {
       if (terminatedRef.current) return;
       const now = Date.now();
+      // Honour expected-exit windows the same way fullscreenchange does, so
+      // that getDisplayMedia picker / Chrome share-toolbar interactions don't
+      // burn a 2-point WINDOW_BLUR right after we've marked them.
+      if (now < expectedExitUntilRef.current) return;
       if (now - lastFsExitAtRef.current < POST_FS_EXIT_COOLDOWN_MS) return;
       if (now - lastLeaveStrikeAtRef.current < LEAVE_STRIKE_COOLDOWN_MS) return;
       lastLeaveStrikeAtRef.current = now;
@@ -209,7 +221,28 @@ export function useFullscreenGuard({
       // Window blur covers Cmd+Tab to a non-fullscreen app and macOS
       // 3-finger-swipe between fullscreen Spaces — neither of which trips
       // fullscreenchange. Weighted to terminate on the 2nd offence.
-      void reportLeaveStrike('WINDOW_BLUR');
+      //
+      // Defer the strike: Chrome's screen-share toolbar (Hide/Stop button),
+      // permission re-prompts, and the share-picker all blur the window for
+      // ~50–200 ms and immediately return focus. We only want to count blurs
+      // that actually represent the user leaving — focus stays gone past the
+      // debounce window. onFocus clears the pending timer.
+      if (pendingBlurTimerRef.current) {
+        clearTimeout(pendingBlurTimerRef.current);
+      }
+      pendingBlurTimerRef.current = setTimeout(() => {
+        pendingBlurTimerRef.current = null;
+        void reportLeaveStrike('WINDOW_BLUR');
+      }, BLUR_STRIKE_DEBOUNCE_MS);
+    };
+
+    const onFocus = () => {
+      // Focus came back inside the debounce window → not a real leave.
+      // Common cause: clicking Chrome's screen-share toolbar buttons.
+      if (pendingBlurTimerRef.current) {
+        clearTimeout(pendingBlurTimerRef.current);
+        pendingBlurTimerRef.current = null;
+      }
     };
 
     const onBeforeUnload = (e: BeforeUnloadEvent) => {
@@ -238,6 +271,7 @@ export function useFullscreenGuard({
     document.addEventListener('fullscreenchange', onFullscreenChange);
     document.addEventListener('visibilitychange', onVisibility);
     window.addEventListener('blur', onBlur);
+    window.addEventListener('focus', onFocus);
     window.addEventListener('beforeunload', onBeforeUnload);
     window.addEventListener('keydown', onKeyDown, { capture: true });
 
@@ -245,8 +279,13 @@ export function useFullscreenGuard({
       document.removeEventListener('fullscreenchange', onFullscreenChange);
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('blur', onBlur);
+      window.removeEventListener('focus', onFocus);
       window.removeEventListener('beforeunload', onBeforeUnload);
       window.removeEventListener('keydown', onKeyDown, { capture: true } as any);
+      if (pendingBlurTimerRef.current) {
+        clearTimeout(pendingBlurTimerRef.current);
+        pendingBlurTimerRef.current = null;
+      }
     };
   }, [state.active, isFullscreen, reportEvent, reportLeaveStrike, testMode]);
 

@@ -222,6 +222,13 @@ export default function ExamRunnerPage() {
   const [adminPauseReason, setAdminPauseReason] = useState('');
   const pauseAnchorRef = useRef<{ at: number; remainingMs: number } | null>(null);
   const [timeExtendedToast, setTimeExtendedToast] = useState<string | null>(null);
+  // Pre-share environment alerts — shown BEFORE the screen-share gate so the
+  // strike counter never runs while the candidate is still settling in. The
+  // candidate must confirm both that the phone is silenced and that the room
+  // is quiet before they ever click the screen-share button.
+  const [preShareAcknowledged, setPreShareAcknowledged] = useState(false);
+  const [preShareSilenced, setPreShareSilenced] = useState(false);
+  const [preShareQuiet, setPreShareQuiet] = useState(false);
   const paperRef = useRef<Paper | null>(null);
   const paperFetchIdRef = useRef(0);
 
@@ -456,10 +463,22 @@ export default function ExamRunnerPage() {
   // duplicate picker which is confusing and a usability anti-pattern).
   const handleEnterFullscreenAndShare = useCallback(() => {
     if (screenShare.state.status !== 'ACTIVE') {
+      // 같은 사유로 (Chrome picker + 공유 툴바 노출) 15초 흡수.
+      fullscreen.markExpectedExit(15_000);
       void screenShare.start();
     }
     void fullscreen.enterFullscreen();
   }, [fullscreen, screenShare]);
+
+  // Chrome 의 "화면 공유 중" 툴바가 처음 그려질 때 추가로 한 번 blur/focus 가
+  // 튄다. 또한 사용자가 그 툴바의 "숨기기" 버튼을 누르면 같은 패턴이 다시 발생.
+  // 공유 status 가 ACTIVE 로 바뀌는 매 순간 짧은 흡수 창을 다시 깔아 첫 번째
+  // 시나리오를 처리하고, 평소의 blur debounce 로 "숨기기" 클릭을 처리한다.
+  useEffect(() => {
+    if (screenShare.state.status === 'ACTIVE') {
+      fullscreen.markExpectedExit(3_000);
+    }
+  }, [screenShare.state.status, fullscreen]);
   const display = useDisplayMonitor({
     enabled: !!sessionId,
     sessionId,
@@ -836,6 +855,91 @@ export default function ExamRunnerPage() {
       </div>
     );
 
+  /* ───── 환경 점검 게이트 (silence phone / quiet place) ─────
+     이 게이트는 풀스크린/화면공유 게이트보다 먼저 나와야 한다.
+     useFullscreenGuard 의 strike 리스너들은 fullscreen.state.active 가 true
+     로 바뀌는 순간 attach 된다 — 즉 풀스크린 진입 후부터 blur/visibility/
+     beforeunload 가 카운트되기 시작한다. 응시자가 안내문을 읽는 동안
+     휴대폰을 만지거나 알림이 오면 그 사이에 1회 strike 가 잡혀 버린다.
+     그래서 풀스크린 진입 *전* 에 이 게이트로 무음·환경 확인을 먼저 받아
+     부정행위 카운트가 절대 백그라운드에서 굴러가지 않게 한다. */
+  if (!preShareAcknowledged) {
+    const canContinue = preShareSilenced && preShareQuiet;
+    return (
+      <>
+        <ExternalDisplayBlocker
+          state={displayState}
+          onRecheck={display.recheck}
+          onRequestPermission={display.requestPermission}
+        />
+        <div className="h-screen w-screen bg-[#F8FAFC] flex flex-col overflow-hidden">
+          <ExamPageHeader title="시험 환경 점검" hideClock />
+
+          <main className="flex-1 min-h-0 w-full flex flex-col items-center justify-center overflow-hidden">
+            <div className={`w-full ${EXAM.layout.container} ${EXAM.layout.containerPx} ${EXAM.layout.containerPy} h-full flex items-center`}>
+              <section className="w-full h-full flex flex-col justify-center relative">
+                <div className="absolute top-0 right-0 z-10">
+                  <LangToggle />
+                </div>
+
+                <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding} text-center max-w-[clamp(480px,40vw,820px)] mx-auto w-full`}>
+                  <div className="mx-auto w-[clamp(56px,4.5vw,96px)] h-[clamp(56px,4.5vw,96px)] rounded-full bg-[#FFFBEB] flex items-center justify-center mb-[clamp(12px,1vw,24px)]">
+                    <AlertTriangle className={`w-[clamp(26px,2.2vw,44px)] h-[clamp(26px,2.2vw,44px)] ${EXAM.color.warning}`} />
+                  </div>
+                  <h2 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink} mb-[clamp(8px,0.7vw,16px)]`}>
+                    시험을 시작하기 전 확인해 주세요
+                  </h2>
+                  <p className={`${EXAM.text.body} ${EXAM.color.body} mb-[clamp(8px,0.7vw,16px)] leading-relaxed`}>
+                    아래 항목을 모두 확인하셔야 다음 단계 (화면 공유) 로 넘어갈 수 있습니다.
+                    <br />
+                    체크가 완료되기 전까지 부정행위 카운트는 시작되지 않습니다.
+                  </p>
+                  <p className={`${EXAM.text.body} ${EXAM.color.danger} font-semibold mb-[clamp(20px,1.6vw,40px)] leading-relaxed`}>
+                    한 번 시작하면 시험 도중 휴대폰 사용·소음은 부정행위로 처리될 수 있습니다.
+                  </p>
+
+                  <div className="flex flex-col gap-[clamp(12px,1vw,20px)] text-left mb-[clamp(20px,1.6vw,40px)]">
+                    <label className={`flex items-start gap-3 px-4 py-3 rounded-md border ${preShareSilenced ? 'border-[#3B82F6] bg-[#EFF6FF]' : 'border-[#E5E7EB] bg-white'} cursor-pointer`}>
+                      <input
+                        type="checkbox"
+                        className="mt-1 h-4 w-4 accent-[#3B82F6]"
+                        checked={preShareSilenced}
+                        onChange={(e) => setPreShareSilenced(e.target.checked)}
+                      />
+                      <span className={`${EXAM.text.body} ${EXAM.color.ink}`}>
+                        휴대폰을 <strong>무음 모드</strong> 로 설정했으며, 시험 중 알림이 울리지 않도록 조치했습니다.
+                      </span>
+                    </label>
+                    <label className={`flex items-start gap-3 px-4 py-3 rounded-md border ${preShareQuiet ? 'border-[#3B82F6] bg-[#EFF6FF]' : 'border-[#E5E7EB] bg-white'} cursor-pointer`}>
+                      <input
+                        type="checkbox"
+                        className="mt-1 h-4 w-4 accent-[#3B82F6]"
+                        checked={preShareQuiet}
+                        onChange={(e) => setPreShareQuiet(e.target.checked)}
+                      />
+                      <span className={`${EXAM.text.body} ${EXAM.color.ink}`}>
+                        주변에 다른 사람이 없는 <strong>조용한 장소</strong> 에서 혼자 시험에 응시합니다.
+                      </span>
+                    </label>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setPreShareAcknowledged(true)}
+                    disabled={!canContinue}
+                    className={`${EXAM.button.primaryLg} ${EXAM.text.buttonLg} disabled:opacity-40 disabled:cursor-not-allowed`}
+                  >
+                    확인하고 계속
+                  </button>
+                </div>
+              </section>
+            </div>
+          </main>
+        </div>
+      </>
+    );
+  }
+
   if (!fullscreen.state.active) {
     return (
       <>
@@ -939,10 +1043,12 @@ export default function ExamRunnerPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      // getDisplayMedia 의 picker 가 풀스크린을 강제로 종료시키므로
-                      // 사전 마킹해서 FULLSCREEN_EXIT strike 가 잡히지 않게 한다.
-                      // 10초면 picker 열고 선택까지 충분. (modal 은 그대로 뜬다)
-                      fullscreen.markExpectedExit(10_000);
+                      // getDisplayMedia 의 picker 가 풀스크린을 강제로 종료시키고
+                      // 화면 공유가 시작되면 Chrome 이 "공유 중" 툴바를 깔면서
+                      // 추가로 blur/focus 가 한 번 더 튄다. 15초로 잡아두면
+                      // picker 선택 + 툴바 노출까지 한 번에 흡수된다. 마킹은
+                      // FULLSCREEN_EXIT + WINDOW_BLUR + TAB_HIDDEN 모두 억제.
+                      fullscreen.markExpectedExit(15_000);
                       void screenShare.start().then((status) => {
                         // picker 의 "공유" 클릭은 Chrome 에서 fresh user gesture 로
                         // 인정될 가능성이 있어서 즉시 풀스크린 재진입을 시도한다.
