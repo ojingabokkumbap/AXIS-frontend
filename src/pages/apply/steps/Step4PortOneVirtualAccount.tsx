@@ -27,7 +27,7 @@ function FieldRow({
 }) {
   return (
     <div
-      className="flex flex-col sm:flex-row border-b first:border-t h-16"
+      className="flex flex-col sm:flex-row border-b first:border-t sm:h-16"
       style={{ borderColor: BORDER }}
     >
       <div className="w-full sm:w-27.5 lg:w-32.5 shrink-0 flex items-center px-4 py-3 sm:py-4 bg-[#F8FAFC]">
