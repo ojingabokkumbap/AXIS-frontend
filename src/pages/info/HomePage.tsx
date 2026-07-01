@@ -6,7 +6,9 @@ import { useI18n } from '@/i18n';
 import { SiteHeader } from '@/components/marketing/SiteHeader';
 import { SiteFooter } from '@/components/marketing/SiteFooter';
 import mainVisualMp4 from '@/assets/main_visual.mp4';
+import mainVisualMobileMp4 from '@/assets/main_visual_mobile.mp4';
 import mainVisualPoster from '@/assets/main_visual_poster.jpg';
+import { useIsMobile } from '@/lib/useIsMobile';
 import evaluationImage from '@/assets/ass.png';
 import { HomeScheduleSection } from './HomeScheduleSection';
 import { NoticeAccordion } from '@/components/marketing/NoticeAccordion';
@@ -52,6 +54,8 @@ const T_SMALL = 'text-[14px] lg:text-[15px] leading-[1.5]';
 export default function HomePage() {
   const navigate = useNavigate();
   const { t } = useI18n();
+  const isMobile = useIsMobile();
+  const heroVideoSrc = isMobile ? mainVisualMobileMp4 : mainVisualMp4;
   const [, setProfile] = useState<Profile | null>(null);
   const mainRef = useRef<HTMLDivElement>(null);
   const [homeNotices, setHomeNotices] = useState<NoticeItem[]>([]);
@@ -127,6 +131,7 @@ export default function HomePage() {
       >
         <div className="absolute inset-0">
           <video
+            key={heroVideoSrc}
             className="w-full h-full"
             style={{ objectFit: 'cover' }}
             autoPlay
@@ -137,7 +142,7 @@ export default function HomePage() {
             poster={mainVisualPoster}
             aria-hidden="true"
           >
-            <source src={mainVisualMp4} type="video/mp4" />
+            <source src={heroVideoSrc} type="video/mp4" />
           </video>
         </div>
         <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
@@ -256,11 +261,11 @@ export default function HomePage() {
 
             <div className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-12 whitespace-pre-line">
               {[
-                { icon: 'nice' as const,    title: 'NICE 인증',          desc: '응시자 본인 명의의 \n 인증 절차를 통해 \n 시험 접수자와 응시자를 \n 확인합니다.' },
-                { icon: 'idcard' as const,  title: '신분증 OCR',         desc: '신분증의 이름 \n 생년월일·사진을 \n 자동으로 인식하여 \n 응시 정보를 추출합니다.' },
-                { icon: 'face' as const,    title: '얼굴 대조',           desc: '신분증 사진과 \n 실시간 얼굴을 비교하여 \n 응시자 본인 여부를 \n 확인합니다.' },
-                { icon: 'monitor' as const, title: 'AI 실시간 모니터링',  desc: '검정 중 영상 기반으로 \n 실제 수검자 상태와 \n 화면 이탈 여부를 \n 확인합니다.' },
-                { icon: 'alert' as const,   title: '무효 기준 적용',      desc: '카메라 이탈, 화면 감지 등\n 위반 유형별 경고 및\n 시험 종료 기준이 \n 적용됩니다.' },
+                { icon: 'nice' as const,    title: t('home.security.card.nice.title' as never),    desc: t('home.security.card.nice.desc' as never) },
+                { icon: 'idcard' as const,  title: t('home.security.card.idcard.title' as never),  desc: t('home.security.card.idcard.desc' as never) },
+                { icon: 'face' as const,    title: t('home.security.card.face.title' as never),    desc: t('home.security.card.face.desc' as never) },
+                { icon: 'monitor' as const, title: t('home.security.card.monitor.title' as never), desc: t('home.security.card.monitor.desc' as never) },
+                { icon: 'alert' as const,   title: t('home.security.card.alert.title' as never),   desc: t('home.security.card.alert.desc' as never) },
               ].map(s => (
                 <div key={s.title} className="reveal">
                   <div style={{ color: INK_900 }}>
@@ -282,19 +287,19 @@ export default function HomePage() {
               <div className="reveal">
                 <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>{t('home.cert.title')}</h2>
                 <p className={`${T_LEAD} mt-4`} style={{ color: GRAY_500 }}>
-                  AI 실무 역량을 직무와 산업에 맞게 검증합니다.
+                  {t('home.cert.leadSub' as never)}
                 </p>
                 <div className="mt-6">
-                  <MoreLink to="/about">AXIS 시리즈 전체 보기</MoreLink>
+                  <MoreLink to="/about">{t('home.cert.seeAll' as never)}</MoreLink>
                 </div>
               </div>
 
               {/* 우측: 아코디언 */}
               <div className="reveal">
                 {[
-                  { code: 'AXIS', name: 'AI 실무역량검정', target: '전 직종 재직자 · 대학생 · 취준생', levels: [{ l: 'L3', d: '객관식 · 60분 · 10만원' }, { l: 'L2', d: '객관식+실습 · 75분 · 15만원' }, { l: 'L1', d: '산출물+서술 · 90분 · 20만원' }] },
-                  { code: 'AXIS-C', name: 'AI 코딩·자동화 실무역량검정', target: '현업 자동화 담당자 · 비개발 실무자', levels: [{ l: 'L3', d: '객관식+코드 · 60분 · 10만원' }, { l: 'L2', d: '필기+코드구현 · 75분 · 15만원' }, { l: 'L1', d: '산출물+서술 · 90분 · 20만원' }] },
-                  { code: 'AXIS-H', name: '의료기관 AI 실무역량검정', target: '원무 · 행정 · 간호 등 의료기관 비임상 직무', levels: [{ l: 'L3', d: '객관식 · 60분 · 10만원' }, { l: 'L2', d: '시나리오실습 · 60분 · 15만원' }, { l: 'L1', d: '산출물+서술 · 90분 · 20만원' }] },
+                  { code: 'AXIS', name: t('home.cert.axis.name' as never), target: t('home.cert.axis.target' as never), levels: [{ l: 'L3', d: t('home.cert.axis.l3' as never) }, { l: 'L2', d: t('home.cert.axis.l2' as never) }, { l: 'L1', d: t('home.cert.axis.l1' as never) }] },
+                  { code: 'AXIS-C', name: t('home.cert.axisc.name' as never), target: t('home.cert.axisc.target' as never), levels: [{ l: 'L3', d: t('home.cert.axisc.l3' as never) }, { l: 'L2', d: t('home.cert.axisc.l2' as never) }, { l: 'L1', d: t('home.cert.axisc.l1' as never) }] },
+                  { code: 'AXIS-H', name: t('home.cert.axish.name' as never), target: t('home.cert.axish.target' as never), levels: [{ l: 'L3', d: t('home.cert.axish.l3' as never) }, { l: 'L2', d: t('home.cert.axish.l2' as never) }, { l: 'L1', d: t('home.cert.axish.l1' as never) }] },
                 ].map((c, idx) => {
                   const open = openCert === c.code;
                   return (
@@ -370,15 +375,15 @@ export default function HomePage() {
                 <div className="flex flex-col">
                   <div>
                     <h2 className={` mb-10 ${H_SEC}`}>
-                      로직·AI·전문가 채점으로 신뢰할 수 있는 평가
+                      {t('home.eval.title' as never)}
                     </h2>
                   </div>
 
                   <div className="mt-6 lg:mt-8 space-y-5 lg:space-y-6">
                     {[
-                      { level: 'L3', title: '객관식 자동채점', desc: '객관식 40문항과 실습 4문항으로 평가하며, AI 기반으로 자동채점합니다.' },
-                      { level: 'L2', title: '필기 + AI 실습형 과제', desc: '사례형 객관식 30문항과 실습 3과제로 평가하며, 실습 답안은 AI 1차 채점 후 전문가가 검수합니다.' },
-                      { level: 'L1', title: '산출물 + 서술형 평가', desc: '객관식 25문항, 실행계획서, 서술형 2문항으로 평가하며, 전문가 채점 후 관리자가 최종 확정합니다.' },
+                      { level: 'L3', title: t('home.eval.l3.title' as never), desc: t('home.eval.l3.desc' as never) },
+                      { level: 'L2', title: t('home.eval.l2.title' as never), desc: t('home.eval.l2.desc' as never) },
+                      { level: 'L1', title: t('home.eval.l1.title' as never), desc: t('home.eval.l1.desc' as never) },
                     ].map(e => (
                       <div key={e.level}>
                         <div className={H_CARD} style={{ color: INK_900 }}>
@@ -394,7 +399,7 @@ export default function HomePage() {
                 <div className="flex items-end justify-center">
                   <img
                     src={evaluationImage}
-                    alt="평가 방식 다이어그램"
+                    alt={t('home.eval.diagram.alt' as never)}
                     className="w-full h-auto max-w-[540px]"
                     style={{ objectFit: 'contain' }}
                   />
@@ -411,21 +416,21 @@ export default function HomePage() {
             <div className="flex flex-wrap items-end justify-between gap-6 reveal">
               <div className="max-w-205">
                 <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>{t('home.results.title')}</h2>
-                <p className={`${T_LEAD} mt-5`} style={{ color: GRAY_500 }}>회차별 합격 여부를 조회하세요.</p>
+                <p className={`${T_LEAD} mt-5`} style={{ color: GRAY_500 }}>{t('home.results.sub' as never)}</p>
               </div>
-              <MoreLink to="/results">전체 발표 보기</MoreLink>
+              <MoreLink to="/results">{t('home.results.more' as never)}</MoreLink>
             </div>
 
             <div className="mt-10 lg:mt-10 space-y-3">
               <ScheduleRow
-                status="발표 완료" statusColor="#059669"
-                title="AXIS L3" meta="제1회 · 발표일: 2026.09.19" sub=""
-                cta={<Link to="/results" className="inline-flex items-center justify-center h-12 min-w-29.5 px-6 rounded-[10px] text-[16px] lg:text-[17px] font-semibold bg-blue-700" style={{ color: '#fff' }}>결과 확인</Link>}
+                status={t('home.results.status.done' as never)} statusColor="#059669"
+                title="AXIS L3" meta={t('home.results.demo.doneMeta' as never, { round: t('home.results.demo.round' as never) })} sub=""
+                cta={<Link to="/results" className="inline-flex items-center justify-center h-12 min-w-29.5 px-6 rounded-[10px] text-[16px] lg:text-[17px] font-semibold bg-blue-700" style={{ color: '#fff' }}>{t('home.results.cta.view' as never)}</Link>}
               />
               <ScheduleRow
-                status="채점 중" statusColor="#D97706"
-                title="AXIS-C L3" meta="제1회 · 09.26 발표 예정" sub=""
-                  cta={<span className="inline-flex items-center justify-center h-12 min-w-29.5 px-6 rounded-[10px] text-[16px] lg:text-[17px] font-semibold bg-gray-200 text-gray-500">대기 중</span>}
+                status={t('home.results.status.grading' as never)} statusColor="#D97706"
+                title="AXIS-C L3" meta={t('home.results.demo.gradingMeta' as never, { round: t('home.results.demo.round' as never) })} sub=""
+                  cta={<span className="inline-flex items-center justify-center h-12 min-w-29.5 px-6 rounded-[10px] text-[16px] lg:text-[17px] font-semibold bg-gray-200 text-gray-500">{t('home.results.cta.pending' as never)}</span>}
               />
             </div>
 
@@ -437,15 +442,15 @@ export default function HomePage() {
           <div className={WRAP}>
             <div className="flex flex-wrap items-end justify-between gap-6 reveal">
               <div>
-                <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>공지사항</h2>
+                <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>{t('home.notices.title' as never)}</h2>
               </div>
-              <MoreLink to="/qna?tab=notice">전체 공지</MoreLink>
+              <MoreLink to="/qna?tab=notice">{t('home.notices.more' as never)}</MoreLink>
             </div>
 
             <div className="mt-12 lg:mt-16">
               {homeNotices.length === 0 ? (
                 <p className={`${T_BODY} text-center py-10`} style={{ color: GRAY_300 }}>
-                  등록된 공지사항이 없습니다.
+                  {t('home.notices.empty' as never)}
                 </p>
               ) : (
                 <NoticeAccordion

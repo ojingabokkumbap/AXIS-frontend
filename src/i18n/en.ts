@@ -324,7 +324,6 @@ export const en = {
   'home.cert.AXIS_C.desc': 'For non-developers and coding beginners',
   'home.cert.AXIS_H.sub': 'Healthcare AI',
   'home.cert.AXIS_H.desc': 'For all roles in healthcare institutions',
-  'home.cert.more': 'View details →',
 
   'home.cta.title': 'Take the exam now',
   'home.cta.sub': 'Online from a PC · proctored by an AI system',
@@ -366,7 +365,6 @@ export const en = {
   'home.results.row2': 'AXIS-C L2 Practitioner · Session 2',
 
   'home.notices.eyebrow': 'NOTICES',
-  'home.notices.title': 'Notices',
   'home.notices.row1': 'AXIS L3 Session 5 — registration info',
   'home.notices.row2': 'New AXIS-H certification launched',
   'home.notices.row3': 'Scheduled maintenance (5/18 02:00~04:00)',
@@ -1908,4 +1906,65 @@ export const en = {
   'mobileBlock.desc': 'Exams and demo exams are not supported on phones or tablets because of the live proctoring (camera and screen monitoring) and split-screen exam environment. Please reconnect from a PC or laptop.',
   'mobileBlock.descEn': '이 기능은 PC 또는 노트북에서만 이용할 수 있습니다. 다른 기기에서 다시 시도해 주세요.',
   'mobileBlock.home': 'Go to home',
+
+  // HomePage — Security process
+  'home.security.card.nice.title': 'NICE identity',
+  'home.security.card.nice.desc': 'Verify the candidate through \n a NICE identity check \n matching the registrant \n to the test-taker.',
+  'home.security.card.idcard.title': 'ID card OCR',
+  'home.security.card.idcard.desc': 'Automatically read the name, \n date of birth, and photo \n from the ID card \n to extract exam info.',
+  'home.security.card.face.title': 'Face match',
+  'home.security.card.face.desc': 'Compare the ID card photo \n to the live face feed \n to confirm the test-taker \n in real time.',
+  'home.security.card.monitor.title': 'AI live monitoring',
+  'home.security.card.monitor.desc': 'Use video during the exam \n to check candidate status \n and screen-off-focus \n throughout the session.',
+  'home.security.card.alert.title': 'Invalidation criteria',
+  'home.security.card.alert.desc': 'Camera drift, screen detection, and \n other violations trigger warnings \n and force-termination \n per type.',
+
+  // HomePage — Cert tracks
+  'home.cert.leadSub': 'Practical AI competency, evaluated by job role and industry.',
+  'home.cert.seeAll': 'See all AXIS series',
+  'home.cert.axis.name': 'AI practical-competency exam',
+  'home.cert.axis.target': 'All working professionals · college students · job seekers',
+  'home.cert.axis.l3': 'MCQ · 60 min · ₩100,000',
+  'home.cert.axis.l2': 'MCQ + hands-on · 75 min · ₩150,000',
+  'home.cert.axis.l1': 'Deliverable + essay · 90 min · ₩200,000',
+  'home.cert.axisc.name': 'AI coding-automation practical-competency exam',
+  'home.cert.axisc.target': 'Business automation staff · non-developer practitioners',
+  'home.cert.axisc.l3': 'MCQ + code · 60 min · ₩100,000',
+  'home.cert.axisc.l2': 'Written + code · 75 min · ₩150,000',
+  'home.cert.axisc.l1': 'Deliverable + essay · 90 min · ₩200,000',
+  'home.cert.axish.name': 'Healthcare AI practical-competency exam',
+  'home.cert.axish.target': 'Non-clinical healthcare roles (front desk · admin · nursing)',
+  'home.cert.axish.l3': 'MCQ · 60 min · ₩100,000',
+  'home.cert.axish.l2': 'Scenario hands-on · 60 min · ₩150,000',
+  'home.cert.axish.l1': 'Deliverable + essay · 90 min · ₩200,000',
+
+  // HomePage — Evaluation
+  'home.eval.title': 'Trusted scoring — rules, AI, and human experts',
+  'home.eval.l3.title': 'Auto-scored MCQ',
+  'home.eval.l3.desc': 'Assessed via 40 MCQ items and 4 hands-on tasks. AI runs the auto-scoring.',
+  'home.eval.l2.title': 'Written + AI hands-on tasks',
+  'home.eval.l2.desc': 'Assessed via 30 case-based MCQ and 3 hands-on tasks. AI does a first-pass score on the hands-on answers, then experts review.',
+  'home.eval.l1.title': 'Deliverable + essay',
+  'home.eval.l1.desc': 'Assessed via 25 MCQ, an execution plan, and 2 essay items. Experts score first, then an admin confirms the final result.',
+  'home.eval.diagram.alt': 'Evaluation flow diagram',
+
+  // HomePage — Pass announcements
+  'home.results.sub': 'Look up pass/fail by round.',
+  'home.results.more': 'View all announcements',
+  'home.results.status.done': 'Published',
+  'home.results.status.grading': 'Grading',
+  'home.results.cta.view': 'View result',
+  'home.results.cta.pending': 'Pending',
+  'home.results.demo.round': 'Round 1',
+  'home.results.demo.doneMeta': '{round} · Published: 2026.09.19',
+  'home.results.demo.gradingMeta': '{round} · Expected: 2026.09.26',
+
+  // HomePage — Notices header (home.notices.title exists earlier — keep single copy)
+  'home.notices.more': 'All notices',
+  'home.notices.empty': 'No notices posted yet.',
+
+  // Notice tag labels
+  'notice.tag.important': 'Important',
+  'notice.tag.notice': 'Notice',
+  'notice.tag.info': 'Info',
 } as const;

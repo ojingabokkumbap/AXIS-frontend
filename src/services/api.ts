@@ -803,9 +803,12 @@ export type NoticeTagType = 'IMPORTANT' | 'NORMAL';
 export interface NoticeItem {
   id: string;
   tag: string;
+  tagEn?: string | null;
   tagType: NoticeTagType;
   title: string;
+  titleEn?: string | null;
   content: string;
+  contentEn?: string | null;
   pinned: boolean;
   views: number;
   createdAt: string;

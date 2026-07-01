@@ -324,7 +324,6 @@ export const ko = {
   'home.cert.AXIS_C.desc': '현업 자동화 담당자 · 비개발 실무자',
   'home.cert.AXIS_H.sub': '의료기관 AI 실무역량검정',
   'home.cert.AXIS_H.desc': '원무·행정·간호 등 의료기관 비임상 직무',
-  'home.cert.more': '자세히 보기 →',
 
   'home.cta.title': '지금 바로 응시하세요',
   'home.cta.sub': 'PC 환경에서 온라인으로 응시 · AI 감독 시스템 운영',
@@ -366,7 +365,6 @@ export const ko = {
   'home.results.row2': 'AXIS-C L2 Practitioner 제2회',
 
   'home.notices.eyebrow': 'NOTICES',
-  'home.notices.title': '공지사항',
   'home.notices.row1': '제5회 AXIS L3 접수 안내',
   'home.notices.row2': 'AXIS-H 신규 자격 출범 안내',
   'home.notices.row3': '시스템 점검 안내 (5/18 02:00~04:00)',
@@ -1940,4 +1938,65 @@ export const ko = {
   'mobileBlock.desc': '실시간 감독(카메라·화면 모니터링)과 분할 화면 응시 환경 때문에 시험과 데모 응시는 모바일·태블릿에서 지원되지 않습니다. PC 또는 노트북에서 다시 접속해 주세요.',
   'mobileBlock.descEn': 'This function can be done only with a PC or laptop. Please try on another device.',
   'mobileBlock.home': '홈으로 가기',
+
+  // HomePage — Security process
+  'home.security.card.nice.title': 'NICE 인증',
+  'home.security.card.nice.desc': '응시자 본인 명의의 \n 인증 절차를 통해 \n 시험 접수자와 응시자를 \n 확인합니다.',
+  'home.security.card.idcard.title': '신분증 OCR',
+  'home.security.card.idcard.desc': '신분증의 이름 \n 생년월일·사진을 \n 자동으로 인식하여 \n 응시 정보를 추출합니다.',
+  'home.security.card.face.title': '얼굴 대조',
+  'home.security.card.face.desc': '신분증 사진과 \n 실시간 얼굴을 비교하여 \n 응시자 본인 여부를 \n 확인합니다.',
+  'home.security.card.monitor.title': 'AI 실시간 모니터링',
+  'home.security.card.monitor.desc': '검정 중 영상 기반으로 \n 실제 수검자 상태와 \n 화면 이탈 여부를 \n 확인합니다.',
+  'home.security.card.alert.title': '무효 기준 적용',
+  'home.security.card.alert.desc': '카메라 이탈, 화면 감지 등\n 위반 유형별 경고 및\n 시험 종료 기준이 \n 적용됩니다.',
+
+  // HomePage — Cert tracks
+  'home.cert.leadSub': 'AI 실무 역량을 직무와 산업에 맞게 검증합니다.',
+  'home.cert.seeAll': 'AXIS 시리즈 전체 보기',
+  'home.cert.axis.name': 'AI 실무역량검정',
+  'home.cert.axis.target': '전 직종 재직자 · 대학생 · 취준생',
+  'home.cert.axis.l3': '객관식 · 60분 · 10만원',
+  'home.cert.axis.l2': '객관식+실습 · 75분 · 15만원',
+  'home.cert.axis.l1': '산출물+서술 · 90분 · 20만원',
+  'home.cert.axisc.name': 'AI 코딩·자동화 실무역량검정',
+  'home.cert.axisc.target': '현업 자동화 담당자 · 비개발 실무자',
+  'home.cert.axisc.l3': '객관식+코드 · 60분 · 10만원',
+  'home.cert.axisc.l2': '필기+코드구현 · 75분 · 15만원',
+  'home.cert.axisc.l1': '산출물+서술 · 90분 · 20만원',
+  'home.cert.axish.name': '의료기관 AI 실무역량검정',
+  'home.cert.axish.target': '원무 · 행정 · 간호 등 의료기관 비임상 직무',
+  'home.cert.axish.l3': '객관식 · 60분 · 10만원',
+  'home.cert.axish.l2': '시나리오실습 · 60분 · 15만원',
+  'home.cert.axish.l1': '산출물+서술 · 90분 · 20만원',
+
+  // HomePage — Evaluation
+  'home.eval.title': '로직·AI·전문가 채점으로 신뢰할 수 있는 평가',
+  'home.eval.l3.title': '객관식 자동채점',
+  'home.eval.l3.desc': '객관식 40문항과 실습 4문항으로 평가하며, AI 기반으로 자동채점합니다.',
+  'home.eval.l2.title': '필기 + AI 실습형 과제',
+  'home.eval.l2.desc': '사례형 객관식 30문항과 실습 3과제로 평가하며, 실습 답안은 AI 1차 채점 후 전문가가 검수합니다.',
+  'home.eval.l1.title': '산출물 + 서술형 평가',
+  'home.eval.l1.desc': '객관식 25문항, 실행계획서, 서술형 2문항으로 평가하며, 전문가 채점 후 관리자가 최종 확정합니다.',
+  'home.eval.diagram.alt': '평가 방식 다이어그램',
+
+  // HomePage — Pass announcements
+  'home.results.sub': '회차별 합격 여부를 조회하세요.',
+  'home.results.more': '전체 발표 보기',
+  'home.results.status.done': '발표 완료',
+  'home.results.status.grading': '채점 중',
+  'home.results.cta.view': '결과 확인',
+  'home.results.cta.pending': '대기 중',
+  'home.results.demo.round': '제1회',
+  'home.results.demo.doneMeta': '{round} · 발표일: 2026.09.19',
+  'home.results.demo.gradingMeta': '{round} · 09.26 발표 예정',
+
+  // HomePage — Notices header (home.notices.title exists earlier — keep single copy)
+  'home.notices.more': '전체 공지',
+  'home.notices.empty': '등록된 공지사항이 없습니다.',
+
+  // Notice tag labels (backend `tag` string → localized display)
+  'notice.tag.important': '중요',
+  'notice.tag.notice': '공지',
+  'notice.tag.info': '안내',
 } as const;

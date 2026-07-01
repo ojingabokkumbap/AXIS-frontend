@@ -1,16 +1,27 @@
 import type { NoticeItem } from '@/services/api';
+import { useI18n } from '@/i18n';
 
 const INK_900 = '#191919';
 const GRAY_500 = '#525252';
 const GRAY_300 = '#737373';
 const BORDER_LIGHT = '#E5E7EB';
 
-function formatNoticeDate(iso: string): string {
+function formatNoticeDate(iso: string, lang: 'ko' | 'en'): string {
+  const locale = lang === 'ko' ? 'ko-KR' : 'en-CA';
   return new Date(iso)
-    .toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+    .toLocaleDateString(locale, { year: 'numeric', month: '2-digit', day: '2-digit' })
     .replace(/\. /g, '.')
     .replace(/\.$/, '');
 }
+
+// Maps the DB `tag` (Korean by default) to a localized i18n label.
+// The tag column stores whatever the admin typed in Korean — we fall back to
+// the stored string if it doesn't match one of the well-known tags.
+const TAG_KEY_BY_KO: Record<string, 'notice.tag.important' | 'notice.tag.notice' | 'notice.tag.info'> = {
+  '중요': 'notice.tag.important',
+  '공지': 'notice.tag.notice',
+  '안내': 'notice.tag.info',
+};
 
 function NoticeChevron({ open }: { open: boolean }) {
   return (
@@ -50,9 +61,18 @@ export function NoticeAccordion({
   onToggle,
   variant = 'home',
 }: NoticeAccordionProps) {
+  const { t, lang } = useI18n();
   if (notices.length === 0) return null;
 
   const isHome = variant === 'home';
+  const pickTag = (n: NoticeItem): string => {
+    if (lang === 'en' && n.tagEn) return n.tagEn;
+    const tk = TAG_KEY_BY_KO[n.tag];
+    if (tk) return t(tk as never);
+    return n.tag;
+  };
+  const pickTitle = (n: NoticeItem): string => (lang === 'en' && n.titleEn ? n.titleEn : n.title);
+  const pickContent = (n: NoticeItem): string => (lang === 'en' && n.contentEn ? n.contentEn : n.content);
 
   return (
     <div className={isHome ? 'overflow-hidden' : undefined} style={isHome ? { background: '#FFFFFF' } : undefined}>
@@ -88,7 +108,7 @@ export function NoticeAccordion({
                 className="text-[14px] lg:text-[15px] font-semibold shrink-0 px-3 py-1.5 rounded-full"
                 style={{ background: tagBg, color: tagColor }}
               >
-                {n.tag}
+                {pickTag(n)}
               </span>
               <span
                 className={[
@@ -99,10 +119,10 @@ export function NoticeAccordion({
                 ].join(' ')}
                 style={{ color: INK_900 }}
               >
-                {n.title}
+                {pickTitle(n)}
               </span>
               <span className="shrink-0 text-[14px] lg:text-[15px]" style={{ color: GRAY_300 }}>
-                {formatNoticeDate(n.createdAt)}
+                {formatNoticeDate(n.createdAt, lang)}
               </span>
               <NoticeChevron open={isOpen} />
             </button>
@@ -124,7 +144,7 @@ export function NoticeAccordion({
                 ].join(' ')}
                 style={{ color: GRAY_500, paddingLeft: isHome ? undefined : 0 }}
               >
-                {n.content.trim() || '—'}
+                {pickContent(n).trim() || '—'}
               </div>
             </div>
           </div>
