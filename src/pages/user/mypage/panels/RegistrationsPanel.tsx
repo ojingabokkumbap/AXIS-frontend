@@ -131,7 +131,7 @@ function RegistrationsSection({
   const [gateReg, setGateReg] = useState<RegistrationDto | null>(null);
 
   const handleCancel = async (id: string) => {
-    if (!confirm('이 접수를 취소하시겠습니까?')) return;
+    if (!confirm(t('sec.registrations.confirmCancel' as never))) return;
     setBusyId(id);
     try {
       await onCancel(id);
@@ -147,14 +147,10 @@ function RegistrationsSection({
       <SectionTitle title={t('sec.registrations.title')} sub="" />
 
     <InfoCallout tone="blue" >
-      <p>
-        수험표는 시험 시작 전까지 출력할 수 있으며, 시험 당일 입장 시 수험번호와 본인확인이 필요합니다.
-      </p>
+      <p>{t('sec.registrations.info.voucher' as never)}</p>
     </InfoCallout>
     <InfoCallout tone="red" className="mb-6">
-      <p>
-        접수 마감 전: 전액 환불 / 시험 7일 전: 50% 환불 / 시험 6일 전 이후 또는 미응시: 환불 불가.
-      </p>
+      <p>{t('sec.registrations.info.refund' as never)}</p>
     </InfoCallout>
     {/* 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 mb-6">
@@ -169,10 +165,10 @@ function RegistrationsSection({
         <table className="data-table" style={{ minWidth: 940 }}>
           <thead>
             <tr>
-              <th style={{ width: 100 }}>회차</th>
-              <th style={{ width: 220 }}>자격</th>
-              <th style={{ width: 180 }}>접수상태</th>
-              <th style={{ width: 160 }}>시험일</th>
+              <th style={{ width: 100 }}>{t('sec.registrations.col.round' as never)}</th>
+              <th style={{ width: 220 }}>{t('sec.registrations.col.cert' as never)}</th>
+              <th style={{ width: 180 }}>{t('sec.registrations.col.status' as never)}</th>
+              <th style={{ width: 160 }}>{t('sec.registrations.col.examDate' as never)}</th>
               <th style={{ width: 170 }} className="text-right"></th>
             </tr>
           </thead>
@@ -180,8 +176,8 @@ function RegistrationsSection({
             {data.registrations.length === 0 ? (
               <tr>
                 <td colSpan={5}>
-                  <EmptyState description="시험 접수 후 이곳에서 수험표와 결제 상태를 확인할 수 있습니다.">
-                    최근 3개월 이내의 접수내역이 없습니다.
+                  <EmptyState description={t('sec.registrations.empty.hint' as never)}>
+                    {t('sec.registrations.empty.title' as never)}
                   </EmptyState>
                 </td>
               </tr>
@@ -191,26 +187,26 @@ function RegistrationsSection({
                 let statusText: string;
                 let statusCls: string;
                 if (r.status === 'PAID' && deadlineExpired && r.examDeadline) {
-                  statusText = `${formatExamDate(r.examDeadline)} 응시 마감 (만료)`;
+                  statusText = t('sec.registrations.status.paidExpired' as never, { date: formatExamDate(r.examDeadline) });
                   statusCls = 'text-status-danger font-semibold';
                 } else if (r.status === 'PAID' && r.examDeadline) {
-                  statusText = `${formatExamDate(r.examDeadline)}까지 응시 가능`;
+                  statusText = t('sec.registrations.status.paidUntil' as never, { date: formatExamDate(r.examDeadline) });
                   statusCls = 'font-medium';
                 } else if (r.status === 'PAID') {
-                  statusText = '결제 완료 · 응시 대기';
+                  statusText = t('sec.registrations.status.paid' as never);
                   statusCls = 'text-ink font-semibold text-[14px]';
                 } else if (r.status === 'PENDING_PAYMENT') {
                   statusText = r.seatHeldUntil
-                    ? `${formatLocalDateTime(r.seatHeldUntil)}까지 결제 대기중`
-                    : '30분 내 결제 필요';
+                    ? t('sec.registrations.status.pendingUntil' as never, { date: formatLocalDateTime(r.seatHeldUntil) })
+                    : t('sec.registrations.status.pending30' as never);
                   statusCls = 'text-status-grading font-semibold text-[14px]';
                 } else if (r.status === 'REFUNDED') {
                   statusText = r.latestPayment?.refundAmount
-                    ? `${formatKrw(r.latestPayment.refundAmount)} 환불 완료`
-                    : '환불 완료';
+                    ? t('sec.registrations.status.refundedAmount' as never, { amount: formatKrw(r.latestPayment.refundAmount) })
+                    : t('sec.registrations.status.refunded' as never);
                   statusCls = 'text-muted text-[14px]';
                 } else if (r.status === 'CANCELLED') {
-                  statusText = '접수 취소됨';
+                  statusText = t('sec.registrations.status.cancelled' as never);
                   statusCls = 'text-muted';
                 } else {
                   statusText = regBadge(r.status).text;
@@ -219,7 +215,7 @@ function RegistrationsSection({
                 return (
                   <tr key={r.id}>
                     <td className="text-muted font-en">
-                      {r.schedule.roundNumber}회차
+                      {t('sec.registrations.roundSuffix' as never, { n: r.schedule.roundNumber })}
                     </td>
                     <td>
                       <span className="text-ink text-center font-semibold">
@@ -244,7 +240,7 @@ function RegistrationsSection({
                           </Btn>
                         )}
                         {r.status === 'PENDING_PAYMENT' && (
-                          <Btn variant="orange" className="btn-sm" onClick={() => onPayNow(r)}>결제하기</Btn>
+                          <Btn variant="orange" className="btn-sm" onClick={() => onPayNow(r)}>{t('sec.registrations.act.pay' as never)}</Btn>
                         )}
                         {(r.status === 'CANCELLED' || r.status === 'REFUNDED') && (
                           <Btn variant="blue" className="btn-sm" onClick={() => setReceiptReg(r)}>
@@ -256,8 +252,8 @@ function RegistrationsSection({
                           <>
                             <KebabMenu
                               items={[
-                                { label: '영수증 보기', onClick: () => setReceiptReg(r) },
-                                { label: '환불 정책 보기', onClick: () => setRefundOpen(true) },
+                                { label: t('sec.registrations.act.receiptView' as never), onClick: () => setReceiptReg(r) },
+                                { label: t('sec.registrations.act.refundPolicy' as never), onClick: () => setRefundOpen(true) },
                               ]}
                             />
                           </>
@@ -269,7 +265,7 @@ function RegistrationsSection({
                             onClick={() => handleCancel(r.id)}
                             disabled={busyId === r.id}
                           >
-                            {busyId === r.id ? '취소 중…' : '접수 취소'}
+                            {busyId === r.id ? t('sec.registrations.act.cancelling' as never) : t('sec.registrations.act.cancel' as never)}
                           </Btn>
                         )}
                       </div>

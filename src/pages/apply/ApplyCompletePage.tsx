@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useI18n } from '@/i18n';
 import { SiteHeader } from '@/components/marketing/SiteHeader';
 import { SiteFooter } from '@/components/marketing/SiteFooter';
 
@@ -39,6 +40,7 @@ function MiniToast({ message, onClose }: { message: string; onClose: () => void 
 export default function ApplyCompletePage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { t } = useI18n();
   const state = location.state as ApplyCompleteState | null | undefined;
   const [toast, setToast] = useState<string | null>(null);
 
@@ -49,9 +51,9 @@ export default function ApplyCompletePage() {
   const copyNum = async () => {
     try {
       await navigator.clipboard.writeText(state.vbankNum);
-      setToast('복사되었습니다!');
+      setToast(t('apply.complete.copied' as never));
     } catch {
-      setToast('복사에 실패했습니다');
+      setToast(t('apply.complete.copyFailed' as never));
     }
   };
 
@@ -62,45 +64,45 @@ export default function ApplyCompletePage() {
 
       <div className="flex-1 max-w-lg w-full mx-auto px-4 py-12">
         <div className="text-center text-[22px] font-extrabold text-[#0F172A] mb-2">
-          ✅ 가상계좌가 발급되었습니다
+          {t('apply.complete.vaTitle' as never)}
         </div>
         <p className="text-center text-sm text-[#64748B] mb-8">{state.orderName}</p>
 
         <div className="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm space-y-3 text-[14px]">
           <div className="flex justify-between gap-3">
-            <span className="text-[#64748B]">입금 은행</span>
+            <span className="text-[#64748B]">{t('apply.complete.bank' as never)}</span>
             <span className="font-semibold text-[#0F172A] text-right">{state.vbankName}</span>
           </div>
           <div className="flex justify-between gap-3">
-            <span className="text-[#64748B]">계좌번호</span>
+            <span className="text-[#64748B]">{t('apply.complete.account' as never)}</span>
             <span className="font-mono font-semibold text-[#0F172A] text-right text-[13px] break-all">
               {state.vbankNum}
             </span>
           </div>
           <div className="flex justify-between gap-3">
-            <span className="text-[#64748B]">예금주</span>
+            <span className="text-[#64748B]">{t('apply.complete.holder' as never)}</span>
             <span className="font-medium text-[#0F172A] text-right">주식회사 에이아이넥스</span>
           </div>
           <div className="flex justify-between gap-3">
-            <span className="text-[#64748B]">입금 금액</span>
+            <span className="text-[#64748B]">{t('apply.complete.amount' as never)}</span>
             <span className="font-bold text-[#2563EB]">₩{state.amount.toLocaleString()}</span>
           </div>
           <div className="flex justify-between gap-3 pt-2 border-t border-[#E2E8F0]">
-            <span className="text-[#64748B]">입금 기한</span>
+            <span className="text-[#64748B]">{t('apply.complete.deadline' as never)}</span>
             <span className="font-medium text-[#0F172A] text-right">
-              {formatExpiryDisplay(state.vbankExpiry)} 까지
+              {formatExpiryDisplay(state.vbankExpiry)} {t('apply.complete.deadlineSuffix' as never)}
             </span>
           </div>
         </div>
 
         <p className="mt-6 text-[13px] text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-          ⚠ 입금기한 내 미입금 시 접수가 자동으로 취소됩니다.
+          {t('apply.complete.warnNoPay' as never)}
         </p>
 
         <p className="mt-3 text-[13px] text-[#1E3A5F] bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-4 py-3">
-          입금 확인 후 SMS와 이메일로 접수 확정 안내를 드립니다.
+          {t('apply.complete.smsInfo' as never)}
           <br />
-          처리 시간: 입금 확인 후 즉시 (평균 10초 이내)
+          {t('apply.complete.processTime' as never)}
         </p>
 
         <div className="mt-8 space-y-3">
@@ -109,21 +111,21 @@ export default function ApplyCompletePage() {
             onClick={() => void copyNum()}
             className="w-full h-12 rounded-xl text-[14px] font-semibold border-2 border-[#2563EB] text-[#2563EB] bg-white hover:bg-[#EFF6FF] transition-colors"
           >
-            계좌번호 복사
+            {t('apply.complete.copyAccount' as never)}
           </button>
           <button
             type="button"
             onClick={() => navigate('/mypage')}
             className="w-full h-12 rounded-xl text-[14px] font-semibold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-colors"
           >
-            마이페이지에서 확인
+            {t('apply.complete.gotoMypage' as never)}
           </button>
           <button
             type="button"
             onClick={() => navigate('/')}
             className="w-full h-12 rounded-xl text-[14px] font-medium border border-[#E2E8F0] bg-white text-body hover:bg-[#F8FAFC] transition-colors"
           >
-            홈으로 이동
+            {t('apply.complete.gotoHome' as never)}
           </button>
         </div>
 

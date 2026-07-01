@@ -322,18 +322,18 @@ export function ScoreDetailModal({
           : '—',
     },
     ...(result.totalScore != null
-      ? [{ label: '총점', value: `${result.totalScore} / 100` }]
+      ? [{ label: t('score.detail.total' as never), value: `${result.totalScore} / 100` }]
       : []),
     ...(result.writtenScore != null
       ? [{
-          label: '필기',
-          value: `${result.writtenScore} / 100 ${result.writtenScore >= 60 ? '· 합격' : '· 불합격 (기준 60)'}`,
+          label: t('score.detail.written' as never),
+          value: `${result.writtenScore} / 100 · ${result.writtenScore >= 60 ? t('score.detail.pass' as never) : t('score.detail.failThreshold' as never)}`,
         }]
       : []),
     ...(result.practicalScore != null
       ? [{
-          label: '실기',
-          value: `${result.practicalScore} / 100 ${result.practicalScore >= 60 ? '· 합격' : '· 불합격 (기준 60)'}`,
+          label: t('score.detail.practical' as never),
+          value: `${result.practicalScore} / 100 · ${result.practicalScore >= 60 ? t('score.detail.pass' as never) : t('score.detail.failThreshold' as never)}`,
         }]
       : []),
   ];
@@ -343,15 +343,15 @@ export function ScoreDetailModal({
       <ResultModalRows rows={rows} />
       {result.breakdown.length > 0 && (
         <div className="mt-5">
-          <div className="text-[13px] font-semibold text-ink mb-2">과목별 상세</div>
+          <div className="text-[13px] font-semibold text-ink mb-2">{t('score.detail.subjectBreakdown' as never)}</div>
           <table className="data-table w-full">
             <thead>
               <tr>
-                <th style={{ width: 90 }}>구분</th>
-                <th>과목</th>
-                <th style={{ width: 90 }} className="text-right">점수</th>
-                <th style={{ width: 70 }} className="text-right">비율</th>
-                <th style={{ width: 80 }} className="text-center">결과</th>
+                <th style={{ width: 90 }}>{t('score.detail.col.section' as never)}</th>
+                <th>{t('score.detail.col.subject' as never)}</th>
+                <th style={{ width: 90 }} className="text-right">{t('score.detail.col.score' as never)}</th>
+                <th style={{ width: 70 }} className="text-right">{t('score.detail.col.ratio' as never)}</th>
+                <th style={{ width: 80 }} className="text-center">{t('score.detail.col.result' as never)}</th>
               </tr>
             </thead>
             <tbody>
@@ -363,7 +363,7 @@ export function ScoreDetailModal({
                   <td className="text-right font-en text-muted">{b.percentage}%</td>
                   <td className="text-center">
                     {b.subjectFailed ? (
-                      <span className="text-[12px] font-semibold text-status-danger">과락</span>
+                      <span className="text-[12px] font-semibold text-status-danger">{t('score.detail.subjectFail' as never)}</span>
                     ) : (
                       <span className="text-[12px] text-muted">—</span>
                     )}
@@ -376,7 +376,7 @@ export function ScoreDetailModal({
       )}
       {result.failReason && (
         <div className="mt-4 rounded-lg border border-status-danger bg-red-50 p-3">
-          <div className="text-[12px] font-semibold text-status-danger mb-1">불합격 사유</div>
+          <div className="text-[12px] font-semibold text-status-danger mb-1">{t('score.detail.failReason' as never)}</div>
           <div className="text-[13px] text-ink">{result.failReason}</div>
         </div>
       )}

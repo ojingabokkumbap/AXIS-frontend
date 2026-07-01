@@ -1804,4 +1804,105 @@ export const en = {
   'siteTour.generic.help.title': 'Need a refresher? Look bottom-right.',
   'siteTour.generic.help.body':
     'The Site guide button in the bottom-right corner of every page replays this guide whenever you want.',
+
+  // ── i18n pass 2 additions ──────────────────────────────
+  // RegistrationsPanel
+  'sec.registrations.confirmCancel': 'Cancel this registration?',
+  'sec.registrations.info.voucher':
+    'You can print your exam voucher any time before the exam. On exam day you must present your voucher number and photo ID.',
+  'sec.registrations.info.refund':
+    'Before registration close: full refund / 7 days before exam: 50% refund / within 6 days of exam or no-show: no refund.',
+  'sec.registrations.col.round': 'Round',
+  'sec.registrations.col.cert': 'Certification',
+  'sec.registrations.col.status': 'Status',
+  'sec.registrations.col.examDate': 'Exam date',
+  'sec.registrations.empty.hint': 'After registering for an exam, your voucher and payment status will appear here.',
+  'sec.registrations.empty.title': 'No registrations in the last 3 months.',
+  'sec.registrations.status.paidExpired': '{date} — deadline passed',
+  'sec.registrations.status.paidUntil': 'You can take the exam until {date}',
+  'sec.registrations.status.paid': 'Paid · ready to take',
+  'sec.registrations.status.pendingUntil': 'Payment pending until {date}',
+  'sec.registrations.status.pending30': 'Complete payment within 30 minutes',
+  'sec.registrations.status.refunded': 'Refunded',
+  'sec.registrations.status.refundedAmount': '{amount} refunded',
+  'sec.registrations.status.cancelled': 'Registration cancelled',
+  'sec.registrations.roundSuffix': 'Round {n}',
+  'sec.registrations.act.pay': 'Pay now',
+  'sec.registrations.act.receiptView': 'View receipt',
+  'sec.registrations.act.refundPolicy': 'View refund policy',
+  'sec.registrations.act.cancelling': 'Cancelling…',
+  'sec.registrations.act.cancel': 'Cancel registration',
+
+  // ApplyCompletePage
+  'apply.complete.copied': 'Copied!',
+  'apply.complete.copyFailed': 'Copy failed',
+  'apply.complete.vaTitle': '✅ Virtual account issued',
+  'apply.complete.bank': 'Bank',
+  'apply.complete.account': 'Account number',
+  'apply.complete.holder': 'Account holder',
+  'apply.complete.amount': 'Amount',
+  'apply.complete.deadline': 'Deadline',
+  'apply.complete.deadlineSuffix': '',
+  'apply.complete.warnNoPay': '⚠ If payment is not received by the deadline, your registration will be cancelled automatically.',
+  'apply.complete.smsInfo': 'Once payment is confirmed, we will send confirmation by SMS and email.',
+  'apply.complete.processTime': 'Processing time: immediately after payment (typically within 10 seconds)',
+  'apply.complete.copyAccount': 'Copy account number',
+  'apply.complete.gotoMypage': 'Go to My Page',
+  'apply.complete.gotoHome': 'Home',
+
+  // ScoresPanel InfoCallouts
+  'sec.scores.info.aiNote':
+    'AI scoring is a first-pass aid, not the final decision. Final scores and pass/fail are set after expert review and admin confirmation.',
+  'sec.scores.info.certLink': 'You can issue your certificate from the certificates page.',
+
+  // ScoreDetailModal
+  'score.detail.total': 'Total',
+  'score.detail.written': 'Written',
+  'score.detail.practical': 'Practical',
+  'score.detail.pass': 'Pass',
+  'score.detail.failThreshold': 'Fail (pass mark 60)',
+  'score.detail.subjectBreakdown': 'By subject',
+  'score.detail.col.section': 'Section',
+  'score.detail.col.subject': 'Subject',
+  'score.detail.col.score': 'Score',
+  'score.detail.col.ratio': 'Ratio',
+  'score.detail.col.result': 'Result',
+  'score.detail.subjectFail': 'Subject-fail',
+  'score.detail.failReason': 'Reason for fail',
+
+  // primitives aria-label
+  'mypage.actMenu.more': 'More',
+
+  // ExamReadinessPage
+  'examReady.stepper.info': 'Exam info',
+  'examReady.stepper.notes': 'Exam rules',
+  'examReady.stepper.envcheck': 'Environment check',
+  'examReady.stepper.done': 'Ready to start',
+  'examReady.title': 'Exam preparation',
+  'examReady.hint.pcOnly': 'Please use a PC to proceed to identity verification.',
+  'examReady.hint.testMode': 'Test mode: all restrictions are disabled. Use "Next" to walk through each screen.',
+  'examReady.act.next': 'Next',
+  'examReady.act.identify': 'Verify identity',
+  'examReady.act.navigating': 'Loading…',
+  'examReady.exit.title': 'Exit exam prep',
+  'examReady.exit.cta': 'Exit',
+  'examReady.exit.prompt': 'Exit exam preparation and leave this page?',
+  'examReady.exit.helper': 'Your progress on this screen may not be saved.',
+  'examReady.venueOnline': 'Online (AI proctor)',
+  'examReady.info.exam': 'Exam',
+  'examReady.info.time': 'Duration',
+  'examReady.info.count': 'Questions',
+  'examReady.info.mode': 'Delivery',
+  'examReady.info.minutes': '{n} min',
+  'examReady.info.questions': '{n} questions',
+  'examReady.testMode.on': 'Test mode on',
+  'examReady.testMode.off': 'Enable test mode',
+
+  // ── Mobile block (exam / demo cannot run on phones or tablets) ──
+  'mobileBlock.alert': 'This function can be done only with a PC or laptop. Please try on another device.',
+  'mobileBlock.badge': 'PC only',
+  'mobileBlock.title': 'This can only be done on a PC or laptop',
+  'mobileBlock.desc': 'Exams and demo exams are not supported on phones or tablets because of the live proctoring (camera and screen monitoring) and split-screen exam environment. Please reconnect from a PC or laptop.',
+  'mobileBlock.descEn': '이 기능은 PC 또는 노트북에서만 이용할 수 있습니다. 다른 기기에서 다시 시도해 주세요.',
+  'mobileBlock.home': 'Go to home',
 } as const;

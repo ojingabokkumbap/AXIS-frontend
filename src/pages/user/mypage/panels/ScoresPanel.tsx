@@ -44,12 +44,10 @@ function ResultsSection({ data }: { data: DashboardDto }) {
       <SectionTitle title={t('sec.taken.title')} sub="" />
 
       <InfoCallout tone="blue" className="">
-        <p>
-          AI 채점은 최종 판정자가 아니라 1차 채점 보조입니다. 최종 점수와 합격 판정은 전문가 검수 및 관리자 확정을 거쳐 결정됩니다.
-        </p>
+        <p>{t('sec.scores.info.aiNote' as never)}</p>
       </InfoCallout>
       <InfoCallout tone="blue" className="mb-6">
-        <p>자격증발급은 자격증발급 페이지에서 가능합니다.</p>
+        <p>{t('sec.scores.info.certLink' as never)}</p>
       </InfoCallout>
 
       <div className={TABLE_WRAP}>

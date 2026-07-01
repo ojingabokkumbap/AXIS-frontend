@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { FileSearch, MoreVertical } from 'lucide-react';
+import { useI18n } from '@/i18n';
 import type { BadgeTone } from './types';
 
 const badgeToneClass: Record<BadgeTone, string> = {
@@ -166,6 +167,7 @@ export interface KebabItem {
 }
 
 export function KebabMenu({ items }: { items: KebabItem[] }) {
+  const { t } = useI18n();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState<{ top: number; right: number } | null>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
@@ -214,7 +216,7 @@ export function KebabMenu({ items }: { items: KebabItem[] }) {
         type="button"
         onClick={handleToggle}
         className="w-7 h-7 inline-flex items-center justify-center rounded-md hover:bg-gray-100 cursor-pointer border border-transparent text-muted"
-        aria-label="더보기"
+        aria-label={t('mypage.actMenu.more' as never)}
         aria-haspopup="menu"
         aria-expanded={open}
       >

@@ -91,12 +91,7 @@ function getExamStructure(certType: string | undefined, level: string | undefine
   return base;
 }
 
-const STEPS: StepperStep[] = [
-  { label: '시험정보' },
-  { label: '시험유의사항' },
-  { label: '사용환경 점검' },
-  { label: '시험준비 완료' },
-];
+// STEPS is built inside the component so labels can go through t().
 
 function detectBrowser(ua: string): BrowserInfo {
   const edge = ua.match(/Edg\/(\d+)/);
@@ -147,6 +142,13 @@ export default function ExamReadinessPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useI18n();
+
+  const STEPS: StepperStep[] = [
+    { label: t('examReady.stepper.info' as never) },
+    { label: t('examReady.stepper.notes' as never) },
+    { label: t('examReady.stepper.envcheck' as never) },
+    { label: t('examReady.stepper.done' as never) },
+  ];
 
   const examInfo = (location.state as { examInfo?: ExamInfo })?.examInfo;
   const isMobile = useMemo(() => isMobileUA(navigator.userAgent), []);
@@ -483,7 +485,7 @@ export default function ExamReadinessPage() {
     // h-screen + overflow-hidden으로 뷰포트에 락, main을 flex로 채워서 컨텐츠가
     // 헤더+스텝퍼 제외한 영역에 vertical center로 배치되도록 함.
     <div className="h-screen w-screen bg-[#F8FAFC] flex flex-col overflow-hidden">
-      <ExamPageHeader title="시험 전 안내사항" />
+      <ExamPageHeader title={t('examReady.title' as never)} />
 
       {/* Stepper */}
       <div className={`bg-white border-b border-[#E5E7EB] ${EXAM.layout.containerPx} pt-[clamp(10px,1.2vw,25px)] pb-[clamp(10px,1.1vw,10px)] shrink-0`}>
@@ -517,6 +519,7 @@ export default function ExamReadinessPage() {
                   examInfo={examInfo}
                   totalMinutes={totalMinutes}
                   writtenQuestions={examStructure.writtenQuestions}
+                  t={t}
                 />
               )}
 
@@ -554,9 +557,9 @@ export default function ExamReadinessPage() {
                       : !canAdvance && currentStep === 2 && !envReady
                       ? t('ready.hint.resolve' as never)
                       : !canAdvance && currentStep === 3
-                      ? 'PC 환경에서 본인인증 단계로 진행할 수 있습니다.'
+                      ? t('examReady.hint.pcOnly' as never)
                       : testMode
-                      ? '테스트 모드: 모든 제한이 해제됐습니다. "다음" 버튼으로 각 화면을 진행하세요.'
+                      ? t('examReady.hint.testMode' as never)
                       : ''}
                   </p>
                   <button
@@ -565,7 +568,7 @@ export default function ExamReadinessPage() {
                     disabled={testMode}
                     className={`${EXAM.text.helper} ${EXAM.color.brand} underline underline-offset-2 hover:opacity-80 transition-opacity disabled:no-underline disabled:opacity-60 disabled:cursor-not-allowed shrink-0`}
                   >
-                    {testMode ? '테스트 모드 활성' : '테스트용 버튼 (제한 해제)'}
+                    {testMode ? t('examReady.testMode.on' as never) : t('examReady.testMode.off' as never)}
                   </button>
                 </div>
               )}
@@ -577,9 +580,9 @@ export default function ExamReadinessPage() {
                 onNext={goNext}
                 prevDisabled={starting}
                 nextDisabled={!canAdvance}
-                nextLabel={currentStep < STEPS.length - 1 ? '다음' : '본인인증진행'}
+                nextLabel={currentStep < STEPS.length - 1 ? t('examReady.act.next' as never) : t('examReady.act.identify' as never)}
                 isLoading={starting}
-                loadingLabel="이동 중..."
+                loadingLabel={t('examReady.act.navigating' as never)}
               />
 
             </div>
@@ -589,21 +592,21 @@ export default function ExamReadinessPage() {
 
       {showExitConfirm && (
         <ResultModal
-          title="시험 준비 종료"
+          title={t('examReady.exit.title' as never)}
           onClose={() => setShowExitConfirm(false)}
           footer={(
             <div className="flex w-full items-center justify-end gap-2">
               <ResultModalButton variant="primary" onClick={() => void handleConfirmExit()}>
-                나가기
+                {t('examReady.exit.cta' as never)}
               </ResultModalButton>
             </div>
           )}
         >
           <p className={`${EXAM.text.body} ${EXAM.color.body}`}>
-            시험 준비를 종료하고 페이지를 나가시겠습니까?
+            {t('examReady.exit.prompt' as never)}
           </p>
           <p className={`${EXAM.text.helper} ${EXAM.color.helper} mt-1`}>
-            진행 중인 내용은 저장되지 않을 수 있습니다.
+            {t('examReady.exit.helper' as never)}
           </p>
         </ResultModal>
       )}
@@ -619,21 +622,23 @@ function StepExamInfo({
   examInfo,
   totalMinutes,
   writtenQuestions,
+  t,
 }: {
   examInfo: ExamInfo;
   totalMinutes: number;
   writtenQuestions: number;
+  t: (k: never, p?: Record<string, string | number>) => string;
 }) {
   const examName = certLabel(examInfo.certType, examInfo.level);
-  const venueLabel =
-    examInfo.venue === 'ONLINE_CBT' ? '온라인 (AI 감독)' : examInfo.venue || '온라인 (AI 감독)';
+  const onlineLabel = t('examReady.venueOnline' as never);
+  const venueLabel = examInfo.venue === 'ONLINE_CBT' ? onlineLabel : examInfo.venue || onlineLabel;
 
   return (
     <div className="space-y-[clamp(12px,1vw,28px)]">
-      <InfoRow label="시험명" value={examName} />
-      <InfoRow label="시험시간" value={`${totalMinutes}분`} />
-      <InfoRow label="시험문항" value={`${writtenQuestions}문항`} />
-      <InfoRow label="응시방식" value={venueLabel} />
+      <InfoRow label={t('examReady.info.exam' as never)} value={examName} />
+      <InfoRow label={t('examReady.info.time' as never)} value={t('examReady.info.minutes' as never, { n: totalMinutes })} />
+      <InfoRow label={t('examReady.info.count' as never)} value={t('examReady.info.questions' as never, { n: writtenQuestions })} />
+      <InfoRow label={t('examReady.info.mode' as never)} value={venueLabel} />
     </div>
   );
 }

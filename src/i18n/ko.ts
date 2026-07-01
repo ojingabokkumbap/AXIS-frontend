@@ -1836,4 +1836,105 @@ export const ko = {
   'siteTour.generic.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
   'siteTour.generic.help.body':
     '모든 페이지 오른쪽 아래의 「사이트 가이드」 버튼을 누르면 언제든 이 가이드를 다시 볼 수 있습니다.',
+
+  // ── i18n pass 2 additions ──────────────────────────────
+  // RegistrationsPanel
+  'sec.registrations.confirmCancel': '이 접수를 취소하시겠습니까?',
+  'sec.registrations.info.voucher':
+    '수험표는 시험 시작 전까지 출력할 수 있으며, 시험 당일 입장 시 수험번호와 본인확인이 필요합니다.',
+  'sec.registrations.info.refund':
+    '접수 마감 전: 전액 환불 / 시험 7일 전: 50% 환불 / 시험 6일 전 이후 또는 미응시: 환불 불가.',
+  'sec.registrations.col.round': '회차',
+  'sec.registrations.col.cert': '자격',
+  'sec.registrations.col.status': '접수상태',
+  'sec.registrations.col.examDate': '시험일',
+  'sec.registrations.empty.hint': '시험 접수 후 이곳에서 수험표와 결제 상태를 확인할 수 있습니다.',
+  'sec.registrations.empty.title': '최근 3개월 이내의 접수내역이 없습니다.',
+  'sec.registrations.status.paidExpired': '{date} 응시 마감 (만료)',
+  'sec.registrations.status.paidUntil': '{date}까지 응시 가능',
+  'sec.registrations.status.paid': '결제 완료 · 응시 대기',
+  'sec.registrations.status.pendingUntil': '{date}까지 결제 대기중',
+  'sec.registrations.status.pending30': '30분 내 결제 필요',
+  'sec.registrations.status.refunded': '환불 완료',
+  'sec.registrations.status.refundedAmount': '{amount} 환불 완료',
+  'sec.registrations.status.cancelled': '접수 취소됨',
+  'sec.registrations.roundSuffix': '{n}회차',
+  'sec.registrations.act.pay': '결제하기',
+  'sec.registrations.act.receiptView': '영수증 보기',
+  'sec.registrations.act.refundPolicy': '환불 정책 보기',
+  'sec.registrations.act.cancelling': '취소 중…',
+  'sec.registrations.act.cancel': '접수 취소',
+
+  // ApplyCompletePage
+  'apply.complete.copied': '복사되었습니다!',
+  'apply.complete.copyFailed': '복사에 실패했습니다',
+  'apply.complete.vaTitle': '✅ 가상계좌가 발급되었습니다',
+  'apply.complete.bank': '입금 은행',
+  'apply.complete.account': '계좌번호',
+  'apply.complete.holder': '예금주',
+  'apply.complete.amount': '입금 금액',
+  'apply.complete.deadline': '입금 기한',
+  'apply.complete.deadlineSuffix': '까지',
+  'apply.complete.warnNoPay': '⚠ 입금기한 내 미입금 시 접수가 자동으로 취소됩니다.',
+  'apply.complete.smsInfo': '입금 확인 후 SMS와 이메일로 접수 확정 안내를 드립니다.',
+  'apply.complete.processTime': '처리 시간: 입금 확인 후 즉시 (평균 10초 이내)',
+  'apply.complete.copyAccount': '계좌번호 복사',
+  'apply.complete.gotoMypage': '마이페이지에서 확인',
+  'apply.complete.gotoHome': '홈으로 이동',
+
+  // ScoresPanel InfoCallouts
+  'sec.scores.info.aiNote':
+    'AI 채점은 최종 판정자가 아니라 1차 채점 보조입니다. 최종 점수와 합격 판정은 전문가 검수 및 관리자 확정을 거쳐 결정됩니다.',
+  'sec.scores.info.certLink': '자격증발급은 자격증발급 페이지에서 가능합니다.',
+
+  // ScoreDetailModal (SharedModals)
+  'score.detail.total': '총점',
+  'score.detail.written': '필기',
+  'score.detail.practical': '실기',
+  'score.detail.pass': '합격',
+  'score.detail.failThreshold': '불합격 (기준 60)',
+  'score.detail.subjectBreakdown': '과목별 상세',
+  'score.detail.col.section': '구분',
+  'score.detail.col.subject': '과목',
+  'score.detail.col.score': '점수',
+  'score.detail.col.ratio': '비율',
+  'score.detail.col.result': '결과',
+  'score.detail.subjectFail': '과락',
+  'score.detail.failReason': '불합격 사유',
+
+  // primitives aria-label
+  'mypage.actMenu.more': '더보기',
+
+  // ExamReadinessPage
+  'examReady.stepper.info': '시험정보',
+  'examReady.stepper.notes': '시험유의사항',
+  'examReady.stepper.envcheck': '사용환경 점검',
+  'examReady.stepper.done': '시험준비 완료',
+  'examReady.title': '시험 전 안내사항',
+  'examReady.hint.pcOnly': 'PC 환경에서 본인인증 단계로 진행할 수 있습니다.',
+  'examReady.hint.testMode': '테스트 모드: 모든 제한이 해제됐습니다. "다음" 버튼으로 각 화면을 진행하세요.',
+  'examReady.act.next': '다음',
+  'examReady.act.identify': '본인인증진행',
+  'examReady.act.navigating': '이동 중...',
+  'examReady.exit.title': '시험 준비 종료',
+  'examReady.exit.cta': '나가기',
+  'examReady.exit.prompt': '시험 준비를 종료하고 페이지를 나가시겠습니까?',
+  'examReady.exit.helper': '진행 중인 내용은 저장되지 않을 수 있습니다.',
+  'examReady.venueOnline': '온라인 (AI 감독)',
+  'examReady.info.exam': '시험명',
+  'examReady.info.time': '시험시간',
+  'examReady.info.count': '시험문항',
+  'examReady.info.mode': '응시방식',
+  'examReady.info.minutes': '{n}분',
+  'examReady.info.questions': '{n}문항',
+  'examReady.testMode.on': '테스트 모드 활성',
+  'examReady.testMode.off': '테스트용 버튼 (제한 해제)',
+
+  // ── Mobile block (exam / demo cannot run on phones or tablets) ──
+  'mobileBlock.alert': '이 기능은 PC 또는 노트북에서만 이용할 수 있습니다. 다른 기기에서 다시 시도해 주세요.',
+  'mobileBlock.badge': 'PC 전용',
+  'mobileBlock.title': 'PC 또는 노트북에서만 응시할 수 있습니다',
+  'mobileBlock.desc': '실시간 감독(카메라·화면 모니터링)과 분할 화면 응시 환경 때문에 시험과 데모 응시는 모바일·태블릿에서 지원되지 않습니다. PC 또는 노트북에서 다시 접속해 주세요.',
+  'mobileBlock.descEn': 'This function can be done only with a PC or laptop. Please try on another device.',
+  'mobileBlock.home': '홈으로 가기',
 } as const;
