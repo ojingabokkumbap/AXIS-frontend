@@ -11,7 +11,6 @@ const CertificatePrintPage = lazy(() => import('./pages/user/CertificatePrintPag
 const ConfirmationPrintPage = lazy(() => import('./pages/user/ConfirmationPrintPage'));
 const VoucherPrintPage = lazy(() => import('./pages/user/VoucherPrintPage'));
 const GuidePdfPage = lazy(() => import('./pages/info/GuidePdfPage'));
-import ExamSelectPage from './pages/exam/select/ExamSelectPage';
 import ExamRunnerPage from './pages/exam/runner/ExamRunnerPage';
 import ExamResultPage from './pages/exam/result/ExamResultPage';
 import DemoPage from './pages/exam/runner/DemoPage';
@@ -102,14 +101,9 @@ export default function PublicApp() {
             </RequireAuth>
           }
         />
-        <Route
-          path="/cbt"
-          element={
-            <RequireAuth>
-              <ExamSelectPage />
-            </RequireAuth>
-          }
-        />
+        {/* /cbt used to render ExamSelectPage which called an admin-only session
+            creation API — real candidates enter exams from My Page > 응시 카드. */}
+        <Route path="/cbt" element={<Navigate to="/mypage?section=exams" replace />} />
         <Route
           path="/cbt/exam/:sessionId"
           element={
