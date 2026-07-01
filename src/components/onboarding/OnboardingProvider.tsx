@@ -12,7 +12,9 @@ import {
 } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useI18n } from '@/i18n';
+import { useIsMobile } from '@/lib/useIsMobile';
 import { SpotlightTour, type SpotlightTourStep } from './SpotlightTour';
+import { MobileTourSheet } from './MobileTourSheet';
 import { JourneyWelcomeModal } from './JourneyWelcomeModal';
 import { TourHelpFab } from './TourHelpFab';
 import { isTourDone, resetSiteTours, TOUR_KEYS } from './onboardingStorage';
@@ -66,6 +68,7 @@ function isTourEligiblePath(pathname: string): boolean {
 export function OnboardingProvider({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { t } = useI18n();
+  const isMobile = useIsMobile();
   const tourId = resolveTourId(pathname);
   const [tourOpen, setTourOpen] = useState(false);
   const [forceOpen, setForceOpen] = useState(false);
@@ -361,19 +364,35 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
         onClose={() => setJourneyOpen(false)}
       />
 
-      {tourConfig && (
-        <SpotlightTour
-          open={tourOpen}
-          steps={tourConfig.steps}
-          storageKey={tourConfig.key}
-          labels={labels}
-          forceOpen={forceOpen}
-          onClose={() => {
-            setTourOpen(false);
-            setForceOpen(false);
-          }}
-        />
-      )}
+      {tourConfig &&
+        (isMobile ? (
+          // Phones can't use the spotlight — most targets live in the desktop
+          // nav (behind the hamburger) or assume a wide layout. Swap in a
+          // bottom-sheet card deck that teaches the same steps sequentially.
+          <MobileTourSheet
+            open={tourOpen}
+            steps={tourConfig.steps}
+            storageKey={tourConfig.key}
+            labels={labels}
+            forceOpen={forceOpen}
+            onClose={() => {
+              setTourOpen(false);
+              setForceOpen(false);
+            }}
+          />
+        ) : (
+          <SpotlightTour
+            open={tourOpen}
+            steps={tourConfig.steps}
+            storageKey={tourConfig.key}
+            labels={labels}
+            forceOpen={forceOpen}
+            onClose={() => {
+              setTourOpen(false);
+              setForceOpen(false);
+            }}
+          />
+        ))}
 
       {showFab && (
         <TourHelpFab

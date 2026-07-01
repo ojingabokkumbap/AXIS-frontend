@@ -27,6 +27,7 @@ import ResultsPage from './pages/info/ResultsPage';
 import VerifyCertPage from './pages/info/VerifyCertPage';
 import AboutPage from './pages/info/AboutPage';
 import { OnboardingProvider } from '@/components/onboarding/OnboardingProvider';
+import { MobileExamGuard } from '@/components/MobileExamGuard';
 
 function RequireAuth({ children }: { children: ReactElement }) {
   const location = useLocation();
@@ -108,7 +109,9 @@ export default function PublicApp() {
           path="/cbt/exam/:sessionId"
           element={
             <RequireAuth>
-              <ExamRunnerPage />
+              <MobileExamGuard>
+                <ExamRunnerPage />
+              </MobileExamGuard>
             </RequireAuth>
           }
         />
@@ -140,7 +143,9 @@ export default function PublicApp() {
           path="/demo/:certType/:level"
           element={
             <RequireAuth>
-              <DemoPage />
+              <MobileExamGuard>
+                <DemoPage />
+              </MobileExamGuard>
             </RequireAuth>
           }
         />
@@ -148,7 +153,9 @@ export default function PublicApp() {
           path="/proctor"
           element={
             <RequireAuth>
-              <ProctorPage />
+              <MobileExamGuard>
+                <ProctorPage />
+              </MobileExamGuard>
             </RequireAuth>
           }
         />
@@ -156,7 +163,9 @@ export default function PublicApp() {
           path="/verify"
           element={
             <RequireAuth>
-              <IdentityVerificationPage />
+              <MobileExamGuard>
+                <IdentityVerificationPage />
+              </MobileExamGuard>
             </RequireAuth>
           }
         />
@@ -164,7 +173,9 @@ export default function PublicApp() {
           path="/env-check"
           element={
             <RequireAuth>
-              <EnvironmentCheckPage />
+              <MobileExamGuard>
+                <EnvironmentCheckPage />
+              </MobileExamGuard>
             </RequireAuth>
           }
         />
@@ -172,7 +183,9 @@ export default function PublicApp() {
           path="/exam-ready"
           element={
             <RequireAuth>
-              <ExamReadinessPage />
+              <MobileExamGuard>
+                <ExamReadinessPage />
+              </MobileExamGuard>
             </RequireAuth>
           }
         />

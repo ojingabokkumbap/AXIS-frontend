@@ -84,8 +84,8 @@ export default function LoginPage() {
         }}
       />
 
-      <main className="mx-auto w-full max-w-[var(--spacing-content-w)] px-4 py-20 sm:px-6 lg:px-8">
-        <div className="grid gap-8 rounded-xl border border-[#E0E4ED] p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
+      <main className="mx-auto w-full max-w-[var(--spacing-content-w)] px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
+        <div className="grid gap-8 rounded-xl border border-[#E0E4ED] p-5 sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
           <section className="bg-white p-2 sm:p-4">
             <h2 className="mb-8 text-[30px] font-semibold tracking-[-0.02em] text-gray-800">{t('login.title')}</h2>
 
@@ -176,7 +176,7 @@ export default function LoginPage() {
             </form>
           </section>
 
-          <section className="rounded-xl border border-[#E0E4ED] bg-white px-10 py-4 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD] flex flex-col justify-between">
+          <section className="rounded-xl border border-[#E0E4ED] bg-white px-6 py-6 sm:px-10 sm:py-4 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD] flex flex-col justify-between gap-8">
             <p className="mb-8 text-[27px] leading-[1.35] tracking-[-0.02em] text-gray-800 whitespace-pre-line">
               {t('login.rightPanelPrompt')}
             </p>
@@ -184,7 +184,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => navigate('/signup')}
-                className="h-14 w-full rounded-lg border-none bg-blue-900 text-[18px] font-semisemibold text-white"
+                className="h-14 w-full rounded-lg border-none bg-blue-900 text-[18px] font-semibold text-white"
               >
                 {t('login.cta.signup')}
               </button>

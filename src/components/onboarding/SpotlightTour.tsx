@@ -104,6 +104,11 @@ function resolvePlacement(
   return 'left';
 }
 
+/** Actual tooltip width — never wider than the viewport (minus margins). */
+function tooltipWidth(vw: number): number {
+  return Math.min(TOOLTIP_W, vw - TOOLTIP_MARGIN * 2);
+}
+
 function computeTooltipPos(
   rect: DOMRect | null,
   placement: 'top' | 'bottom' | 'left' | 'right',
@@ -111,9 +116,10 @@ function computeTooltipPos(
   vh: number,
   tooltipH: number,
 ) {
+  const tw = tooltipWidth(vw);
   if (!rect) {
     return {
-      left: Math.max(16, (vw - TOOLTIP_W) / 2),
+      left: Math.max(TOOLTIP_MARGIN, (vw - tw) / 2),
       top: Math.max(16, (vh - tooltipH) / 2),
     };
   }
@@ -121,11 +127,11 @@ function computeTooltipPos(
   let top = 0;
   switch (placement) {
     case 'bottom':
-      left = rect.left + rect.width / 2 - TOOLTIP_W / 2;
+      left = rect.left + rect.width / 2 - tw / 2;
       top = rect.bottom + TOOLTIP_MARGIN;
       break;
     case 'top':
-      left = rect.left + rect.width / 2 - TOOLTIP_W / 2;
+      left = rect.left + rect.width / 2 - tw / 2;
       top = rect.top - tooltipH - TOOLTIP_MARGIN;
       break;
     case 'right':
@@ -133,11 +139,11 @@ function computeTooltipPos(
       top = rect.top + rect.height / 2 - tooltipH / 2;
       break;
     case 'left':
-      left = rect.left - TOOLTIP_W - TOOLTIP_MARGIN;
+      left = rect.left - tw - TOOLTIP_MARGIN;
       top = rect.top + rect.height / 2 - tooltipH / 2;
       break;
   }
-  left = Math.max(12, Math.min(left, vw - TOOLTIP_W - 12));
+  left = Math.max(12, Math.min(left, vw - tw - 12));
   top = Math.max(12, Math.min(top, vh - tooltipH - 12));
   return { left, top };
 }
@@ -394,7 +400,8 @@ export function SpotlightTour({
           position: 'fixed',
           left: pos.left,
           top: pos.top,
-          width: TOOLTIP_W,
+          width: tooltipWidth(viewport.w),
+          maxWidth: 'calc(100vw - 32px)',
           background: '#FFFFFF',
           color: '#191919',
           borderRadius: 20,
