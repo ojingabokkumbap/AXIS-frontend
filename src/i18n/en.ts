@@ -1799,7 +1799,7 @@ export const en = {
   // Generic fallback tour — used on any page without a curated walkthrough.
   'siteTour.generic.welcome.title': 'Welcome',
   'siteTour.generic.welcome.body':
-    'Here is a quick orientation. We will show this guide a few times, then keep it tucked away in the bottom-right corner — promise it will not nag you forever.',
+    'Here is a quick orientation. It appears automatically only on your first visit, then stays tucked away behind the Site guide button in the bottom-right corner — promise it will not nag you again.',
   'siteTour.generic.nav.title': 'Top navigation',
   'siteTour.generic.nav.body':
     'Jump to registration, my page, results, verification, and support from here.',

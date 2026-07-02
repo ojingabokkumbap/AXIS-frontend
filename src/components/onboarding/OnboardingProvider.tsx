@@ -303,20 +303,20 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
     }
   }, [tourId, pathname, homeSteps, mypageSteps, applySteps, cbtSteps, genericSteps]);
 
-  // First visit: journey modal on home (logged-in users only).
+  // First visit to the site: journey modal on home — for every visitor,
+  // logged in or not. It auto-appears exactly once; afterwards the bottom
+  // "Site guide" button is the way back in.
   useEffect(() => {
     setTourOpen(false);
     setForceOpen(false);
     if (pathname !== '/') return;
-    const loggedIn = !!localStorage.getItem('accessToken');
-    if (!loggedIn) return;
     if (isTourDone(TOUR_KEYS.journey)) return;
     const id = window.setTimeout(() => setJourneyOpen(true), 600);
     return () => window.clearTimeout(id);
   }, [pathname]);
 
   // Auto-start page tour after journey dismissed or on other pages.
-  // Plays up to MAX_AUTO_SHOWS (3) times per page; after that the FAB takes over.
+  // Plays MAX_AUTO_SHOWS (1) time per page; after that the FAB takes over.
   useEffect(() => {
     if (!tourConfig || journeyOpen) return;
     if (forceOpen) return;

@@ -1,8 +1,14 @@
 /**
  * First-visit journey modal — explains Register → My Page → Demo → Real exam.
+ *
+ * Desktop: centered dialog. Mobile: slide-up bottom sheet with a scrollable
+ * step list, safe-area padding, and thumb-friendly buttons — the centered
+ * dialog overflowed small viewports.
  */
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { BookOpen, ClipboardList, FlaskConical, ShieldCheck, X } from 'lucide-react';
+import { useIsMobile } from '@/lib/useIsMobile';
 import { markTourDone, TOUR_KEYS } from './onboardingStorage';
 
 interface Props {
@@ -34,7 +40,24 @@ const STEPS = [
   { icon: ShieldCheck, tone: '#7C3AED', bg: '#F5F3FF' },
 ] as const;
 
+function prefersReducedMotion(): boolean {
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Props) {
+  const isMobile = useIsMobile();
+  const [shown, setShown] = useState(false);
+  const reducedMotion = prefersReducedMotion();
+
+  // Slide-up / fade-in entrance — flip `shown` on the frame after `open`
+  // changes so the CSS transition runs. Reduced motion is handled by the
+  // inline `transition: none` styles, so one frame at the start state is fine.
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(open));
+    return () => cancelAnimationFrame(id);
+  }, [open]);
+
   if (!open) return null;
 
   const stepContent = [
@@ -64,11 +87,13 @@ export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Prop
         inset: 0,
         zIndex: 2147483500,
         display: 'flex',
-        alignItems: 'center',
+        alignItems: isMobile ? 'flex-end' : 'center',
         justifyContent: 'center',
-        padding: 20,
+        padding: isMobile ? 0 : 20,
         background: 'rgba(15, 18, 28, 0.55)',
         backdropFilter: 'blur(6px)',
+        opacity: shown ? 1 : 0,
+        transition: reducedMotion ? 'none' : 'opacity 220ms ease',
         fontFamily: 'var(--font-sans, ui-sans-serif, "Noto Sans KR", sans-serif)',
       }}
       onClick={(e) => {
@@ -79,15 +104,21 @@ export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Prop
         style={{
           width: '100%',
           maxWidth: 560,
+          maxHeight: isMobile ? '90dvh' : '90vh',
+          display: 'flex',
+          flexDirection: 'column',
           background: '#FFFFFF',
-          borderRadius: 24,
-          boxShadow: '0 40px 100px rgba(0,0,0,0.22)',
+          borderRadius: isMobile ? '24px 24px 0 0' : 24,
+          boxShadow: isMobile ? '0 -12px 48px rgba(0,0,0,0.22)' : '0 40px 100px rgba(0,0,0,0.22)',
           overflow: 'hidden',
+          transform: shown ? 'translateY(0)' : isMobile ? 'translateY(100%)' : 'translateY(12px)',
+          transition: reducedMotion ? 'none' : 'transform 300ms cubic-bezier(.16,1,.3,1)',
         }}
       >
         <div
           style={{
-            padding: '28px 28px 20px',
+            flexShrink: 0,
+            padding: isMobile ? '20px 20px 16px' : '28px 28px 20px',
             background: 'linear-gradient(135deg, #191919 0%, #2d3748 100%)',
             color: '#fff',
             position: 'relative',
@@ -104,8 +135,8 @@ export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Prop
               border: 'none',
               background: 'rgba(255,255,255,0.12)',
               color: '#fff',
-              width: 32,
-              height: 32,
+              width: 36,
+              height: 36,
               borderRadius: 8,
               cursor: 'pointer',
               display: 'flex',
@@ -118,15 +149,42 @@ export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Prop
           <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 1.2, textTransform: 'uppercase', opacity: 0.7 }}>
             AXIS Guide
           </div>
-          <h2 id="journey-welcome-title" style={{ margin: '8px 0 0', fontSize: 26, fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1.25 }}>
+          <h2
+            id="journey-welcome-title"
+            style={{
+              margin: '8px 0 0',
+              fontSize: isMobile ? 21 : 26,
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.25,
+              wordBreak: 'keep-all',
+            }}
+          >
             {labels.title}
           </h2>
-          <p style={{ margin: '10px 0 0', fontSize: 15, lineHeight: 1.6, color: 'rgba(255,255,255,0.82)' }}>
+          <p
+            style={{
+              margin: '10px 0 0',
+              fontSize: isMobile ? 14 : 15,
+              lineHeight: 1.6,
+              color: 'rgba(255,255,255,0.82)',
+              wordBreak: 'keep-all',
+            }}
+          >
             {labels.subtitle}
           </p>
         </div>
 
-        <div style={{ padding: '8px 24px 24px' }}>
+        {/* Step list — scrolls independently so buttons stay reachable on short screens. */}
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            padding: isMobile ? '4px 18px 8px' : '8px 24px 8px',
+          }}
+        >
           {stepContent.map((step, i) => {
             const meta = STEPS[i];
             const Icon = meta.icon;
@@ -136,15 +194,15 @@ export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Prop
                 style={{
                   display: 'flex',
                   gap: 14,
-                  padding: '16px 0',
+                  padding: isMobile ? '14px 0' : '16px 0',
                   borderBottom: i < stepContent.length - 1 ? '1px solid #F0F0F0' : 'none',
                 }}
               >
                 <div
                   style={{
                     flexShrink: 0,
-                    width: 44,
-                    height: 44,
+                    width: isMobile ? 40 : 44,
+                    height: isMobile ? 40 : 44,
                     borderRadius: 12,
                     background: meta.bg,
                     color: meta.tone,
@@ -158,7 +216,9 @@ export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Prop
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                     <span style={{ fontSize: 11, fontWeight: 800, color: '#737373' }}>{String(i + 1).padStart(2, '0')}</span>
-                    <span style={{ fontSize: 16, fontWeight: 700, color: '#191919' }}>{step.title}</span>
+                    <span style={{ fontSize: isMobile ? 15 : 16, fontWeight: 700, color: '#191919', wordBreak: 'keep-all' }}>
+                      {step.title}
+                    </span>
                     <span
                       style={{
                         fontSize: 10,
@@ -172,47 +232,68 @@ export function JourneyWelcomeModal({ open, labels, onStartTour, onClose }: Prop
                       {step.badge}
                     </span>
                   </div>
-                  <p style={{ margin: '6px 0 0', fontSize: 14, lineHeight: 1.55, color: '#525252' }}>{step.body}</p>
+                  <p
+                    style={{
+                      margin: '6px 0 0',
+                      fontSize: 14,
+                      lineHeight: 1.55,
+                      color: '#525252',
+                      wordBreak: 'keep-all',
+                    }}
+                  >
+                    {step.body}
+                  </p>
                 </div>
               </div>
             );
           })}
+        </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>
-            <button
-              type="button"
-              onClick={start}
-              style={{
-                width: '100%',
-                height: 48,
-                border: 'none',
-                borderRadius: 12,
-                background: '#191919',
-                color: '#fff',
-                fontSize: 15,
-                fontWeight: 700,
-                cursor: 'pointer',
-              }}
-            >
-              {labels.startTour}
-            </button>
-            <button
-              type="button"
-              onClick={dismiss}
-              style={{
-                width: '100%',
-                height: 44,
-                border: 'none',
-                background: 'transparent',
-                color: '#737373',
-                fontSize: 14,
-                fontWeight: 500,
-                cursor: 'pointer',
-              }}
-            >
-              {labels.skip}
-            </button>
-          </div>
+        <div
+          style={{
+            flexShrink: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 10,
+            padding: isMobile
+              ? '10px 18px max(16px, env(safe-area-inset-bottom))'
+              : '10px 24px 24px',
+            borderTop: '1px solid #F5F5F5',
+          }}
+        >
+          <button
+            type="button"
+            onClick={start}
+            style={{
+              width: '100%',
+              height: isMobile ? 52 : 48,
+              border: 'none',
+              borderRadius: 12,
+              background: '#191919',
+              color: '#fff',
+              fontSize: isMobile ? 16 : 15,
+              fontWeight: 700,
+              cursor: 'pointer',
+            }}
+          >
+            {labels.startTour}
+          </button>
+          <button
+            type="button"
+            onClick={dismiss}
+            style={{
+              width: '100%',
+              height: 44,
+              border: 'none',
+              background: 'transparent',
+              color: '#737373',
+              fontSize: 14,
+              fontWeight: 500,
+              cursor: 'pointer',
+            }}
+          >
+            {labels.skip}
+          </button>
         </div>
       </div>
     </div>,

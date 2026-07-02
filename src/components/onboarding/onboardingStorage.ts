@@ -16,8 +16,12 @@ export const TOUR_KEYS = {
   demoVerify: 'axis.demoTour.verify.v1',
 } as const;
 
-/** Auto-show the tour this many times, then keep it accessible via the FAB only. */
-export const MAX_AUTO_SHOWS = 3;
+/**
+ * Auto-show the tour this many times, then keep it accessible via the FAB only.
+ * 1 = show automatically on the very first visit only; afterwards the user
+ * reopens it on demand from the bottom "Site guide" button.
+ */
+export const MAX_AUTO_SHOWS = 1;
 
 const COUNT_SUFFIX = '.count';
 
