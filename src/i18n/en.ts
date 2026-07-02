@@ -1809,6 +1809,25 @@ export const en = {
   'siteTour.mobileGuide.confirm': 'Got it',
   'siteTour.mobileGuide.close': 'Close',
 
+  // ── Cert Guide (CertGuidePage) — body content lives in a per-language data map in the page
+  'certGuide.hero.subtitle': 'Explore the AXIS certification framework\nbuilt for the AI era',
+  'certGuide.overviewTitle': 'About {cert}',
+  'certGuide.view': 'View',
+  'certGuide.levels.title': 'Level Structure',
+  'certGuide.levels.th.level': 'Level',
+  'certGuide.levels.th.target': 'Audience',
+  'certGuide.levels.th.questions': 'Questions',
+  'certGuide.levels.th.time': 'Duration',
+  'certGuide.levels.th.passing': 'Passing',
+  'certGuide.scope.title': 'Exam Scope',
+  'certGuide.scope.desc': 'Core workplace AI competencies are assessed across {n} domains.',
+  'certGuide.faq.title': 'Frequently Asked Questions',
+  'certGuide.cta.line1': 'Take the exam now and',
+  'certGuide.cta.line2': 'prove your AI skills at work.',
+  'certGuide.cta.sub': 'Round schedules are available on the registration page.',
+  'certGuide.cta.apply': 'Register for the Exam',
+  'certGuide.cta.info': 'AXIS Exam Info',
+
   // ── Results announcement (ResultsPage) ─────────────────────
   'results.hero.title': 'Results',
   'results.hero.subtitle': 'Round results · pass/fail · score lookup',

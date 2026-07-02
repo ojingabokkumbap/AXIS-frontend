@@ -1841,6 +1841,25 @@ export const ko = {
   'siteTour.mobileGuide.confirm': '확인했어요',
   'siteTour.mobileGuide.close': '닫기',
 
+  // ── 자격 안내 (CertGuidePage) — 본문 콘텐츠는 페이지 내 언어별 데이터 맵 사용
+  'certGuide.hero.subtitle': 'AI 시대를 선도하는\nAXIS 자격 체계를 확인하세요',
+  'certGuide.overviewTitle': '{cert} 개요',
+  'certGuide.view': '바로보기',
+  'certGuide.levels.title': '등급 체계',
+  'certGuide.levels.th.level': '등급',
+  'certGuide.levels.th.target': '대상',
+  'certGuide.levels.th.questions': '문항 수',
+  'certGuide.levels.th.time': '시험 시간',
+  'certGuide.levels.th.passing': '합격 기준',
+  'certGuide.scope.title': '출제 범위',
+  'certGuide.scope.desc': '현업에서 요구되는 AI 핵심 역량을 {n}개 영역으로 나누어 검증합니다.',
+  'certGuide.faq.title': '자주 묻는 질문',
+  'certGuide.cta.line1': '지금 바로 응시하고',
+  'certGuide.cta.line2': 'AI 실무역량을 증명하세요.',
+  'certGuide.cta.sub': '회차별 일정은 시험접수 페이지에서 확인하실 수 있습니다.',
+  'certGuide.cta.apply': '시험접수 하기',
+  'certGuide.cta.info': 'AXIS 응시안내',
+
   // ── 합격자 발표 (ResultsPage) ──────────────────────────────
   'results.hero.title': '합격자 발표',
   'results.hero.subtitle': '회차별 결과 · 합격 여부 · 성적 조회',

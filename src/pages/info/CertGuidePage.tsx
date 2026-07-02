@@ -65,7 +65,11 @@ interface CertContent {
   faq: FaqItem[];
 }
 
-const CERT_DATA: Record<CertTab, CertContent> = {
+// Content is structured (tables, card grids, accordions), so it lives here as a
+// per-language data map instead of ~200 flat i18n keys; UI chrome labels still
+// go through the i18n dictionaries.
+const CERT_DATA: Record<'ko' | 'en', Record<CertTab, CertContent>> = {
+  ko: {
   axis: {
     overview:
       'AXIS(AI eXecution & Integrity Standard)는 AI로 실제 업무를 수행하고(eXecution), 그 결과를 검증·통제하는(Integrity) 역량을 평가하는 표준 자격입니다.\n프롬프트 엔지니어링, 데이터 분석, AI 도구 활용 등 현업에서 요구되는 핵심 역량을 검증합니다.',
@@ -166,10 +170,113 @@ const CERT_DATA: Record<CertTab, CertContent> = {
       { q: 'AXIS-H는 의료 자격증인가요?', a: '아닙니다. AXIS-H는 의료 행위 자격이 아닌 AI 활용 역량 인증입니다.' },
     ],
   },
+  },
+  en: {
+  axis: {
+    overview:
+      'AXIS (AI eXecution & Integrity Standard) is a standard certification that assesses your ability to execute real work with AI (eXecution) and to verify and control the results (Integrity).\nIt validates the core competencies today’s workplace demands, including prompt engineering, data analysis, and effective use of AI tools.',
+    levels: [
+      { level: 'L3 (Starter)', target: 'AI beginners & university students', questions: '40 MCQ + 4 practical', time: '60 min', passing: '70 or above' },
+      { level: 'L2 (Practitioner)', target: '2+ years of work experience', questions: '30 case-based MCQ + 3 practical tasks', time: '90 min', passing: '70 or above' },
+      { level: 'L1 (Leader)', target: 'Leaders & architects', questions: '25 MCQ + action plan + 2 essays', time: '120 min', passing: '70 or above' },
+    ],
+    levelsFootnote: '※ Passing requires a total score of 70 or above; practical work below the minimum standard is reviewed separately.',
+    scope: [
+      { title: 'Understanding AI realities and limits', details: ['Hallucination, recency limits, need for verification', '5 questions'] },
+      { title: 'Defining work problems, choosing AI & tools', details: ['When to apply AI, input data, tool selection', '6 questions'] },
+      { title: 'Designing AI instructions, context & dialogue', details: ['Prompts with role, goal, constraints, output format', '7 questions'] },
+      { title: 'Verifying AI output & quality control', details: ['Spotting errors, omissions, logical leaps, exaggeration', '8 questions'] },
+      { title: 'Revising & applying work deliverables', details: ['Improving reports, minutes, and notices', '6 questions'] },
+      { title: 'Security, privacy, copyright & ethics', details: ['Prohibited inputs, copyright, accountability', '8 questions'] },
+    ],
+    examGuide: {
+      title: 'AXIS Exam Guide',
+      body: 'The official exam guide covering scope, question types, and how to prepare. Check the guide for your level.',
+      rows: [
+        { id: 'axis-l3', label: 'AXIS L3 Exam Guide' },
+        { id: 'axis-l2', label: 'AXIS L2 Exam Guide' },
+        { id: 'axis-l1', label: 'AXIS L1 Exam Guide' },
+      ],
+    },
+    faq: [
+      { q: 'How long is an AXIS certificate valid?', a: 'It is valid for 3 years from the issue date, renewable through free refresher training or by earning a higher level.' },
+      { q: 'When can I see my exam results?', a: 'A provisional score appears right after the exam. Official results are released within 1 hour (L3), 3 days (L2), or 7 days (L1). Look them up with your registration number on the Results page, or in My Page.' },
+      { q: 'Is there a limit on retakes?', a: 'You can retake the same level 14 days after your previous exam date.' },
+      { q: 'Can I take L2 without L3?', a: 'Yes — each level can be taken independently. For L1, we recommend earning L2 first.' },
+    ],
+  },
+  'axis-c': {
+    overview:
+      'AXIS-C certifies your ability to automate work with AI tools and to understand, verify, and manage AI-generated code — no professional coding background required.\nRather than complex programming, it assesses the practical skills of structuring repetitive work into automation tasks and judging the errors and risks in AI-written code.',
+    levels: [
+      { level: 'L3 (Starter)', target: 'Practitioners new to automation', questions: '40 MCQ + 4 practical', time: '60 min', passing: '70 or above' },
+      { level: 'L2 (Practitioner)', target: 'Practitioners building work automation', questions: '30 case-based MCQ + 3 practical tasks', time: '120 min', passing: '70 or above' },
+      { level: 'L1 (Leader)', target: 'Automation operations & governance leads', questions: '25 MCQ + action plan + 2 essays', time: '120 min', passing: '70 or above' },
+    ],
+    levelsFootnote: '※ Passing requires a total score of 70 or above; practical work below the minimum standard is reviewed separately. (The L2 exam is 120 min for AXIS-C only.)',
+    scope: [
+      { title: 'Understanding AI coding realities and limits', details: ['Code-generation limits, library errors, hallucinated code', '5 questions'] },
+      { title: 'Defining automation problems, choosing tools & environments', details: ['Judging when to use no-code, scripts, or APIs', '6 questions'] },
+      { title: 'Designing code requests & prompts', details: ['Instructing AI with requirements, I/O, constraints, test conditions', '6 questions'] },
+      { title: 'Reading code & understanding execution flow', details: ['Purpose, variables, function roles, structure', '8 questions'] },
+      { title: 'Judging errors, tests & verification', details: ['Interpreting error messages and test results', '7 questions'] },
+      { title: 'Managing security, license & data risks', details: ['Exposed secrets, personal data, excess permissions', '8 questions'] },
+    ],
+    examGuide: {
+      title: 'AXIS-C Exam Guide',
+      body: 'The official exam guide for the coding & automation track — scope, question types, and preparation tips by level.',
+      rows: [
+        { id: 'axis-c-l3', label: 'AXIS-C L3 Exam Guide' },
+        { id: 'axis-c-l2', label: 'AXIS-C L2 Exam Guide' },
+        { id: 'axis-c-l1', label: 'AXIS-C L1 Exam Guide' },
+      ],
+    },
+    faq: [
+      { q: 'Can I take it without being a developer?', a: 'Yes. AXIS-C is not a coding exam for developers. It assesses automating work with AI tools and reading and verifying AI-written code — no programming career or complex coding required.' },
+      { q: 'Do I need to know a specific programming language?', a: 'No syntax memorization is required. Questions focus on language-agnostic code reading and judgment; some practical items involve reading short code (e.g. Python) to spot errors and risks.' },
+      { q: 'Can I take AXIS-C without the AXIS certificate?', a: 'Yes — AXIS-C is an independent certification you can take on its own.' },
+      { q: 'Is a practice environment provided?', a: 'L2 and above include some browser-based practical items. You analyze, fix, and verify given code rather than writing it from scratch.' },
+    ],
+  },
+  'axis-h': {
+    overview:
+      'AXIS-H certifies healthcare staff in using AI for non-clinical work such as administration, customer service, infection safety, and communications.\nIt never assesses clinical acts like diagnosis, treatment, prescription, or test interpretation — protecting patient data and preventing anything being mistaken for medical practice are at its core.',
+    levels: [
+      { level: 'L3 (Starter)', target: 'Newcomers to non-clinical work', questions: '40 MCQ + 4 practical', time: '60 min', passing: '70 or above' },
+      { level: 'L2 (Practitioner)', target: 'Non-clinical practitioners', questions: '30 case-based MCQ + 3 practical tasks', time: '90 min', passing: '70 or above' },
+      { level: 'L1 (Leader)', target: 'Leaders driving AI adoption in healthcare', questions: '25 MCQ + action plan + 2 essays', time: '120 min', passing: '70 or above' },
+    ],
+    scope: [
+      { title: 'Understanding AI realities and limits in healthcare', details: ['Gaps between institutional policy and AI answers, need for verification', '5 questions'] },
+      { title: 'Defining non-clinical problems, choosing AI & tools', details: ['Patient guidance, admin inquiries, training materials', '6 questions'] },
+      { title: 'Designing AI instructions & dialogue for healthcare', details: ['Instructions that exclude patient data and forbid diagnostic judgment', '7 questions'] },
+      { title: 'Verifying AI output & quality control', details: ['Spotting false reassurance, exaggeration, care-guidance errors, policy mismatches', '8 questions'] },
+      { title: 'Revising & applying non-clinical deliverables', details: ['Improving admin notices, CS scripts, infection-safety campaigns', '6 questions'] },
+      { title: 'Patient data, medical ethics, security & copyright risks', details: ['No personally identifiable info, diagnosis confusion, or medical-ad wording', '8 questions'] },
+    ],
+    scopeNotice:
+      '⛔ Not on AXIS-H: clinical acts such as diagnosis, treatment, prescription, or test interpretation never appear in any question or practical task. Even when symptoms come up in a patient inquiry, the correct answer always resolves to referring the patient to medical staff.',
+    examGuide: {
+      title: 'AXIS-H Exam Guide',
+      body: 'The official exam guide for the non-clinical healthcare track — scope, question types, and preparation tips by level.',
+      rows: [
+        { id: 'axis-h-l3', label: 'AXIS-H L3 Exam Guide' },
+        { id: 'axis-h-l2', label: 'AXIS-H L2 Exam Guide' },
+        { id: 'axis-h-l1', label: 'AXIS-H L1 Exam Guide' },
+      ],
+    },
+    faq: [
+      { q: 'Does the exam include clinical content like diagnosis or prescriptions?', a: 'No. AXIS-H never covers clinical acts such as diagnosis, treatment, prescription, or test interpretation in any question. Even when symptoms appear in a patient inquiry, the correct answer always routes the patient safely to medical staff — the exam assesses patient-data protection and preventing confusion with medical practice.' },
+      { q: 'Can non-medical professionals take it?', a: 'Yes — anyone interested in healthcare AI can take it, including health-informatics majors and healthtech workers.' },
+      { q: 'Is clinical experience required?', a: 'L3 requires none. L2 and above call for healthcare-domain knowledge, but not necessarily clinical experience.' },
+      { q: 'Is AXIS-H a medical license?', a: 'No. AXIS-H certifies AI competency — it is not a license to practice medicine.' },
+    ],
+  },
+  },
 };
 
 export default function CertGuidePage() {
-  const { t } = useI18n();
+  const { t, lang } = useI18n();
   const [searchParams] = useSearchParams();
   const initialCert = (searchParams.get('cert') as CertTab) || 'axis';
   const [activeTab, setActiveTab] = useState<CertTab>(
@@ -203,7 +310,7 @@ export default function CertGuidePage() {
     setOpenFaq(null);
   }, [activeTab]);
 
-  const data = CERT_DATA[activeTab];
+  const data = CERT_DATA[lang][activeTab];
   const previewPdf = previewPdfId ? INFO_PDF_MAP[previewPdfId] : null;
 
   return (
@@ -212,7 +319,7 @@ export default function CertGuidePage() {
 
       <PageHeroSolid
         title={t('gnb.guide')}
-        subtitle={'AI 시대를 선도하는\nAXIS 자격 체계를 확인하세요'}
+        subtitle={t('certGuide.hero.subtitle' as never)}
       />
 
       <PageTabs
@@ -226,7 +333,7 @@ export default function CertGuidePage() {
         {/* Overview */}
         <section className="mb-14 reveal">
           <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>
-            {CERT_LABELS[activeTab]} 개요
+            {t('certGuide.overviewTitle' as never, { cert: CERT_LABELS[activeTab] })}
           </h2>
           <p className={T_BODY} style={{ color: GRAY_500 }}>{data.overview}</p>
         </section>
@@ -257,7 +364,7 @@ export default function CertGuidePage() {
                         onClick={() => setPreviewPdfId(row.id as InfoPdfId)}
                         className="inline-flex h-10 items-center justify-center rounded-full border border-blue-600 bg-white px-5 text-[14px] font-semibold text-blue-700 transition-colors hover:bg-blue-50"
                       >
-                        바로보기
+                        {t('certGuide.view' as never)}
                       </button>
                     </div>
                   </div>
@@ -270,16 +377,16 @@ export default function CertGuidePage() {
 
         {/* Level table */}
         <section className="mb-14 reveal">
-          <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>등급 체계</h2>
+          <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>{t('certGuide.levels.title' as never)}</h2>
           <div className={TABLE_WRAP}>
             <table className="data-table" style={{ minWidth: 500 }}>
               <thead>
                 <tr>
-                  <th>등급</th>
-                  <th>대상</th>
-                  <th>문항 수</th>
-                  <th>시험 시간</th>
-                  <th>합격 기준</th>
+                  <th>{t('certGuide.levels.th.level' as never)}</th>
+                  <th>{t('certGuide.levels.th.target' as never)}</th>
+                  <th>{t('certGuide.levels.th.questions' as never)}</th>
+                  <th>{t('certGuide.levels.th.time' as never)}</th>
+                  <th>{t('certGuide.levels.th.passing' as never)}</th>
                 </tr>
               </thead>
               <tbody>
@@ -304,9 +411,9 @@ export default function CertGuidePage() {
 
         {/* Scope */}
         <section className="mb-14 reveal">
-          <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>출제 범위</h2>
+          <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>{t('certGuide.scope.title' as never)}</h2>
           <p className={`${T_BODY} mb-8 lg:mb-10`} style={{ color: GRAY_500 }}>
-            현업에서 요구되는 AI 핵심 역량을 {data.scope.length}개 영역으로 나누어 검증합니다.
+            {t('certGuide.scope.desc' as never, { n: data.scope.length })}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10 lg:gap-y-12">
             {data.scope.map((item, idx) => (
@@ -348,7 +455,7 @@ export default function CertGuidePage() {
 
         {/* FAQ accordion */}
         <section className="mb-14 reveal">
-          <h2 className={`${H_CARD} mb-10`} style={{ color: INK_900 }}>자주 묻는 질문</h2>
+          <h2 className={`${H_CARD} mb-10`} style={{ color: INK_900 }}>{t('certGuide.faq.title' as never)}</h2>
           <div className="mt-2" style={{ borderTop: `2px solid #1B1B1B` }}>
             {data.faq.map((item, idx) => (
               <div key={idx} style={{ borderBottom: `1px solid #1B1B1B` }}>
@@ -411,25 +518,25 @@ export default function CertGuidePage() {
             <div className="absolute inset-0 bg-blue-800/50" aria-hidden="true" />
             <div className="relative mx-auto text-center">
               <p className="text-[26px] lg:text-[34px] font-semibold leading-[1.3] tracking-[-0.025em] text-white">
-                지금 바로 응시하고<br />
-                AI 실무역량을 증명하세요.
+                {t('certGuide.cta.line1' as never)}<br />
+                {t('certGuide.cta.line2' as never)}
               </p>
               <p className={`mt-4 ${T_BODY} text-blue-100`}>
-                회차별 일정은 시험접수 페이지에서 확인하실 수 있습니다.
+                {t('certGuide.cta.sub' as never)}
               </p>
               <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
                 <Link
                   to="/apply"
                   className="inline-flex h-12 items-center justify-center rounded-full bg-white px-7 text-[16px] font-semibold text-blue-700 transition-colors hover:bg-blue-50"
                 >
-                  시험접수 하기
+                  {t('certGuide.cta.apply' as never)}
                 </Link>
                 <button
                   type="button"
                   onClick={() => setPreviewPdfId('axis-exam-info-b2c')}
                   className="inline-flex h-12 items-center justify-center rounded-full border border-white/85 bg-transparent px-7 text-[16px] font-semibold !text-white hover:!text-white"
                 >
-                  AXIS 응시안내
+                  {t('certGuide.cta.info' as never)}
                 </button>
               </div>
             </div>
