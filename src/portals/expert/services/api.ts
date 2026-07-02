@@ -146,6 +146,10 @@ export interface GradingTaskDetail {
   aiRationale: string | null;
   aiCriterionScores: unknown;
   aiRiskFlags: unknown;
+  /** Which grader produced the first pass: 'l3-answer-key' | 'claude-opus-4-8' | 'hybrid-l3+claude' | 'judge0-autotest'. */
+  aiModel: string | null;
+  /** Raw AI first-pass points (0..maxPoints). */
+  earnedPoints: number | null;
   expertScore: number | null;
   expertNotes: string | null;
 }

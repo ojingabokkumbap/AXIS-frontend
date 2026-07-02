@@ -141,7 +141,7 @@ interface DemoPaper {
   level: CertLevel;
   durationMin: number;
   questions: DemoQuestion[];
-  /** L3 ships up to 4 stratified practical samples; L1/L2 ship 1. */
+  /** All levels ship a single representative practical sample (display-only). */
   practicalTasks: DemoPracticalTask[];
   /**
    * @deprecated The server still emits this for one release so older shipped
@@ -2382,7 +2382,7 @@ function DemoWrittenView({
     mainScrollRef.current?.scrollTo({ top: 0 });
   }, [activeIdx]);
 
-  // 실습 슬롯: MCQ 다음 N자리 (L3 = 4, L2/L1 = 1). 답안은 저장하지 않음(채점 X).
+  // 실습 슬롯: MCQ 다음 1자리 (모든 레벨 공통). 답안은 저장하지 않음(채점 X).
   const practicalIdx = activeIdx - questions.length;
   const practicalTask =
     practicalIdx >= 0 && practicalIdx < practicalTasks.length ? practicalTasks[practicalIdx] : null;

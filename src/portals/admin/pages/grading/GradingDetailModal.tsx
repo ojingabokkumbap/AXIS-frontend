@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { X, Loader2, Bot, AlertTriangle, ShieldAlert, CheckCircle2, Save, Download, Code2, Users } from 'lucide-react';
+import { X, Loader2, Bot, AlertTriangle, ShieldAlert, CheckCircle2, Save, Download, Code2, Users, MessageSquare } from 'lucide-react';
 import { Button, pushToast, CertTag, certCodeOf } from '@admin/components/shared/ui-kit';
 import { adminApi, type GradingDetail } from '@admin/services/api';
 import { AxiosError } from 'axios';
@@ -33,6 +33,44 @@ function bandTone(band: string | null): string {
 
 const isAdminRole = (roles: string[] | undefined) =>
   roles?.some((r) => r === 'SUPER_ADMIN' || r === 'GRADING_ADMIN' || r === 'EXAM_ADMIN') ?? false;
+
+type CritRow = { label?: string; maxPoints?: number; score?: number; kind?: 'objective' | 'rationale' };
+
+/** Badge describing which grader produced the first-pass score (aiModel). */
+function gradingSource(aiModel: string | null | undefined): { label: string; cls: string } | null {
+  switch (aiModel) {
+    case 'l3-answer-key':
+      return { label: 'Answer-key (L3)', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+    case 'hybrid-l3+claude':
+      return { label: 'Hybrid', cls: 'bg-violet-50 text-violet-700 border-violet-200' };
+    case 'claude-opus-4-8':
+      return { label: 'AI 1st-pass', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
+    case 'judge0-autotest':
+      return { label: 'Code auto-test', cls: 'bg-slate-100 text-slate-600 border-slate-200' };
+    default:
+      return null;
+  }
+}
+
+/** L3 objective-vs-rationale point split from kind-tagged aiCriterionScores. */
+function l3Split(aiCriterionScores: unknown): { obj: number; objMax: number; rat: number; ratMax: number } | null {
+  if (!Array.isArray(aiCriterionScores)) return null;
+  const rows = aiCriterionScores as CritRow[];
+  if (!rows.some((r) => r?.kind === 'objective' || r?.kind === 'rationale')) return null;
+  let obj = 0, objMax = 0, rat = 0, ratMax = 0;
+  for (const r of rows) {
+    if (r.kind === 'rationale') { rat += r.score ?? 0; ratMax += r.maxPoints ?? 0; }
+    else { obj += r.score ?? 0; objMax += r.maxPoints ?? 0; }
+  }
+  return { obj, objMax, rat, ratMax };
+}
+
+/** L1 section header per exam part. */
+function partHeader(part: string): string | null {
+  if (part === 'DELIVERABLE') return 'Part B · Execution Plan';
+  if (part === 'ESSAY') return 'Part C · Essay';
+  return null;
+}
 
 export default function GradingDetailModal({
   sessionId,
@@ -205,19 +243,37 @@ export default function GradingDetailModal({
                 </Button>
               </div>
 
-              {detail.tasks.map((t, i) => (
+              {detail.tasks.map((t, i) => {
+                const src = gradingSource(t.aiModel);
+                const l3 = l3Split(t.aiCriterionScores);
+                const ph = partHeader(t.part);
+                return (
                 <div key={t.taskId} className="border border-slate-200 rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
+                  {ph && (
+                    <div className="text-[11px] font-semibold uppercase tracking-wider text-indigo-600 mb-1">{ph}</div>
+                  )}
+                  <div className="flex items-start justify-between gap-2 flex-wrap mb-2">
                     <div className="font-semibold text-slate-800">
                       과제 {i + 1} · {t.title}{' '}
                       <span className="text-slate-400 font-normal">({t.part} · 만점 {t.maxPoints})</span>
                       {isAxisC && <span className="ml-2 text-[11px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-mono">CODE</span>}
                     </div>
-                    {t.aiBand && (
-                      <span className={`text-[12px] font-medium ${bandTone(t.aiBand)}`}>
-                        AI: {t.aiBand}{t.aiConfidence != null ? ` · conf ${(t.aiConfidence * 100).toFixed(0)}%` : ''}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {src && (
+                        <span className={`inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full border ${src.cls}`}>
+                          <Bot className="w-3 h-3" /> {src.label}
+                        </span>
+                      )}
+                      {t.aiModel && <span className="text-[10px] text-slate-400 font-mono">{t.aiModel}</span>}
+                      {t.earnedPoints != null && (
+                        <span className="text-[11px] text-slate-500">원점수 {t.earnedPoints}/{t.maxPoints}</span>
+                      )}
+                      {t.aiBand && (
+                        <span className={`text-[12px] font-medium ${bandTone(t.aiBand)}`}>
+                          AI: {t.aiBand}{t.aiConfidence != null ? ` · conf ${(t.aiConfidence * 100).toFixed(0)}%` : ''}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
@@ -263,6 +319,27 @@ export default function GradingDetailModal({
                       )}
                     </div>
                     <div>
+                      {l3 && (
+                        <div className="mb-3">
+                          <div className="text-[11px] uppercase tracking-wide text-slate-400 mb-1">AI 점수 구성 (L3)</div>
+                          <div className="flex flex-wrap gap-2 text-[12px]">
+                            <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded px-2 py-0.5">객관식 {l3.obj}/{l3.objMax}</span>
+                            <span className="inline-flex items-center gap-1 bg-indigo-50 text-indigo-700 border border-indigo-200 rounded px-2 py-0.5">근거 {l3.rat}/{l3.ratMax}</span>
+                          </div>
+                        </div>
+                      )}
+                      {t.part === 'PRACTICAL' && Array.isArray(t.aiChatLog) && t.aiChatLog.length > 0 && (
+                        <div className="mb-3">
+                          <div className="text-[11px] uppercase tracking-wide text-slate-400 mb-1 inline-flex items-center gap-1"><MessageSquare className="w-3 h-3" /> AI 대화 기록 · 검증 ({t.aiChatLog.length})</div>
+                          <div className="max-h-40 overflow-y-auto space-y-1 bg-slate-50 rounded p-2 border border-slate-200">
+                            {t.aiChatLog.map((m, j) => (
+                              <div key={j} className={`text-[12px] leading-relaxed rounded px-2 py-1 ${m.role === 'user' ? 'bg-blue-50 text-blue-900' : 'bg-emerald-50 text-emerald-900'}`}>
+                                <span className="font-semibold mr-1">{m.role === 'user' ? '응시자' : 'AI'}:</span>{m.text}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       {t.aiRationale && (
                         <div className="mb-3">
                           <div className="text-[11px] uppercase tracking-wide text-slate-400 mb-1 inline-flex items-center gap-1"><Bot className="w-3 h-3" /> AI 근거</div>
@@ -296,7 +373,8 @@ export default function GradingDetailModal({
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </>
           )}
         </div>

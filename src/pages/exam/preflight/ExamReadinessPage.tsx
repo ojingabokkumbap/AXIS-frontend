@@ -56,9 +56,9 @@ interface ExamStructure {
 // Exam structure by level (matching backend exam-spec.ts).
 const EXAM_STRUCTURE: Record<string, ExamStructure> = {
   L3: {
-    totalMinutes: 40,
-    writtenMinutes: 40,
-    writtenQuestions: 50,
+    totalMinutes: 60,
+    writtenMinutes: 60,
+    writtenQuestions: 40,
     practicalMinutes: 0,
     practicalTasks: 0,
     practicalType: 'none',

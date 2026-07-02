@@ -21,6 +21,7 @@ import {
 import { useI18n, LangToggle } from '@/i18n';
 import { examApi, proctorApi, type CertLevel, type ExamPart } from '@/services/api';
 import { EXAM, ExamPageHeader, ExamExitConfirmModal } from '@/pages/exam/shared';
+import { L3PracticalListView, type L3Spec } from './L3PracticalTaskView';
 import { ResultModal, ResultModalButton } from '@/components/ResultModal';
 import {
   useProctorMonitorLive,
@@ -61,6 +62,8 @@ type Task = {
   requiredStructure?: string | null;
   forbiddenRules?: string | null;
   aiToolAllowed?: string | null;
+  // L3 실습형 answer-free structured-answer spec (never includes answerKey values).
+  l3?: L3Spec | null;
   contentText?: string;
   aiChatLog?: { role: 'user' | 'assistant'; text: string; ts: number }[] | null;
   version?: number;
@@ -636,14 +639,18 @@ export default function ExamRunnerPage() {
   const essayTasks = tasks.filter((t) => t.part === 'ESSAY');
   const stageSequence = useMemo<Stage[]>(() => {
     if (!paper) return ['WRITTEN'];
-    if (paper.session.level === 'L3') return ['WRITTEN'];
+    // L3: MCQ only on the legacy path; when the frozen paper includes 실습형
+    // tasks (L3_PRACTICALS_ENABLED at start) add the structured practical stage.
+    if (paper.session.level === 'L3') {
+      return practicalTasks.length > 0 ? ['WRITTEN', 'PRACTICAL'] : ['WRITTEN'];
+    }
     if (paper.session.level === 'L2') return ['WRITTEN', 'PRACTICAL'];
     // L1: Part A (written) → Part B (exec-plan deliverable) → Part C (essays).
     const seq: Stage[] = ['WRITTEN'];
     if (deliverableTask) seq.push('DELIVERABLE');
     if (essayTasks.length > 0) seq.push('ESSAY');
     return seq;
-  }, [paper, essayTasks.length, deliverableTask]);
+  }, [paper, practicalTasks.length, essayTasks.length, deliverableTask]);
   const currentStageIndex = Math.max(0, stageSequence.indexOf(stage));
   /**
    * Stage navigation — freely bidirectional (Written ↔ Practical ↔ Essay /
@@ -1224,24 +1231,33 @@ export default function ExamRunnerPage() {
             layout={examLayout}
           />
         )}
-        {stage === 'PRACTICAL' && (
-          <PracticalListView
-            tasks={practicalTasks}
-            text={practicalText}
-            setText={updatePractical}
-            chat={practicalChat}
-            chatInput={chatInput}
-            setChatInput={setChatInput}
-            onSendChat={sendChat}
-            aiBusy={aiBusy}
-            color={color}
-            sessionId={sessionId ?? ''}
-            uploadedFiles={deliverableUploaded}
-            onFileUploaded={(taskId, fileName) =>
-              setDeliverableUploaded((prev) => ({ ...prev, [taskId]: fileName }))
-            }
-          />
-        )}
+        {stage === 'PRACTICAL' &&
+          (paper.session.level === 'L3' ? (
+            // L3 실습형 — structured answer-key inputs, no in-exam AI chat.
+            <L3PracticalListView
+              tasks={practicalTasks}
+              text={practicalText}
+              setText={updatePractical}
+              color={color}
+            />
+          ) : (
+            <PracticalListView
+              tasks={practicalTasks}
+              text={practicalText}
+              setText={updatePractical}
+              chat={practicalChat}
+              chatInput={chatInput}
+              setChatInput={setChatInput}
+              onSendChat={sendChat}
+              aiBusy={aiBusy}
+              color={color}
+              sessionId={sessionId ?? ''}
+              uploadedFiles={deliverableUploaded}
+              onFileUploaded={(taskId, fileName) =>
+                setDeliverableUploaded((prev) => ({ ...prev, [taskId]: fileName }))
+              }
+            />
+          ))}
         {stage === 'DELIVERABLE' && deliverableTask && (
           <DeliverableView
             task={deliverableTask}

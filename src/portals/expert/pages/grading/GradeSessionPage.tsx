@@ -8,6 +8,7 @@ import {
   CheckCircle2,
   FileWarning,
   Loader2,
+  MessageSquare,
   ShieldAlert,
   Sparkles,
   XCircle,
@@ -42,6 +43,44 @@ function bandPill(band: string | null): string {
 function aiSuggestedPoints(task: GradingTaskDetail): number | null {
   if (task.aiPreScore == null || task.maxPoints <= 0) return null;
   return Math.max(0, Math.min(task.maxPoints, Math.round((task.aiPreScore / 100) * task.maxPoints)));
+}
+
+type CritRow = { label?: string; maxPoints?: number; score?: number; kind?: 'objective' | 'rationale' };
+
+/** Badge describing which grader produced the first-pass score (aiModel). */
+function gradingSource(aiModel: string | null | undefined): { label: string; cls: string } | null {
+  switch (aiModel) {
+    case 'l3-answer-key':
+      return { label: 'Answer-key (L3)', cls: 'bg-emerald-50 text-emerald-700 border-emerald-200' };
+    case 'hybrid-l3+claude':
+      return { label: 'Hybrid', cls: 'bg-violet-50 text-violet-700 border-violet-200' };
+    case 'claude-opus-4-8':
+      return { label: 'AI 1st-pass', cls: 'bg-indigo-50 text-indigo-700 border-indigo-200' };
+    case 'judge0-autotest':
+      return { label: 'Code auto-test', cls: 'bg-slate-100 text-slate-600 border-slate-200' };
+    default:
+      return null;
+  }
+}
+
+/** L3 objective-vs-rationale point split from kind-tagged aiCriterionScores. */
+function l3Split(aiCriterionScores: unknown): { obj: number; objMax: number; rat: number; ratMax: number } | null {
+  if (!Array.isArray(aiCriterionScores)) return null;
+  const rows = aiCriterionScores as CritRow[];
+  if (!rows.some((r) => r?.kind === 'objective' || r?.kind === 'rationale')) return null;
+  let obj = 0, objMax = 0, rat = 0, ratMax = 0;
+  for (const r of rows) {
+    if (r.kind === 'rationale') { rat += r.score ?? 0; ratMax += r.maxPoints ?? 0; }
+    else { obj += r.score ?? 0; objMax += r.maxPoints ?? 0; }
+  }
+  return { obj, objMax, rat, ratMax };
+}
+
+/** L1 section header per exam part. */
+function partHeader(part: string): string | null {
+  if (part === 'DELIVERABLE') return 'Part B · Execution Plan';
+  if (part === 'ESSAY') return 'Part C · Essay';
+  return null;
 }
 
 function isAiRationaleReady(text: string | null): boolean {
@@ -236,32 +275,46 @@ export default function GradeSessionPage() {
                 hasAi && Number(scores[t.taskId] ?? '') === aiPts;
               const confirmed = aiConfirmed[t.taskId] || scoreMatchesAi;
               const riskCount = Array.isArray(t.aiRiskFlags) ? (t.aiRiskFlags as unknown[]).length : 0;
+              const src = gradingSource(t.aiModel);
+              const l3 = l3Split(t.aiCriterionScores);
+              const ph = partHeader(t.part);
 
               return (
                 <Card key={t.taskId} className="overflow-hidden border border-slate-200 shadow-sm">
                   <div className="px-6 py-4 border-b border-slate-100 bg-white flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <div className="text-[11px] font-semibold uppercase tracking-wider text-indigo-600 mb-1">
-                        과제 {i + 1}
+                        {ph ?? `과제 ${i + 1}`}
                       </div>
                       <h3 className="text-lg font-semibold text-slate-900">{t.title}</h3>
                       <p className="text-[13px] text-slate-500 mt-0.5">
                         {t.part} · 만점 {t.maxPoints}점
                       </p>
                     </div>
-                    {t.aiBand && (
-                      <span
-                        className={`inline-flex items-center gap-1.5 text-[13px] font-medium px-3 py-1.5 rounded-full border ${bandPill(t.aiBand)}`}
-                      >
-                        <Bot className="w-3.5 h-3.5" />
-                        AI {t.aiBand}
-                        {t.aiConfidence != null && (
-                          <span className="opacity-75">
-                            · 신뢰도 {(t.aiConfidence * 100).toFixed(0)}%
-                          </span>
-                        )}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2 flex-wrap justify-end">
+                      {src && (
+                        <span className={`inline-flex items-center gap-1 text-[12px] font-medium px-2.5 py-1 rounded-full border ${src.cls}`}>
+                          <Bot className="w-3.5 h-3.5" /> {src.label}
+                        </span>
+                      )}
+                      {t.aiModel && <span className="text-[10px] text-slate-400 font-mono">{t.aiModel}</span>}
+                      {t.earnedPoints != null && (
+                        <span className="text-[12px] text-slate-500">원점수 {t.earnedPoints}/{t.maxPoints}</span>
+                      )}
+                      {t.aiBand && (
+                        <span
+                          className={`inline-flex items-center gap-1.5 text-[13px] font-medium px-3 py-1.5 rounded-full border ${bandPill(t.aiBand)}`}
+                        >
+                          <Bot className="w-3.5 h-3.5" />
+                          AI {t.aiBand}
+                          {t.aiConfidence != null && (
+                            <span className="opacity-75">
+                              · 신뢰도 {(t.aiConfidence * 100).toFixed(0)}%
+                            </span>
+                          )}
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 xl:grid-cols-2 min-h-[420px]">
@@ -357,6 +410,17 @@ export default function GradeSessionPage() {
                           </div>
                         </div>
 
+                        {l3 && (
+                          <div className="mb-4 flex flex-wrap gap-2">
+                            <span className="inline-flex items-center gap-1 text-[12px] bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg px-3 py-1.5">
+                              객관식 <b>{l3.obj}/{l3.objMax}</b>
+                            </span>
+                            <span className="inline-flex items-center gap-1 text-[12px] bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-lg px-3 py-1.5">
+                              근거 <b>{l3.rat}/{l3.ratMax}</b>
+                            </span>
+                          </div>
+                        )}
+
                         {hasAi ? (
                           <div className="flex flex-wrap items-stretch gap-4 mb-4">
                             <div className="flex-1 min-w-[140px] rounded-xl bg-white border border-indigo-200 px-5 py-4 shadow-sm">
@@ -430,6 +494,21 @@ export default function GradeSessionPage() {
                           </div>
                         )}
                       </div>
+
+                      {t.part === 'PRACTICAL' && Array.isArray(t.aiChatLog) && t.aiChatLog.length > 0 && (
+                        <div className="rounded-2xl border border-slate-200 bg-white p-5">
+                          <div className="flex items-center gap-2 text-[12px] font-semibold uppercase tracking-wider text-slate-500 mb-3">
+                            <MessageSquare className="w-4 h-4 text-slate-500" /> AI 대화 기록 · 검증 ({t.aiChatLog.length})
+                          </div>
+                          <div className="max-h-64 overflow-y-auto space-y-2">
+                            {t.aiChatLog.map((m, j) => (
+                              <div key={j} className={`text-[13px] leading-relaxed rounded-xl px-3 py-2 ${m.role === 'user' ? 'bg-blue-50 text-blue-900' : 'bg-emerald-50 text-emerald-900'}`}>
+                                <span className="font-semibold mr-1.5">{m.role === 'user' ? '응시자' : 'AI'}:</span>{m.text}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
                       <div className="rounded-2xl border border-slate-200 bg-slate-50/50 p-5">
                         <div className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 mb-3">
