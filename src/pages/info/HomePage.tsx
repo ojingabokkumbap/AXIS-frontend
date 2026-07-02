@@ -314,7 +314,7 @@ export default function HomePage() {
                         aria-expanded={open}
                       >
                         <div className="flex-1 min-w-0 flex flex-col lg:flex-row lg:items-baseline gap-1.5 lg:gap-5">
-                          <span className="text-[13px] lg:text-[15px] font-semibold tracking-[0.06em] font-en" style={{ color: ACCENT }}>{c.code}</span>
+                          <span className="shrink-0 whitespace-nowrap text-[13px] lg:text-[15px] font-semibold tracking-[0.06em] font-en" style={{ color: ACCENT }}>{c.code}</span>
                           <span className={H_DISPLAY_CARD} style={{ color: INK_900 }}>{c.name}</span>
                           <span className={T_SMALL} style={{ color: GRAY_500 }}>{c.target}</span>
                         </div>
