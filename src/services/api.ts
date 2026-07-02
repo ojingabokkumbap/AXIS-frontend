@@ -327,8 +327,25 @@ export interface PublicPassListResponse {
   entries: { registrationNumberMasked: string; passed: boolean }[];
 }
 
+export type PublicLookupResponse =
+  | { status: 'NOT_FOUND' }
+  | { status: 'NOT_ANNOUNCED' }
+  | {
+      status: 'RESULT';
+      passed: boolean;
+      totalScore: number | null;
+      cutScore: number;
+      certType: string;
+      level: string;
+      roundLabel: string;
+      examDate: string;
+      sections: { name: string; score: number; max: number }[];
+    };
+
 export const resultsApi = {
   mine: () => api.get('/results/mine'),
+  publicLookup: (body: { registrationNumber: string; name: string; birthDate: string }) =>
+    api.post<PublicLookupResponse>('/results/public/lookup', body),
   publicRounds: (opts?: {
     certType?: 'AXIS' | 'AXIS_C' | 'AXIS_H';
     page?: number;

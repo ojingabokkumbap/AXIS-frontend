@@ -53,9 +53,15 @@ function filterTabToCertType(tab: FilterTab): 'AXIS' | 'AXIS_C' | 'AXIS_H' {
 type LookupState =
   | { step: 'idle' }
   | { step: 'checking' }
-  | { step: 'pass'; score: number; cut: number; sections: { name: string; score: number; max: number }[] }
-  | { step: 'fail'; score: number; cut: number; sections: { name: string; score: number; max: number }[] }
-  | { step: 'not-found' };
+  | {
+      step: 'pass' | 'fail';
+      score: number | null;
+      cut: number;
+      roundLabel: string;
+      sections: { name: string; score: number; max: number }[];
+    }
+  | { step: 'not-found' }
+  | { step: 'not-announced' };
 
 type LookupModalResult = Exclude<LookupState, { step: 'idle' } | { step: 'checking' }>;
 
@@ -64,11 +70,28 @@ function LookupResultModalView({ result, onClose }: { result: LookupModalResult;
     return (
       <ResultModal title="조회 결과" onClose={onClose}>
         <ResultModalEmpty
-          message="입력하신 접수번호와 이름에 해당하는 결과를 찾을 수 없습니다."
+          message="입력하신 접수번호·이름·생년월일에 해당하는 결과를 찾을 수 없습니다."
           helperText={
             <>
-              접수번호와 이름을 다시 확인해주세요. 문의사항은{' '}
+              세 항목이 접수 당시 정보와 정확히 일치해야 합니다. 다시 확인해주세요. 문의사항은{' '}
               <Link to="/qna" className="font-semibold" style={{ color: 'var(--color-blue)' }}>1:1 문의</Link>를 이용해주세요.
+            </>
+          }
+        />
+      </ResultModal>
+    );
+  }
+
+  if (result.step === 'not-announced') {
+    return (
+      <ResultModal title="조회 결과" onClose={onClose}>
+        <ResultModalEmpty
+          message="아직 성적이 발표되지 않았습니다."
+          helperText={
+            <>
+              채점이 진행 중이거나 발표 전인 회차입니다. 발표 일정은 회차 결과 탭에서 확인하실 수 있으며,{' '}
+              <Link to="/mypage" className="font-semibold" style={{ color: 'var(--color-blue)' }}>마이페이지</Link>에서도
+              확인 가능합니다.
             </>
           }
         />
@@ -85,8 +108,9 @@ function LookupResultModalView({ result, onClose }: { result: LookupModalResult;
         }
         descriptionColor={passed ? '#059669' : '#374151'}
         rows={[
+          { label: '회차', value: result.roundLabel },
           { label: '판정', value: passed ? '합격' : '불합격', valueClass: 'font-semibold' },
-          { label: '평균 점수', value: `${result.score}점`, valueClass: 'font-en font-semibold' },
+          { label: '총점', value: result.score != null ? `${result.score}점` : '—', valueClass: 'font-en font-semibold' },
           { label: '합격 기준', value: `${result.cut}점 이상`, valueClass: 'font-en' },
           ...result.sections.map((sec) => ({
             label: sec.name,
@@ -217,6 +241,7 @@ export default function ResultsPage() {
   >(null);
   const [regNo, setRegNo] = useState('');
   const [name, setName] = useState('');
+  const [birthDate, setBirthDate] = useState('');
   const [lookup, setLookup] = useState<LookupState>({ step: 'idle' });
   const [lookupModalOpen, setLookupModalOpen] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -303,34 +328,53 @@ export default function ResultsPage() {
 
   const handleLookup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!regNo.trim() || !name.trim()) {
-      setToast('접수번호와 이름을 모두 입력해주세요.');
+    const birthDigits = birthDate.replace(/\D/g, '');
+    if (!regNo.trim() || !name.trim() || !birthDigits) {
+      setToast('접수번호, 이름, 생년월일을 모두 입력해주세요.');
+      return;
+    }
+    if (birthDigits.length !== 8) {
+      setToast('생년월일은 8자리로 입력해주세요. 예: 19900101');
       return;
     }
     setLookup({ step: 'checking' });
-    setTimeout(() => {
-      const isMatch = regNo.trim().toUpperCase().startsWith('AXIS') && name.trim().length >= 2;
-      if (isMatch) {
-        const passed = regNo.includes('0001') || regNo.includes('0142');
-        const sections = [
-          { name: 'AI 기초 이해', score: passed ? 82 : 35, max: 100 },
-          { name: '프롬프트 설계', score: passed ? 78 : 28, max: 100 },
-          { name: 'AI 도구 활용', score: passed ? 91 : 42, max: 100 },
-          { name: '윤리·보안', score: passed ? 88 : 30, max: 100 },
-        ];
-        const total = sections.reduce((a, s) => a + s.score, 0);
-        const avg = Math.round(total / sections.length);
-        if (passed) {
-          setLookup({ step: 'pass', score: avg, cut: 60, sections });
+    resultsApi
+      .publicLookup({
+        registrationNumber: regNo.trim(),
+        name: name.trim(),
+        birthDate: birthDigits,
+      })
+      .then((res) => {
+        const d = res.data;
+        if (d.status === 'RESULT') {
+          setLookup({
+            step: d.passed ? 'pass' : 'fail',
+            score: d.totalScore,
+            cut: d.cutScore,
+            roundLabel: d.roundLabel,
+            sections: d.sections,
+          });
+        } else if (d.status === 'NOT_ANNOUNCED') {
+          setLookup({ step: 'not-announced' });
         } else {
-          setLookup({ step: 'fail', score: avg, cut: 60, sections });
+          setLookup({ step: 'not-found' });
         }
         setLookupModalOpen(true);
-      } else {
-        setLookup({ step: 'not-found' });
-        setLookupModalOpen(true);
-      }
-    }, 800);
+      })
+      .catch((err: unknown) => {
+        setLookup({ step: 'idle' });
+        const status =
+          err && typeof err === 'object' && 'response' in err
+            ? (err as { response?: { status?: number } }).response?.status
+            : undefined;
+        if (status === 429) {
+          setToast('조회 요청이 너무 많습니다. 1분 후 다시 시도해주세요.');
+        } else if (status === 400) {
+          setToast('입력값을 확인해주세요. 생년월일은 8자리 숫자입니다.');
+        } else {
+          setToast('조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        }
+      });
   };
 
   return (
@@ -639,7 +683,7 @@ export default function ResultsPage() {
           <section className="mb-10 sm:mb-14 reveal">
             <h2 className={`${H_CARD} text-black mb-4`} >내 결과 확인</h2>
             <p className={`${T_BODY} mb-6`} style={{ color: GRAY_500 }}>
-              접수번호와 이름으로 본인의 시험 결과를 조회할 수 있습니다.
+              접수번호, 이름, 생년월일로 본인의 시험 결과를 조회할 수 있습니다. 세 항목 모두 접수 당시 정보와 일치해야 합니다.
               로그인 상태라면 <Link to="/mypage" className="font-semibold text-ink underline underline-offset-4">마이페이지</Link>에서도 확인 가능합니다.
             </p>
 
@@ -675,6 +719,22 @@ export default function ResultsPage() {
                       onChange={e => setName(e.target.value)}
                       placeholder="홍길동"
                       className={FIELD_INPUT}
+                      style={{ borderColor: '#e5e7eb', background: '#ffffff' }}
+                    />
+                  </label>
+                  <label className="block flex-1 min-w-0">
+                    <span className="mb-2 block text-[14px] sm:text-[15px] lg:text-[16px] font-semibold tracking-[-0.005em] text-black">
+                      생년월일
+                    </span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      autoComplete="bday"
+                      maxLength={10}
+                      value={birthDate}
+                      onChange={e => setBirthDate(e.target.value)}
+                      placeholder="19900101"
+                      className={`${FIELD_INPUT} font-en`}
                       style={{ borderColor: '#e5e7eb', background: '#ffffff' }}
                     />
                   </label>
