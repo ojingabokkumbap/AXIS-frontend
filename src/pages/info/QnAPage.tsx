@@ -84,6 +84,14 @@ const FAQ_FILTER_TO_ENUM: Record<FaqCategoryFilter, FaqCategoryEnum | undefined>
   '환불': 'REFUND',
 };
 
+const FAQ_FILTER_LABEL_EN: Record<FaqCategoryFilter, string> = {
+  '전체': 'All',
+  '접수': 'Registration',
+  '응시': 'Exam',
+  '합격': 'Results',
+  '환불': 'Refund',
+};
+
 /* ------------------------------------------------------------------ */
 /*  Sub-components                                                     */
 /* ------------------------------------------------------------------ */
@@ -657,7 +665,7 @@ export default function QnAPage() {
         className={`${H_CARD} mb-6`}
         style={{ color: INK_900 }}
       >
-        공지사항
+        {lang === 'ko' ? '공지사항' : 'Notices'}
       </h2>
       {noticeLoading ? (
         <div className="flex items-center justify-center py-16">
@@ -709,7 +717,7 @@ export default function QnAPage() {
                 fontFamily: 'inherit',
               }}
             >
-              {cat}
+              {lang === 'ko' ? cat : FAQ_FILTER_LABEL_EN[cat]}
             </button>
           );
         })}
@@ -836,14 +844,32 @@ export default function QnAPage() {
 
       {/* Neutral info box */}
       <div className="info-box neutral" style={{ marginBottom: 16 }}>
-        <strong>로그인 후 문의를 작성하면</strong> 마이페이지에서 답변을 확인할 수 있습니다.
+        {lang === 'ko' ? (
+          <>
+            <strong>문의를 작성하시면</strong> 마이페이지에서 답변을 확인하실 수 있습니다.
+          </>
+        ) : (
+          <>
+            <strong>Once you submit an inquiry,</strong> you can track the reply here or on My Page.
+          </>
+        )}
       </div>
 
       {/* Blue info box */}
       <div className="info-box" style={{ marginBottom: 28 }}>
-        <strong>개인정보 처리 안내</strong> —{' '}
-        문의 처리에 필요한 개인정보가 수집되며, 문의 처리 완료 후 보관기간에 따라 관리됩니다.
-        자세한 내용은 개인정보처리방침을 확인해 주세요.
+        {lang === 'ko' ? (
+          <>
+            <strong>개인정보 처리 안내</strong> —{' '}
+            문의 처리에 필요한 개인정보가 수집되며, 문의 처리 완료 후 보관기간에 따라 관리됩니다.
+            자세한 내용은 개인정보처리방침을 확인해 주세요.
+          </>
+        ) : (
+          <>
+            <strong>Privacy notice</strong> —{' '}
+            We collect the personal information needed to handle your inquiry, retained per our
+            retention policy after it is resolved. See our Privacy Policy for details.
+          </>
+        )}
       </div>
 
       <div className="space-y-4">
@@ -1011,9 +1037,9 @@ export default function QnAPage() {
         className="text-center text-[15px] lg:text-[16px] mt-10 pt-8"
         style={{ borderTop: `1px solid ${BORDER_LIGHT}`, color: GRAY_500 }}
       >
-        <strong className="font-semibold" style={{ color: INK_900 }}>전화</strong> 1811-9530 ·{' '}
-        <strong className="font-semibold" style={{ color: INK_900 }}>이메일</strong> support@axisexam.com ·{' '}
-        평일 09:00~18:00
+        <strong className="font-semibold" style={{ color: INK_900 }}>{lang === 'ko' ? '전화' : 'Phone'}</strong> 1811-9530 ·{' '}
+        <strong className="font-semibold" style={{ color: INK_900 }}>{lang === 'ko' ? '이메일' : 'Email'}</strong> support@axisexam.com ·{' '}
+        {lang === 'ko' ? '평일 09:00~18:00' : 'Weekdays 09:00–18:00'}
       </div>
 
       {/* My inquiries section */}
@@ -1299,9 +1325,9 @@ export default function QnAPage() {
   /* ================================================================ */
 
   const TABS: { key: SupportTab; label: string }[] = [
-    { key: 'notice', label: '공지사항' },
+    { key: 'notice', label: lang === 'ko' ? '공지사항' : 'Notices' },
     { key: 'faq', label: 'FAQ' },
-    { key: 'ask', label: '1:1 문의' },
+    { key: 'ask', label: lang === 'ko' ? '1:1 문의' : 'Q&A' },
   ];
 
   return (
@@ -1309,8 +1335,8 @@ export default function QnAPage() {
       <SiteHeader active="support" />
 
       <PageHeroSolid
-        title="고객센터"
-        subtitle="공지사항 · FAQ · 1:1 문의"
+        title={lang === 'ko' ? '고객센터' : 'Support Center'}
+        subtitle={lang === 'ko' ? '공지사항 · FAQ · 1:1 문의' : 'Notices · FAQ · Q&A'}
       />
 
       <PageTabs
