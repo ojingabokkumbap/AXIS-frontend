@@ -365,6 +365,7 @@ export const ko = {
   'home.results.row2': 'AXIS-C L2 Practitioner 제2회',
 
   'home.notices.eyebrow': 'NOTICES',
+  'home.notices.title': '공지사항',
   'home.notices.row1': '제5회 AXIS L3 접수 안내',
   'home.notices.row2': 'AXIS-H 신규 자격 출범 안내',
   'home.notices.row3': '시스템 점검 안내 (5/18 02:00~04:00)',

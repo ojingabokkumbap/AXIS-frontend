@@ -365,6 +365,7 @@ export const en = {
   'home.results.row2': 'AXIS-C L2 Practitioner · Session 2',
 
   'home.notices.eyebrow': 'NOTICES',
+  'home.notices.title': 'Notices',
   'home.notices.row1': 'AXIS L3 Session 5 — registration info',
   'home.notices.row2': 'New AXIS-H certification launched',
   'home.notices.row3': 'Scheduled maintenance (5/18 02:00~04:00)',
