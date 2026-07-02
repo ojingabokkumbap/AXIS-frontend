@@ -68,8 +68,10 @@ export function SiteHeader({ active = null, compact = false }: Props) {
     return () => document.removeEventListener('mousedown', onDocClick);
   }, [langOpen]);
 
+  // whitespace-nowrap + smaller type below xl keep the long English labels on
+  // one line without colliding with the language/auth controls on the right.
   const navItemClass = (key: SiteNavKey) =>
-    `inline-flex items-center h-9 px-3 text-[16px] leading-none transition-colors rounded-lg ${
+    `inline-flex items-center h-9 px-2 xl:px-3 text-[14px] xl:text-[16px] leading-none whitespace-nowrap transition-colors rounded-lg ${
       active === key ? 'font-bold' : 'font-semibold'
     } hover:bg-[#F5F5F7]`;
 
@@ -102,7 +104,7 @@ export function SiteHeader({ active = null, compact = false }: Props) {
         }}
       >
         <div
-          className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-10"
+          className="mx-auto flex items-center justify-between gap-2 px-4 sm:px-6 lg:px-8 xl:px-10"
           style={{ maxWidth: 1280, height: 80 }}
         >
           {/* Logo */}
@@ -120,9 +122,11 @@ export function SiteHeader({ active = null, compact = false }: Props) {
             </span>
           </Link>
 
-          {/* Center nav */}
+          {/* Center nav — a real flex child (not absolutely centered) so the
+              long English labels can never overlap the logo or the controls
+              on the right; it centers itself in the remaining space. */}
           {!compact && (
-            <nav data-tour="site-nav" className="hidden lg:flex items-center gap-3 absolute left-1/2 -translate-x-1/2">
+            <nav data-tour="site-nav" className="hidden lg:flex items-center justify-center flex-1 min-w-0 gap-1 xl:gap-3">
               {navItem('about', t('gnb.about'), '/about')}
 
               {/* 자격안내 dropdown */}
@@ -259,7 +263,7 @@ export function SiteHeader({ active = null, compact = false }: Props) {
               <>
                 <Link
                   to="/mypage"
-                  className="hidden sm:inline-flex items-center h-9 px-3 rounded-lg text-[14px] font-semibold hover:bg-[#F5F5F7] transition-colors no-underline"
+                  className="hidden sm:inline-flex items-center h-9 px-3 rounded-lg text-[14px] font-semibold whitespace-nowrap hover:bg-[#F5F5F7] transition-colors no-underline"
                   style={{ color: INK }}
                 >
                   {t('gnb.mypage')}
@@ -267,7 +271,7 @@ export function SiteHeader({ active = null, compact = false }: Props) {
                 <button
                   type="button"
                   onClick={handleLogout}
-                  className="hidden sm:inline-flex items-center h-9 px-3 rounded-lg text-[14px] font-semibold hover:bg-[#F5F5F7] transition-colors bg-transparent border-none cursor-pointer"
+                  className="hidden sm:inline-flex items-center h-9 px-3 rounded-lg text-[14px] font-semibold whitespace-nowrap hover:bg-[#F5F5F7] transition-colors bg-transparent border-none cursor-pointer"
                   style={{ color: BODY }}
                 >
                   {t('gnb.logout')}
@@ -276,7 +280,7 @@ export function SiteHeader({ active = null, compact = false }: Props) {
             ) : (
               <Link
                 to="/login"
-                className="hidden sm:inline-flex items-center h-9 px-3 rounded-lg text-[14px] font-semibold hover:bg-[#F5F5F7] transition-colors no-underline"
+                className="hidden sm:inline-flex items-center h-9 px-3 rounded-lg text-[14px] font-semibold whitespace-nowrap hover:bg-[#F5F5F7] transition-colors no-underline"
                 style={{ color: INK }}
               >
                 {t('gnb.login')}
