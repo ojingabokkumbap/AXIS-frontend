@@ -1203,6 +1203,8 @@ export const en = {
   'apply.s3.email': 'Email Address',
   'apply.s3.emailPlaceholder': 'you@example.com',
   'apply.s3.profileHint': 'Pre-filled from your profile. You may edit these fields.',
+  'apply.s3.lockedHint':
+    'This identity information cannot be edited here. To change it, please contact Support (1:1 inquiry) — only an administrator can update it.',
   'apply.s3.docTitle': 'Eligibility Document',
   'apply.s3.docRequired': '(Required)',
   'apply.s3.docSub':

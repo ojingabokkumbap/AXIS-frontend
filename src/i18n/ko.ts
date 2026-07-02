@@ -1225,6 +1225,8 @@ export const ko = {
   'apply.s3.email': '이메일',
   'apply.s3.emailPlaceholder': 'you@example.com',
   'apply.s3.profileHint': '프로필 정보로 자동 입력되었습니다. 필요 시 수정할 수 있습니다.',
+  'apply.s3.lockedHint':
+    '본인 확인 정보는 접수 화면에서 수정할 수 없습니다. 변경이 필요하면 고객센터 1:1 문의로 요청해 주세요. 관리자 확인 후 변경됩니다.',
   'apply.s3.docTitle': '응시 자격 서류',
   'apply.s3.docRequired': '(필수)',
   'apply.s3.docSub':

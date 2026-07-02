@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAxiosError } from 'axios';
-import { Info } from 'lucide-react';
+import { Info, Lock } from 'lucide-react';
 import { useI18n } from '@/i18n';
 import { useWizard } from '@/pages/apply/lib/WizardContext';
 import { userApi, registrationsApi } from '@/services/api';
@@ -79,6 +79,69 @@ function FieldRow({
 }
 
 const INPUT_CLASS = `w-full max-w-[420px] h-11 px-3.5 rounded-md text-[16px] sm:text-[14px] lg:text-[15px] bg-white border border-[#E0E4ED] transition-colors focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#2563EB]/30`;
+
+const LOCKED_INPUT_CLASS = `w-full h-11 pl-3.5 pr-10 rounded-md text-[16px] sm:text-[14px] lg:text-[15px] bg-[#F8FAFC] border border-[#E0E4ED] cursor-not-allowed focus:outline-none`;
+
+/**
+ * Identity fields (name / birth / phone) come from the verified profile and
+ * must not be edited during registration — only an admin can change them.
+ * The input is read-only with a lock icon; any edit attempt flashes a hint
+ * explaining how to request a change.
+ */
+function LockedInput({ value, hint }: { value: string; hint: string }) {
+  const [hintVisible, setHintVisible] = useState(false);
+  const hideTimer = useRef<number | null>(null);
+
+  const flashHint = () => {
+    setHintVisible(true);
+    if (hideTimer.current) window.clearTimeout(hideTimer.current);
+    hideTimer.current = window.setTimeout(() => setHintVisible(false), 5000);
+  };
+
+  useEffect(
+    () => () => {
+      if (hideTimer.current) window.clearTimeout(hideTimer.current);
+    },
+    [],
+  );
+
+  return (
+    <div className="w-full max-w-[420px]">
+      <div className="relative" onClick={flashHint}>
+        <input
+          type="text"
+          value={value}
+          readOnly
+          aria-readonly="true"
+          onKeyDown={(e) => {
+            if (e.key !== 'Tab' && e.key !== 'Shift') {
+              e.preventDefault();
+              flashHint();
+            }
+          }}
+          className={LOCKED_INPUT_CLASS}
+          style={{ color: INK_900 }}
+        />
+        <Lock
+          aria-hidden="true"
+          className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none"
+          style={{ color: '#94A3B8' }}
+          strokeWidth={2.2}
+        />
+      </div>
+      {hintVisible && (
+        <p
+          role="status"
+          className={`mt-2 flex items-start gap-1.5 px-3 py-2 rounded-md ${T_META} break-keep`}
+          style={{ background: '#FFFBEB', color: '#B45309' }}
+        >
+          <Lock className="w-3.5 h-3.5 shrink-0 mt-0.5" strokeWidth={2.2} />
+          <span>{hint}</span>
+        </p>
+      )}
+    </div>
+  );
+}
 
 function ConsentItem({
   text,
@@ -249,6 +312,9 @@ export default function Step3InfoReview() {
   const [birthDate, setBirthDate] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  // Identity fields are locked only when the profile already provides them —
+  // an empty field stays editable so an incomplete profile can't block the wizard.
+  const [locked, setLocked] = useState({ name: false, birth: false, phone: false });
   const [docFile, setDocFile] = useState<File | null>(null);
   const [eligibilityType, setEligibilityType] = useState('');
   const [uploading, setUploading] = useState(false);
@@ -292,6 +358,7 @@ export default function Step3InfoReview() {
         setBirthDate(p.birthDate ?? '');
         setPhone(p.phone ?? '');
         setEmail(p.email ?? '');
+        setLocked({ name: !!p.name, birth: !!p.birthDate, phone: !!p.phone });
       })
       .catch(() => {});
   }, []);
@@ -342,31 +409,43 @@ export default function Step3InfoReview() {
       {/* 수험자 정보 */}
       <CardSection title={t('apply.s3.infoTitle')}>
         <FieldRow label={t('apply.s3.name')} required>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={t('apply.s3.namePlaceholder')}
-            className={INPUT_CLASS}
-          />
+          {locked.name ? (
+            <LockedInput value={name} hint={t('apply.s3.lockedHint' as never)} />
+          ) : (
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={t('apply.s3.namePlaceholder')}
+              className={INPUT_CLASS}
+            />
+          )}
         </FieldRow>
         <FieldRow label={t('apply.s3.birth')} required>
-          <input
-            type="text"
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-            placeholder={t('apply.s3.birthPlaceholder')}
-            className={INPUT_CLASS}
-          />
+          {locked.birth ? (
+            <LockedInput value={birthDate} hint={t('apply.s3.lockedHint' as never)} />
+          ) : (
+            <input
+              type="text"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+              placeholder={t('apply.s3.birthPlaceholder')}
+              className={INPUT_CLASS}
+            />
+          )}
         </FieldRow>
         <FieldRow label={t('apply.s3.phone')} required>
-          <input
-            type="tel"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder={t('apply.s3.phonePlaceholder')}
-            className={INPUT_CLASS}
-          />
+          {locked.phone ? (
+            <LockedInput value={phone} hint={t('apply.s3.lockedHint' as never)} />
+          ) : (
+            <input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder={t('apply.s3.phonePlaceholder')}
+              className={INPUT_CLASS}
+            />
+          )}
         </FieldRow>
         <FieldRow
           label={t('apply.s3.email')}
