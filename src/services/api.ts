@@ -337,6 +337,7 @@ export type PublicLookupResponse =
       cutScore: number;
       certType: string;
       level: string;
+      roundNumber: number;
       roundLabel: string;
       examDate: string;
       sections: { name: string; score: number; max: number }[];

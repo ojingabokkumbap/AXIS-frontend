@@ -1,4 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
+import { useI18n } from '@/i18n';
 
 /* ─────────────────────────────────────────────────────────────
    ResultModal — 조회 결과(검색 실패 / 상태 표시 등) 공용 모달
@@ -77,6 +78,7 @@ interface ResultModalProps {
 }
 
 export function ResultModal({ title, headerBg = '#2563EB', onClose, children, footer }: ResultModalProps) {
+  const { t } = useI18n();
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     document.addEventListener('keydown', onKey);
@@ -110,7 +112,7 @@ export function ResultModal({ title, headerBg = '#2563EB', onClose, children, fo
           </h3>
           <button
             type="button"
-            aria-label="닫기"
+            aria-label={t('common.close')}
             onClick={onClose}
             className="shrink-0 w-9 h-9 flex items-center justify-center rounded-md transition-colors text-white"
           >
@@ -129,7 +131,7 @@ export function ResultModal({ title, headerBg = '#2563EB', onClose, children, fo
           style={{ borderColor: '#E5E5E5', background: '#FAFAFA' }}
         >
           {footer ?? (
-            <ResultModalButton onClick={onClose}>확인</ResultModalButton>
+            <ResultModalButton onClick={onClose}>{t('common.confirm' as never)}</ResultModalButton>
           )}
         </div>
       </div>
