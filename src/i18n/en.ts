@@ -1809,6 +1809,23 @@ export const en = {
   'siteTour.generic.help.body':
     'The Site guide button in the bottom-right corner of every page replays this guide whenever you want.',
 
+  // Mobile-only usage guide — shown once to phone visitors.
+  'siteTour.mobileGuide.badge': 'Mobile guide',
+  'siteTour.mobileGuide.title': 'AXIS works great on your phone',
+  'siteTour.mobileGuide.subtitle':
+    'Almost everything — from registration to certificates — is available on mobile. Just one exception: taking an exam requires a PC.',
+  'siteTour.mobileGuide.can1.title': 'Register & pay',
+  'siteTour.mobileGuide.can1.body': 'Pick a series and level, schedule your session, and pay right from your phone.',
+  'siteTour.mobileGuide.can2.title': 'Manage My Page',
+  'siteTour.mobileGuide.can2.body': 'Check registrations, scores, and certificates anytime, anywhere.',
+  'siteTour.mobileGuide.can3.title': 'Results & verification',
+  'siteTour.mobileGuide.can3.body': 'Pass announcements and certificate verification work on mobile too.',
+  'siteTour.mobileGuide.pc.title': 'Exams require a PC',
+  'siteTour.mobileGuide.pc.body':
+    'Demo and real exams need webcam proctoring and a fullscreen environment, so they can only be taken on a desktop or laptop. Please switch to a PC on exam day.',
+  'siteTour.mobileGuide.confirm': 'Got it',
+  'siteTour.mobileGuide.close': 'Close',
+
   // ── i18n pass 2 additions ──────────────────────────────
   // RegistrationsPanel
   'sec.registrations.confirmCancel': 'Cancel this registration?',

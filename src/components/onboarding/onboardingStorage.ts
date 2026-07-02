@@ -7,6 +7,7 @@ export const TOUR_KEYS = {
   apply: 'axis.siteTour.apply.v1',
   cbt: 'axis.siteTour.cbt.v1',
   generic: 'axis.siteTour.generic.v1',
+  mobileGuide: 'axis.siteTour.mobileGuide.v1',
   demoIntro: 'axis.demoTour.intro.v2',
   demoGate: 'axis.demoTour.gate.v1',
   demoRunner: 'axis.demoTour.runner.v1',
@@ -90,6 +91,7 @@ export function resetSiteTours(): void {
     TOUR_KEYS.apply,
     TOUR_KEYS.cbt,
     TOUR_KEYS.generic,
+    TOUR_KEYS.mobileGuide,
   ].forEach(clearKey);
 }
 

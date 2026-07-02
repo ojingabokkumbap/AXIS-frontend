@@ -16,6 +16,7 @@ import { useIsMobile } from '@/lib/useIsMobile';
 import { SpotlightTour, type SpotlightTourStep } from './SpotlightTour';
 import { MobileTourSheet } from './MobileTourSheet';
 import { JourneyWelcomeModal } from './JourneyWelcomeModal';
+import { MobileSiteGuideModal } from './MobileSiteGuideModal';
 import { TourHelpFab } from './TourHelpFab';
 import { isTourDone, resetSiteTours, TOUR_KEYS } from './onboardingStorage';
 
@@ -73,6 +74,9 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   const [tourOpen, setTourOpen] = useState(false);
   const [forceOpen, setForceOpen] = useState(false);
   const [journeyOpen, setJourneyOpen] = useState(false);
+  const [mobileGuideOpen, setMobileGuideOpen] = useState(false);
+  // Mirrors localStorage so effects re-run when the guide is dismissed.
+  const [mobileGuideDone, setMobileGuideDone] = useState(() => isTourDone(TOUR_KEYS.mobileGuide));
 
   const labels = useMemo(
     () => ({
@@ -102,6 +106,25 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
       realBadge: t('siteTour.journey.badge.real' as never),
       startTour: t('siteTour.journey.startTour' as never),
       skip: t('siteTour.journey.skip' as never),
+    }),
+    [t],
+  );
+
+  const mobileGuideLabels = useMemo(
+    () => ({
+      badge: t('siteTour.mobileGuide.badge' as never),
+      title: t('siteTour.mobileGuide.title' as never),
+      subtitle: t('siteTour.mobileGuide.subtitle' as never),
+      can1Title: t('siteTour.mobileGuide.can1.title' as never),
+      can1Body: t('siteTour.mobileGuide.can1.body' as never),
+      can2Title: t('siteTour.mobileGuide.can2.title' as never),
+      can2Body: t('siteTour.mobileGuide.can2.body' as never),
+      can3Title: t('siteTour.mobileGuide.can3.title' as never),
+      can3Body: t('siteTour.mobileGuide.can3.body' as never),
+      pcTitle: t('siteTour.mobileGuide.pc.title' as never),
+      pcBody: t('siteTour.mobileGuide.pc.body' as never),
+      confirm: t('siteTour.mobileGuide.confirm' as never),
+      close: t('siteTour.mobileGuide.close' as never),
     }),
     [t],
   );
@@ -309,16 +332,30 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setTourOpen(false);
     setForceOpen(false);
+    setMobileGuideOpen(false);
     if (pathname !== '/') return;
     if (isTourDone(TOUR_KEYS.journey)) return;
     const id = window.setTimeout(() => setJourneyOpen(true), 600);
     return () => window.clearTimeout(id);
   }, [pathname]);
 
+  // Mobile-only "using AXIS on a phone" guide — auto-shows once per device on
+  // any tour-eligible page. On home it waits for the journey modal; page
+  // tours in turn wait for it, so the chain is journey → mobile guide → tour.
+  useEffect(() => {
+    if (!isMobile || mobileGuideDone || journeyOpen) return;
+    if (tourOpen || forceOpen) return; // an active tour finishes first
+    if (!isTourEligiblePath(pathname)) return;
+    if (pathname === '/' && !isTourDone(TOUR_KEYS.journey)) return;
+    const id = window.setTimeout(() => setMobileGuideOpen(true), 500);
+    return () => window.clearTimeout(id);
+  }, [isMobile, mobileGuideDone, journeyOpen, tourOpen, forceOpen, pathname]);
+
   // Auto-start page tour after journey dismissed or on other pages.
   // Plays MAX_AUTO_SHOWS (1) time per page; after that the FAB takes over.
   useEffect(() => {
     if (!tourConfig || journeyOpen) return;
+    if (isMobile && (mobileGuideOpen || !mobileGuideDone)) return;
     if (forceOpen) return;
     if (isTourDone(tourConfig.key)) return;
     const loggedIn = !!localStorage.getItem('accessToken');
@@ -326,7 +363,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
     if (pathname === '/' && !isTourDone(TOUR_KEYS.journey)) return;
     const id = window.setTimeout(() => setTourOpen(true), 800);
     return () => window.clearTimeout(id);
-  }, [pathname, tourConfig, journeyOpen, forceOpen, tourId]);
+  }, [pathname, tourConfig, journeyOpen, forceOpen, tourId, isMobile, mobileGuideOpen, mobileGuideDone]);
 
   const replayCurrentTour = useCallback(() => {
     if (!tourConfig) return;
@@ -336,6 +373,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
 
   const replayAllTours = useCallback(() => {
     resetSiteTours();
+    setMobileGuideDone(false);
     setForceOpen(true);
     if (pathname === '/') {
       setJourneyOpen(true);
@@ -346,8 +384,8 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
 
   // FAB lives on every tour-eligible page (including those using the generic
   // tour) so the user can replay/start the guide at any time from the right edge.
-  const showFab = isTourEligiblePath(pathname) && !!tourConfig && !journeyOpen;
-  const tourActive = tourOpen || journeyOpen;
+  const showFab = isTourEligiblePath(pathname) && !!tourConfig && !journeyOpen && !mobileGuideOpen;
+  const tourActive = tourOpen || journeyOpen || mobileGuideOpen;
 
   return (
     <Ctx.Provider value={{ replayCurrentTour, replayAllTours, tourActive }}>
@@ -362,6 +400,15 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
           setTourOpen(true);
         }}
         onClose={() => setJourneyOpen(false)}
+      />
+
+      <MobileSiteGuideModal
+        open={mobileGuideOpen}
+        labels={mobileGuideLabels}
+        onClose={() => {
+          setMobileGuideOpen(false);
+          setMobileGuideDone(true);
+        }}
       />
 
       {tourConfig &&

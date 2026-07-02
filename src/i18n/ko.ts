@@ -1841,6 +1841,23 @@ export const ko = {
   'siteTour.generic.help.body':
     '모든 페이지 오른쪽 아래의 「사이트 가이드」 버튼을 누르면 언제든 이 가이드를 다시 볼 수 있습니다.',
 
+  // 모바일 전용 이용 안내 — 폰 방문자에게 1회 표시.
+  'siteTour.mobileGuide.badge': '모바일 이용 안내',
+  'siteTour.mobileGuide.title': '스마트폰으로도 편하게 이용하세요',
+  'siteTour.mobileGuide.subtitle':
+    '접수부터 자격증 확인까지 대부분의 기능을 모바일에서 이용할 수 있습니다. 단 하나, 시험 응시만 PC가 필요해요.',
+  'siteTour.mobileGuide.can1.title': '시험 접수 · 결제',
+  'siteTour.mobileGuide.can1.body': '시리즈·등급 선택부터 결제까지 모바일에서 바로 진행할 수 있습니다.',
+  'siteTour.mobileGuide.can2.title': '마이페이지 관리',
+  'siteTour.mobileGuide.can2.body': '접수 내역, 성적 조회, 자격증 발급을 언제 어디서든 확인하세요.',
+  'siteTour.mobileGuide.can3.title': '합격자 발표 · 자격 검증',
+  'siteTour.mobileGuide.can3.body': '합격 확인과 자격증 진위확인도 모바일에서 지원됩니다.',
+  'siteTour.mobileGuide.pc.title': '시험 응시는 PC에서만',
+  'siteTour.mobileGuide.pc.body':
+    '데모·실전 시험은 웹캠 감독과 전체화면 환경이 필요해 데스크톱/노트북에서만 응시할 수 있습니다. 시험 당일에는 꼭 PC로 접속해 주세요.',
+  'siteTour.mobileGuide.confirm': '확인했어요',
+  'siteTour.mobileGuide.close': '닫기',
+
   // ── i18n pass 2 additions ──────────────────────────────
   // RegistrationsPanel
   'sec.registrations.confirmCancel': '이 접수를 취소하시겠습니까?',
