@@ -242,9 +242,9 @@ export default function ForgotPasswordPage() {
       />
 
       <main className="mx-auto w-full max-w-[var(--spacing-content-w)] px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
-        <div className="grid gap-8 rounded-xl border border-[#E0E4ED] p-5 sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
-          <section className="bg-white p-2 sm:p-4">
-            <h2 className="mb-8 text-[30px] font-semibold tracking-[-0.02em] text-gray-800">{t('forgot.heroTitle')}</h2>
+        <div className="grid gap-10 sm:gap-8 sm:rounded-xl sm:border sm:border-[#E0E4ED] sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
+          <section className="bg-white sm:p-4">
+            <h2 className="mb-6 text-[22px] font-semibold tracking-[-0.02em] text-gray-800 sm:text-[26px] lg:mb-8 lg:text-[30px]">{t('forgot.heroTitle')}</h2>
 
        
             {/* ═══ STEP 1: NICE Verification ═══ */}
@@ -269,7 +269,7 @@ export default function ForgotPasswordPage() {
                       placeholder={t('forgot.phonePh')}
                       aria-required="true"
                       disabled={verifying}
-                      className={`${INPUT_CLASS} flex-1`}
+                      className={`${INPUT_CLASS} min-w-0 flex-1`}
                       style={{ opacity: verifying ? 0.6 : 1 }}
                     />
                     <button
@@ -462,7 +462,7 @@ export default function ForgotPasswordPage() {
                   </svg>
                 </div>
                 <h2 className="mb-2 text-[20px] font-bold text-[#0A0E1A]">{t('forgot.successTitle')}</h2>
-                <p className="mb-8 text-center text-[14px] leading-[1.6] text-[#8B95B0]">{t('forgot.successMsg')}</p>
+                <p className="mb-8 break-keep text-center text-[14px] leading-[1.6] text-[#8B95B0] lg:break-normal">{t('forgot.successMsg')}</p>
                 <button
                   type="button"
                   onClick={() => navigate('/login')}
@@ -474,11 +474,11 @@ export default function ForgotPasswordPage() {
             )}
           </section>
 
-          <section className="flex flex-col justify-between gap-8 rounded-xl border border-[#E0E4ED] bg-white px-6 py-6 sm:px-10 sm:py-4 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD]">
-            <p className="mb-8 text-[27px] leading-[1.35] tracking-[-0.02em] text-gray-800">
+          <section className="flex flex-col justify-between gap-6 rounded-xl border border-[#E0E4ED] bg-white px-5 py-6 sm:px-10 sm:py-4 lg:gap-8 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD]">
+            <p className="mb-0 break-keep text-[20px] leading-[1.35] tracking-[-0.02em] text-gray-800 sm:text-[24px] lg:mb-8 lg:break-normal lg:text-[27px]">
               {t('signup.rightPanelPrompt')}
             </p>
-            <div className="space-y-5">
+            <div className="space-y-4 lg:space-y-5">
               <button
                 type="button"
                 onClick={() => navigate('/login')}

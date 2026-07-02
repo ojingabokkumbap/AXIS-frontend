@@ -700,7 +700,7 @@ export default function QnAPage() {
                 setFaqFilter(cat);
                 setOpenFaqIds(new Set());
               }}
-              className="inline-flex items-center h-10 px-4 text-[14px] lg:text-[15px] font-semibold transition-all cursor-pointer"
+              className="inline-flex items-center h-11 lg:h-10 px-4 text-[14px] lg:text-[15px] font-semibold transition-all cursor-pointer"
               style={{
                 color: isActive ? INK_900 : GRAY_300,
                 border: isActive ? `1.5px solid ${INK_900}` : `1.5px solid ${BORDER_LIGHT}`,
@@ -733,7 +733,7 @@ export default function QnAPage() {
                 <button
                   type="button"
                   onClick={() => toggleFaq(faq.id)}
-                  className="flex items-start justify-between w-full py-6 lg:py-7 gap-6 bg-transparent border-none cursor-pointer text-left"
+                  className="flex items-start justify-between w-full py-5 sm:py-6 lg:py-7 gap-4 sm:gap-6 bg-transparent border-none cursor-pointer text-left"
                   style={{ fontFamily: 'inherit' }}
                   aria-expanded={isOpen}
                 >
@@ -764,7 +764,7 @@ export default function QnAPage() {
                 <div
                   className="overflow-hidden"
                   style={{
-                    maxHeight: isOpen ? 400 : 0,
+                    maxHeight: isOpen ? 800 : 0,
                     opacity: isOpen ? 1 : 0,
                     transition: 'max-height .35s cubic-bezier(.16,1,.3,1), opacity .25s ease',
                   }}
@@ -791,7 +791,6 @@ export default function QnAPage() {
     padding: '0 16px',
     border: '1.5px solid var(--color-border)',
     borderRadius: 'var(--radius-default)',
-    fontSize: 15,
     fontFamily: 'inherit',
     color: 'var(--color-ink)',
     background: 'var(--color-white)',
@@ -802,7 +801,6 @@ export default function QnAPage() {
     padding: '14px 16px',
     border: '1.5px solid var(--color-border)',
     borderRadius: 'var(--radius-default)',
-    fontSize: 15,
     fontFamily: 'inherit',
     color: 'var(--color-ink)',
     background: 'var(--color-white)',
@@ -861,6 +859,7 @@ export default function QnAPage() {
           <select
             value={newCategory}
             onChange={(e) => setNewCategory(e.target.value as InquiryCategory)}
+            className="text-[16px] lg:text-[15px]"
             style={formSelectStyle}
             onFocus={focusBorder}
             onBlur={blurBorder}
@@ -887,6 +886,7 @@ export default function QnAPage() {
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
             placeholder={lang === 'ko' ? '문의 제목을 입력하세요' : 'Enter inquiry title'}
+            className="text-[16px] lg:text-[15px]"
             style={formInputStyle}
             onFocus={focusBorder}
             onBlur={blurBorder}
@@ -907,6 +907,7 @@ export default function QnAPage() {
             onChange={(e) => setNewContent(e.target.value)}
             placeholder={lang === 'ko' ? '문의 내용을 작성하세요' : 'Please describe your inquiry in detail'}
             rows={6}
+            className="text-[16px] lg:text-[15px]"
             style={formTextareaStyle}
             onFocus={focusBorder}
             onBlur={blurBorder}
@@ -1081,7 +1082,7 @@ export default function QnAPage() {
                           (lang === 'ko' ? '(첨부 파일)' : '(attachment)')}
                       </p>
                     </div>
-                    <div className="text-xs ml-4" style={{ color: 'var(--color-light)' }}>
+                    <div className="text-xs ml-4 shrink-0 whitespace-nowrap" style={{ color: 'var(--color-light)' }}>
                       {new Date(inq.createdAt).toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US')}
                     </div>
                   </div>
@@ -1151,7 +1152,7 @@ export default function QnAPage() {
           className="flex-1 rounded-xl border border-border overflow-hidden flex flex-col bg-white"
           style={{ minHeight: 300 }}
         >
-          <div className="flex-1 overflow-y-auto p-5 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
             {/* Original message */}
             <div className="rounded-lg p-4" style={{ background: 'var(--color-bg)' }}>
               <div className="text-xs mb-2" style={{ color: 'var(--color-muted)' }}>
@@ -1164,7 +1165,7 @@ export default function QnAPage() {
             {selectedInquiry.replies?.map((reply) => (
               <div
                 key={reply.id}
-                className={`rounded-lg p-4 ${reply.isAdmin ? 'ml-6' : 'mr-6'}`}
+                className={`rounded-lg p-4 ${reply.isAdmin ? 'ml-3 sm:ml-6' : 'mr-3 sm:mr-6'}`}
                 style={{
                   background: reply.isAdmin ? 'var(--color-bg)' : 'var(--color-surface)',
                 }}
@@ -1234,7 +1235,7 @@ export default function QnAPage() {
                   onChange={(e) => setReplyContent(e.target.value)}
                   placeholder={lang === 'ko' ? '추가 문의사항을 입력하세요...' : 'Type your message...'}
                   rows={2}
-                  className="form-textarea flex-1"
+                  className="form-textarea flex-1 max-lg:text-[16px]"
                   style={{ minHeight: 'auto', resize: 'none' }}
                 />
                 <button
@@ -1321,8 +1322,8 @@ export default function QnAPage() {
       {/* Tab content */}
       <div className="flex-1">
         <div
-          className="mx-auto px-8"
-          style={{ maxWidth: 'var(--spacing-content-w)', padding: '40px 32px 80px' }}
+          className="mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 lg:pt-10 pb-16 lg:pb-20 max-lg:break-keep"
+          style={{ maxWidth: 'var(--spacing-content-w)' }}
         >
           {activeTab === 'notice' && renderNotice()}
           {activeTab === 'faq' && renderFaq()}

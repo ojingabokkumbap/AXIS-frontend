@@ -122,11 +122,11 @@ function Step2KcpStub() {
           return (
             <div
               key={s.id}
-              className="border border-[#E5E5E5] rounded-xl p-5 bg-white hover:border-[#93C5FD] transition-colors"
+              className="border border-[#E5E5E5] rounded-xl p-4 sm:p-5 bg-white hover:border-[#93C5FD] transition-colors"
             >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex-1">
-                  <div className={`${H_CARD} mb-1`} style={{ color: INK_900 }}>
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                <div className="flex-1 min-w-0">
+                  <div className={`${H_CARD} mb-1 break-keep`} style={{ color: INK_900 }}>
                     {t('apply.s2.session')
                       .replace('{cert}', certLabel)
                       .replace('{level}', selectedLevel)
@@ -140,7 +140,7 @@ function Step2KcpStub() {
                 <button
                   type="button"
                   onClick={() => handleSelect(s)}
-                  className="shrink-0 px-5 py-2.5 rounded-lg text-[14px] lg:text-[15px] font-semibold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-colors cursor-pointer"
+                  className="w-full sm:w-auto shrink-0 px-5 py-3 sm:py-2.5 rounded-lg text-[14px] lg:text-[15px] font-semibold bg-[#2563EB] text-white hover:bg-[#1D4ED8] transition-colors cursor-pointer"
                 >
                   {t('apply.s2.select')}
                 </button>
@@ -149,7 +149,7 @@ function Step2KcpStub() {
           );
         })}
       </div>
-      <div className="flex gap-2">
+      <div className="sticky bottom-0 sm:static bg-white py-4 sm:py-0 flex gap-2">
         <button
           type="button"
           onClick={prevStep}
@@ -250,8 +250,8 @@ function SessionCards() {
                 className="border rounded-xl p-4 bg-white hover:border-[#93C5FD] transition-colors"
                 style={{ borderColor: BORDER }}
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap mb-2">
                       <span className={H_CARD} style={{ color: INK_900 }}>
                         {t('apply.s2.session')
@@ -268,7 +268,7 @@ function SessionCards() {
                         </span>
                       )}
                     </div>
-                    <div className={`grid grid-cols-2 gap-x-4 gap-y-1 ${T_BODY} mb-2.5`} style={{ color: GRAY_500 }}>
+                    <div className={`grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1 ${T_BODY} mb-2.5`} style={{ color: GRAY_500 }}>
                       <span>📅 {formatDate(s.examDate, s.examStartTime)}</span>
                       <span>🏛 {s.venue}</span>
                       <span className={almostFull ? 'text-status-danger font-medium' : ''}>
@@ -286,7 +286,7 @@ function SessionCards() {
                   <button
                     onClick={() => handleSelect(s)}
                     disabled={seats === 0}
-                    className="shrink-0 px-4 py-2 rounded-lg text-[13px] lg:text-[14px] font-semibold text-white hover:bg-[#1D4ED8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                    className="w-full sm:w-auto shrink-0 px-4 py-3 sm:py-2 rounded-lg text-[13px] lg:text-[14px] font-semibold text-white hover:bg-[#1D4ED8] disabled:opacity-50 disabled:cursor-not-allowed transition-colors cursor-pointer"
                     style={{ background: ACCENT }}
                   >
                     {seats === 0 ? t('apply.s2.full') : t('apply.s2.select')}
@@ -298,7 +298,7 @@ function SessionCards() {
         </div>
       )}
 
-      <div className="flex gap-2">
+      <div className="sticky bottom-0 sm:static bg-white py-4 sm:py-0 flex gap-2">
         <button
           type="button"
           onClick={prevStep}
@@ -515,19 +515,19 @@ function L3SlotPicker() {
 
         {/* Time slots */}
         <div className="flex h-full flex-col">
-          <div className={`font-semibold text-[18px]`} style={{ color: INK_900 }}>
+          <div className={`font-semibold text-[16px] sm:text-[18px]`} style={{ color: INK_900 }}>
             {selectedDate
               ? t('apply.s2.slotsOn').replace('{date}', formatDate(selectedDate))
               : ''}
           </div>
           {!selectedDate ? (
-            <div className="flex-1 rounded-xl flex flex-col items-center justify-center text-center" style={{ backgroundColor: '#f7f8fa' }}>
-              <div className="w-14 h-14 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#E5E7EB' }}>
+            <div className="flex-1 min-h-[220px] md:min-h-0 py-8 md:py-0 rounded-xl flex flex-col items-center justify-center text-center" style={{ backgroundColor: '#f7f8fa' }}>
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-4" style={{ backgroundColor: '#E5E7EB' }}>
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path d="M4 4L20 11L13 13L11 20L4 4Z" fill="#FFFFFF" />
                 </svg>
               </div>
-              <p className="text-[17px] leading-[1.5] font-medium whitespace-pre-line" style={{ color: '#9CA3AF' }}>
+              <p className="text-[15px] sm:text-[17px] leading-[1.5] font-medium whitespace-pre-line break-keep px-4" style={{ color: '#9CA3AF' }}>
                 {'시험 날짜를 선택하면\n시간을 선택할 수 있습니다.'}
               </p>
             </div>
@@ -562,7 +562,7 @@ function L3SlotPicker() {
                                   if (available) handleSelectSlot(s);
                                 }}
                                 disabled={!available}
-                                className={`relative px-7 py-3 rounded-xl border text-left transition-colors cursor-pointer ${
+                                className={`relative px-4 sm:px-7 py-3 rounded-xl border text-left transition-colors cursor-pointer ${
                                   isSelected
                                     ? 'border-[#2563EB] bg-[#EFF6FF]'
                                     : available
@@ -597,7 +597,7 @@ function L3SlotPicker() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="sticky bottom-0 sm:static bg-white py-4 sm:py-0 flex gap-2">
         <button
           type="button"
           onClick={prevStep}

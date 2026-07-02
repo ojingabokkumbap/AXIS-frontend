@@ -85,9 +85,9 @@ export default function LoginPage() {
       />
 
       <main className="mx-auto w-full max-w-[var(--spacing-content-w)] px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
-        <div className="grid gap-8 rounded-xl border border-[#E0E4ED] p-5 sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
-          <section className="bg-white p-2 sm:p-4">
-            <h2 className="mb-8 text-[30px] font-semibold tracking-[-0.02em] text-gray-800">{t('login.title')}</h2>
+        <div className="grid gap-10 sm:gap-8 sm:rounded-xl sm:border sm:border-[#E0E4ED] sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
+          <section className="bg-white sm:p-4">
+            <h2 className="mb-6 text-[22px] font-semibold tracking-[-0.02em] text-gray-800 sm:text-[26px] lg:mb-8 lg:text-[30px]">{t('login.title')}</h2>
 
             <form onSubmit={handleLogin}>
               <div className="mb-4">
@@ -142,9 +142,10 @@ export default function LoginPage() {
               </div>
 
               <div className=" flex justify-end mb-4">
-                <label className="inline-flex items-center gap-2 text-[16px] text-[#0A0E1A]">
+                <label className="inline-flex items-center gap-2 py-2 text-[16px] text-[#0A0E1A] lg:py-0">
                   <input
                     type="checkbox"
+                    className="h-[18px] w-[18px] flex-shrink-0 lg:h-auto lg:w-auto"
                     checked={saveUserId}
                     onChange={(e) => {
                       const checked = e.target.checked;
@@ -176,11 +177,11 @@ export default function LoginPage() {
             </form>
           </section>
 
-          <section className="rounded-xl border border-[#E0E4ED] bg-white px-6 py-6 sm:px-10 sm:py-4 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD] flex flex-col justify-between gap-8">
-            <p className="mb-8 text-[27px] leading-[1.35] tracking-[-0.02em] text-gray-800 whitespace-pre-line">
+          <section className="rounded-xl border border-[#E0E4ED] bg-white px-5 py-6 sm:px-10 sm:py-4 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD] flex flex-col justify-between gap-6 lg:gap-8">
+            <p className="mb-0 text-[20px] leading-[1.35] tracking-[-0.02em] text-gray-800 whitespace-pre-line break-keep sm:text-[24px] lg:mb-8 lg:break-normal lg:text-[27px]">
               {t('login.rightPanelPrompt')}
             </p>
-            <div className="space-y-5">
+            <div className="space-y-4 lg:space-y-5">
               <button
                 type="button"
                 onClick={() => navigate('/signup')}

@@ -48,12 +48,12 @@ export function MyPageModal({
         aria-hidden
       />
       <div
-        className={`relative w-full ${widthCls} max-h-[90vh] overflow-y-auto rounded-[14px] bg-white border border-border print:max-h-none print:rounded-none print:border-none`}
+        className={`relative w-full ${widthCls} max-h-[85vh] sm:max-h-[90vh] overflow-y-auto rounded-[14px] bg-white border border-border print:max-h-none print:rounded-none print:border-none`}
         role="dialog"
         aria-modal="true"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-white px-6 py-4 print:hidden">
-          <h3 className="text-[15px] font-semibold text-ink">{title}</h3>
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-white px-4 py-3.5 sm:px-6 sm:py-4 print:hidden">
+          <h3 className="text-[15px] font-semibold text-ink min-w-0 break-keep">{title}</h3>
           <button
             type="button"
             onClick={onClose}
@@ -66,16 +66,16 @@ export function MyPageModal({
             </svg>
           </button>
         </div>
-        <div className="px-6 py-6 print:px-0 print:py-0" id="mypage-print-region">
+        <div className="px-4 py-5 sm:px-6 sm:py-6 print:px-0 print:py-0" id="mypage-print-region">
           {children}
         </div>
-        <div className="sticky bottom-0 z-10 flex items-center justify-end gap-2 border-t border-border bg-white px-6 py-4 print:hidden">
+        <div className="sticky bottom-0 z-10 flex flex-col items-stretch gap-2 border-t border-border bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:px-6 sm:py-4 print:hidden">
           {footer}
           {printable && (
             <button
               type="button"
               onClick={handlePrint}
-              className="rounded-lg bg-blue px-5 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-[#0052CC]"
+              className="min-h-[44px] sm:min-h-0 rounded-lg bg-blue px-5 py-2 text-[13px] font-semibold text-white transition-colors hover:bg-[#0052CC]"
             >
               {t('mypage.modal.print' as never)}
             </button>
@@ -83,7 +83,7 @@ export function MyPageModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border-[1.5px] border-[#D1D5DB] bg-white px-5 py-2 text-[13px] font-medium text-ink transition-colors hover:bg-[#F9FAFB]"
+            className="min-h-[44px] sm:min-h-0 rounded-lg border-[1.5px] border-[#D1D5DB] bg-white px-5 py-2 text-[13px] font-medium text-ink transition-colors hover:bg-[#F9FAFB]"
           >
             {t('mypage.modal.close' as never)}
           </button>

@@ -72,7 +72,7 @@ export default function Step1CertLevel() {
               <button
                 key={c.id}
                 onClick={() => setCert(selected ? null : c.id)}
-                className={`w-full text-left px-8 py-8 mb-4 rounded-xl border transition-all cursor-pointer flex items-center gap-4 ${
+                className={`w-full text-left px-4 py-5 sm:px-8 sm:py-8 mb-4 rounded-xl border transition-all cursor-pointer flex items-center gap-3 sm:gap-4 ${
                   selected
                     ? `${c.color} shadow-sm`
                     : 'border-[#E5E5E5] bg-white hover:border-[#93C5FD] hover:bg-[#F8FAFC]'
@@ -97,7 +97,7 @@ export default function Step1CertLevel() {
                       {t(`apply.cert.${c.id}.sub` as never)}
                     </span>
                   </div>
-                  <p className={`${T_BODY} mb-2 line-clamp-1`} style={{ color: GRAY_500 }}>
+                  <p className={`${T_BODY} mb-2 line-clamp-2 sm:line-clamp-1 break-keep`} style={{ color: GRAY_500 }}>
                     {t(`apply.cert.${c.id}.desc` as never)}
                   </p>
                   <div className="flex flex-wrap gap-1">
@@ -149,7 +149,7 @@ export default function Step1CertLevel() {
               <button
                 key={lv.id}
                 onClick={() => setLevel(selected ? null : lv.id)}
-                className={`w-full text-left px-8 py-8 mb-4 rounded-xl border transition-all cursor-pointer flex items-center gap-4 ${
+                className={`w-full text-left px-4 py-5 sm:px-8 sm:py-8 mb-4 rounded-xl border transition-all cursor-pointer flex items-center gap-3 sm:gap-4 ${
                   selected
                     ? 'border-[#2563EB] bg-[#EFF6FF] shadow-sm'
                     : 'border-[#E5E5E5] bg-white hover:border-[#93C5FD]'
@@ -177,7 +177,7 @@ export default function Step1CertLevel() {
                       {t(`apply.level.${lv.id}.fee` as never)}
                     </span>
                   </div>
-                  <p className={`${T_BODY} line-clamp-1`} style={{ color: GRAY_500 }}>
+                  <p className={`${T_BODY} line-clamp-2 sm:line-clamp-1 break-keep`} style={{ color: GRAY_500 }}>
                     {t(`apply.level.${lv.id}.desc` as never)}
                   </p>
                 </div>
@@ -198,7 +198,7 @@ export default function Step1CertLevel() {
 
       {/* L1 응시 자격 notice — only AXIS-C L1 requires proof of experience */}
       {selectedLevel === 'L1' && selectedCert === 'AXIS_C' && (
-        <div className={`mb-6 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl ${T_BODY} text-amber-700`}>
+        <div className={`mb-6 px-4 py-3 bg-amber-50 border border-amber-200 rounded-xl ${T_BODY} text-amber-700 break-keep`}>
           {t('apply.s1.l1Notice')}
         </div>
       )}

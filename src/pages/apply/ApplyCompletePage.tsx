@@ -31,7 +31,7 @@ function MiniToast({ message, onClose }: { message: string; onClose: () => void 
     return () => clearTimeout(id);
   }, [onClose]);
   return (
-    <div className="fixed bottom-6 left-1/2 z-[3000] -translate-x-1/2 px-4 py-3 rounded-xl bg-[#0F172A] text-white text-sm shadow-lg">
+    <div className="fixed bottom-6 left-1/2 z-[3000] -translate-x-1/2 max-w-[90vw] text-center px-4 py-3 rounded-xl bg-[#0F172A] text-white text-sm shadow-lg">
       {message}
     </div>
   );
@@ -62,13 +62,13 @@ export default function ApplyCompletePage() {
       {toast && <MiniToast message={toast} onClose={() => setToast(null)} />}
       <SiteHeader active="apply" />
 
-      <div className="flex-1 max-w-lg w-full mx-auto px-4 py-12">
-        <div className="text-center text-[22px] font-extrabold text-[#0F172A] mb-2">
+      <div className="flex-1 max-w-lg w-full mx-auto px-4 py-8 sm:py-12">
+        <div className="text-center text-[20px] sm:text-[22px] font-extrabold text-[#0F172A] mb-2 break-keep">
           {t('apply.complete.vaTitle' as never)}
         </div>
-        <p className="text-center text-sm text-[#64748B] mb-8">{state.orderName}</p>
+        <p className="text-center text-sm text-[#64748B] mb-6 sm:mb-8 break-keep">{state.orderName}</p>
 
-        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-6 shadow-sm space-y-3 text-[14px]">
+        <div className="bg-white rounded-2xl border border-[#E2E8F0] p-5 sm:p-6 shadow-sm space-y-3 text-[14px]">
           <div className="flex justify-between gap-3">
             <span className="text-[#64748B]">{t('apply.complete.bank' as never)}</span>
             <span className="font-semibold text-[#0F172A] text-right">{state.vbankName}</span>
@@ -85,7 +85,7 @@ export default function ApplyCompletePage() {
           </div>
           <div className="flex justify-between gap-3">
             <span className="text-[#64748B]">{t('apply.complete.amount' as never)}</span>
-            <span className="font-bold text-[#2563EB]">₩{state.amount.toLocaleString()}</span>
+            <span className="font-bold text-[#2563EB] text-[16px] sm:text-[14px]">₩{state.amount.toLocaleString()}</span>
           </div>
           <div className="flex justify-between gap-3 pt-2 border-t border-[#E2E8F0]">
             <span className="text-[#64748B]">{t('apply.complete.deadline' as never)}</span>
@@ -95,11 +95,11 @@ export default function ApplyCompletePage() {
           </div>
         </div>
 
-        <p className="mt-6 text-[13px] text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+        <p className="mt-6 text-[13px] text-amber-900 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 break-keep">
           {t('apply.complete.warnNoPay' as never)}
         </p>
 
-        <p className="mt-3 text-[13px] text-[#1E3A5F] bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-4 py-3">
+        <p className="mt-3 text-[13px] text-[#1E3A5F] bg-[#EFF6FF] border border-[#BFDBFE] rounded-xl px-4 py-3 break-keep">
           {t('apply.complete.smsInfo' as never)}
           <br />
           {t('apply.complete.processTime' as never)}

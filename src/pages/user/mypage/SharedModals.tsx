@@ -32,13 +32,13 @@ export function VoucherModal({
       {reg && (
         <div>
           <div
-            className="mb-5 flex items-center justify-between rounded-[14px] border border-transparent px-5 py-4 text-white bg-[#0A0E1A] print:border-border print:bg-white print:text-ink"
+            className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between rounded-[14px] border border-transparent px-4 py-4 sm:px-5 text-white bg-[#0A0E1A] print:border-border print:bg-white print:text-ink"
           >
-            <div>
+            <div className="min-w-0">
               <div className="text-[11px] tracking-[0.16em] text-blue font-en">AXIS</div>
-              <div className="text-[18px] font-semibold print:text-ink">{certLabel(reg.certType, reg.level)}</div>
+              <div className="text-[18px] font-semibold break-keep print:text-ink">{certLabel(reg.certType, reg.level)}</div>
             </div>
-            <div className="text-right text-[11px] text-white/60 print:text-muted">
+            <div className="sm:text-right text-[11px] text-white/60 print:text-muted">
               {t('mypage.voucher.session' as never)}{' '}
               <span className="font-semibold text-white print:text-ink">
                 {reg.schedule.year}.{reg.schedule.roundNumber}
@@ -178,8 +178,13 @@ export function ExamGateModal({
       title={t('mypage.examGate.title')}
       onClose={onClose}
       footer={
-        <div className="flex flex-wrap gap-2 justify-end w-full">
-          <Btn variant="green" type="button" onClick={() => { onEnvCheck(); onClose(); }}>
+        <div className="flex flex-col gap-2 w-full sm:flex-row sm:flex-wrap sm:justify-end">
+          <Btn
+            variant="green"
+            type="button"
+            className="w-full min-h-[44px] sm:w-auto sm:min-h-0"
+            onClick={() => { onEnvCheck(); onClose(); }}
+          >
             {t('mypage.examGate.envCta')}
           </Btn>
         </div>
@@ -344,6 +349,28 @@ export function ScoreDetailModal({
       {result.breakdown.length > 0 && (
         <div className="mt-5">
           <div className="text-[13px] font-semibold text-ink mb-2">{t('score.detail.subjectBreakdown' as never)}</div>
+          <div className="md:hidden space-y-2">
+            {result.breakdown.map((b) => (
+              <div key={`${b.part}-${b.subjectIndex}`} className="rounded-lg border border-border px-3 py-2.5">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-muted">{b.part}</div>
+                    <div className="text-[13px] font-medium text-ink break-keep">{b.subjectName}</div>
+                  </div>
+                  {b.subjectFailed && (
+                    <span className="inline-flex flex-shrink-0 text-[12px] font-semibold text-status-danger">
+                      {t('score.detail.subjectFail' as never)}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-1.5 flex items-baseline gap-2 text-[13px]">
+                  <span className="font-en font-semibold text-ink">{b.earned}/{b.total}</span>
+                  <span className="font-en text-muted">{b.percentage}%</span>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="hidden md:block">
           <table className="data-table w-full">
             <thead>
               <tr>
@@ -372,6 +399,7 @@ export function ScoreDetailModal({
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       )}
       {result.failReason && (

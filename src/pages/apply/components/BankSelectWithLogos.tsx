@@ -56,7 +56,7 @@ export function BankSelectWithLogos({ id, labelId, value, onChange, disabled }: 
         onClick={() => {
           if (!disabled) setOpen((o) => !o);
         }}
-        className="w-full min-h-12 px-3 py-2 border border-[#E5E7EB] rounded-xl text-[14px] bg-white text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#2563EB] flex items-center gap-3 text-left disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full min-h-12 px-3 py-2 border border-[#E5E7EB] rounded-xl text-[15px] sm:text-[14px] bg-white text-[#0F172A] focus:outline-none focus:ring-2 focus:ring-[#2563EB] flex items-center gap-3 text-left disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {selected ? (
           <>
@@ -90,14 +90,14 @@ export function BankSelectWithLogos({ id, labelId, value, onChange, disabled }: 
         <ul
           role="listbox"
           aria-labelledby={labelId}
-          className="absolute z-[100] mt-1 w-full max-h-72 overflow-y-auto rounded-xl border border-[#E5E7EB] bg-white shadow-lg py-1"
+          className="absolute z-[100] mt-1 w-full max-h-60 sm:max-h-72 overflow-y-auto rounded-xl border border-[#E5E7EB] bg-white shadow-lg py-1"
         >
           <li role="presentation">
             <button
               type="button"
               role="option"
               aria-selected={value === ''}
-              className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-[14px] hover:bg-[#F8FAFC] ${
+              className={`flex w-full items-center gap-3 px-3 py-3 sm:py-2.5 text-left text-[15px] sm:text-[14px] hover:bg-[#F8FAFC] ${
                 value === '' ? 'bg-[#EFF6FF]' : ''
               }`}
               onClick={() => {
@@ -115,7 +115,7 @@ export function BankSelectWithLogos({ id, labelId, value, onChange, disabled }: 
                 type="button"
                 role="option"
                 aria-selected={value === b.code}
-                className={`flex w-full items-center gap-3 px-3 py-2.5 text-left text-[14px] hover:bg-[#F8FAFC] ${
+                className={`flex w-full items-center gap-3 px-3 py-3 sm:py-2.5 text-left text-[15px] sm:text-[14px] hover:bg-[#F8FAFC] ${
                   value === b.code ? 'bg-[#EFF6FF]' : ''
                 }`}
                 onClick={() => {

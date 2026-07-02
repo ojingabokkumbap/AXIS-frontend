@@ -12,7 +12,7 @@ import type { CertificateDto, DashboardDto } from '../types';
 import { InfoCallout } from '@/components/InfoCallout';
 import { openPrintPopup } from '@/utils/openPrintPopup';
 
-const TABLE_WRAP = 'w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
+const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 
 export function CertsPanel({ data }: { data: DashboardDto }) {
   const { t } = useI18n();
@@ -101,6 +101,46 @@ export function CertsPanel({ data }: { data: DashboardDto }) {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="md:hidden mt-4 border-t-2 border-ink">
+        {data.certificates.length === 0 ? (
+          <div className="py-10 px-4 text-center text-muted text-[14px] break-keep">
+            {t('sec.certs.empty')}
+          </div>
+        ) : (
+          data.certificates.map((c) => (
+            <div key={c.sessionId} className="border-b border-border py-4">
+              <div className="min-w-0">
+                <div className="text-[16px] font-semibold text-ink break-keep">
+                  {certLabel(c.certType, c.level)}
+                </div>
+                <div className="mt-0.5 text-[13px] text-muted font-en break-all">{c.certNumber}</div>
+              </div>
+              <div className="mt-3 space-y-1.5 text-[13px]">
+                <div className="flex justify-between gap-3">
+                  <span className="text-light flex-shrink-0">{t('sec.certs.col.issued')}</span>
+                  <span className="text-ink text-right">{formatExamDate(c.issuedAt)}</span>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span className="text-light flex-shrink-0">{t('sec.certs.col.validity')}</span>
+                  <span className="text-ink text-right break-keep">
+                    {formatExamDate(c.issuedAt)} ~ {formatExamDate(c.validUntil)}
+                    <span className="text-light ml-1">{t('sec.certs.validity.years')}</span>
+                  </span>
+                </div>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <Btn variant="primary" className="w-full min-h-[44px] bg-blue-500" onClick={() => openCertificate(c)}>
+                  {t('mypage.act.pdfDownload' as never)}
+                </Btn>
+                <Btn variant="blue" className="w-full min-h-[44px]" onClick={() => setBadgeFor(c)}>
+                  {t('mypage.act.digitalBadge' as never)}
+                </Btn>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <DigitalBadgeModal

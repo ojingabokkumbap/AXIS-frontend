@@ -315,9 +315,9 @@ export default function SignupPage() {
       />
 
       <main className="mx-auto w-full max-w-[var(--spacing-content-w)] px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
-        <div className="grid gap-8 rounded-xl border border-[#E0E4ED] p-5 sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
-          <section className="bg-white p-2 sm:p-4">
-            <h2 className="mb-8 text-[30px] font-semibold tracking-[-0.02em] text-gray-800">{t('signup.title')}</h2>
+        <div className="grid gap-10 sm:gap-8 sm:rounded-xl sm:border sm:border-[#E0E4ED] sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
+          <section className="bg-white sm:p-4">
+            <h2 className="mb-6 text-[22px] font-semibold tracking-[-0.02em] text-gray-800 sm:text-[26px] lg:mb-8 lg:text-[30px]">{t('signup.title')}</h2>
 
         
             {/* ═══ STEP 1: NICE Verification ═══ */}
@@ -342,7 +342,7 @@ export default function SignupPage() {
                       placeholder={t('signup.phonePh')}
                       aria-required="true"
                       disabled={verifying}
-                      className={`${INPUT_CLASS} flex-1`}
+                      className={`${INPUT_CLASS} min-w-0 flex-1`}
                       style={{ opacity: verifying ? 0.6 : 1 }}
                     />
                     <button
@@ -444,7 +444,7 @@ export default function SignupPage() {
                       maxLength={20}
                       aria-required="true"
                       aria-describedby="userId-status"
-                      className={`${INPUT_CLASS} flex-1`}
+                      className={`${INPUT_CLASS} min-w-0 flex-1`}
                     />
                     <button
                       type="button"
@@ -565,17 +565,17 @@ export default function SignupPage() {
 
                 {/* Consent checkboxes */}
                 <div className="mb-5 overflow-hidden rounded-md border border-[#E0E4ED]">
-                  <label className="flex cursor-pointer items-center gap-2.5 border-b border-[#E0E4ED] bg-[#F9FAFB] px-4 py-3.5">
+                  <label className="flex cursor-pointer items-center gap-2.5 border-b border-[#E0E4ED] bg-[#F9FAFB] px-4 py-4 lg:py-3.5">
                     <input
                       type="checkbox"
                       checked={agreeAll}
                       onChange={(e) => handleAgreeAll(e.target.checked)}
-                      className="h-[18px] w-[18px] accent-[#2B7FFF]"
+                      className="h-[18px] w-[18px] flex-shrink-0 accent-[#2B7FFF]"
                     />
-                    <span className="text-[14px] font-bold text-[#0A0E1A]">{t('signup.agreeAll')}</span>
+                    <span className="break-keep text-[14px] font-bold text-[#0A0E1A]">{t('signup.agreeAll')}</span>
                   </label>
 
-                  <label className="flex cursor-pointer items-center gap-2.5 border-b border-[#E0E4ED] px-4 py-3">
+                  <label className="flex cursor-pointer items-center gap-2.5 border-b border-[#E0E4ED] px-4 py-3.5 lg:py-3">
                     <input
                       type="checkbox"
                       checked={agreeTerms}
@@ -585,15 +585,15 @@ export default function SignupPage() {
                         else if (agreePrivacy) setAgreeAll(true);
                       }}
                       aria-required="true"
-                      className="h-[18px] w-[18px] accent-[#2B7FFF]"
+                      className="h-[18px] w-[18px] flex-shrink-0 accent-[#2B7FFF]"
                     />
-                    <span className="text-[13px] text-[#0A0E1A]">
+                    <span className="break-keep text-[13px] text-[#0A0E1A]">
                       <span className="font-semibold text-[#DC2626]">{t('signup.required')}</span>{' '}
                       {t('signup.agreeTerms')}
                     </span>
                   </label>
 
-                  <label className="flex cursor-pointer items-center gap-2.5 border-b border-[#E0E4ED] px-4 py-3">
+                  <label className="flex cursor-pointer items-center gap-2.5 border-b border-[#E0E4ED] px-4 py-3.5 lg:py-3">
                     <input
                       type="checkbox"
                       checked={agreePrivacy}
@@ -603,15 +603,15 @@ export default function SignupPage() {
                         else if (agreeTerms) setAgreeAll(true);
                       }}
                       aria-required="true"
-                      className="h-[18px] w-[18px] accent-[#2B7FFF]"
+                      className="h-[18px] w-[18px] flex-shrink-0 accent-[#2B7FFF]"
                     />
-                    <span className="text-[13px] text-[#0A0E1A]">
+                    <span className="break-keep text-[13px] text-[#0A0E1A]">
                       <span className="font-semibold text-[#DC2626]">{t('signup.required')}</span>{' '}
                       {t('signup.agreePrivacy')}
                     </span>
                   </label>
 
-                  <label className="flex cursor-pointer items-center gap-2.5 px-4 py-3">
+                  <label className="flex cursor-pointer items-center gap-2.5 px-4 py-3.5 lg:py-3">
                     <input
                       type="checkbox"
                       checked={agreeMarketing}
@@ -620,9 +620,9 @@ export default function SignupPage() {
                         if (!e.target.checked) setAgreeAll(false);
                         else if (agreeTerms && agreePrivacy) setAgreeAll(true);
                       }}
-                      className="h-[18px] w-[18px] accent-[#2B7FFF]"
+                      className="h-[18px] w-[18px] flex-shrink-0 accent-[#2B7FFF]"
                     />
-                    <span className="text-[13px] text-[#0A0E1A]">
+                    <span className="break-keep text-[13px] text-[#0A0E1A]">
                       <span className="font-semibold text-[#8B95B0]">{t('signup.optional')}</span>{' '}
                       {t('signup.agreeMarketing')}
                     </span>
@@ -660,11 +660,11 @@ export default function SignupPage() {
             )}
           </section>
 
-          <section className="flex flex-col justify-between gap-8 rounded-xl border border-[#E0E4ED] bg-white px-6 py-6 sm:px-10 sm:py-4 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD]">
-            <p className="mb-8 text-[27px] leading-[1.35] tracking-[-0.02em] text-gray-800">
+          <section className="flex flex-col justify-between gap-6 rounded-xl border border-[#E0E4ED] bg-white px-5 py-6 sm:px-10 sm:py-4 lg:gap-8 lg:rounded-none lg:border-y-0 lg:border-r-0 lg:border-l-[#D0D5DD]">
+            <p className="mb-0 break-keep text-[20px] leading-[1.35] tracking-[-0.02em] text-gray-800 sm:text-[24px] lg:mb-8 lg:break-normal lg:text-[27px]">
               {t('signup.rightPanelPrompt')}
             </p>
-            <div className="space-y-5">
+            <div className="space-y-4 lg:space-y-5">
               <button
                 type="button"
                 onClick={() => navigate('/login')}

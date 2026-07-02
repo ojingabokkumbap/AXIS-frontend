@@ -43,7 +43,7 @@ const SECTION = 'py-[64px] lg:py-[120px] px-6 lg:px-10';
 const WRAP = 'mx-auto max-w-[1280px]';
 
 /* Type scale — 페이지 전체 통일 (이 페이지가 다른 화면들의 기준이 됨) */
-const H_HERO = 'text-[34px] sm:text-[40px] lg:text-[54px] font-semibold leading-[1.25]';
+const H_HERO = 'text-[30px] sm:text-[40px] lg:text-[54px] font-semibold leading-[1.25] break-keep lg:break-normal';
 const H_SEC = 'text-[26px] lg:text-[34px] font-semibold leading-[1.15] tracking-[-0.025em]';
 const H_DISPLAY_CARD = 'text-[22px] lg:text-[26px] font-semibold leading-[1.3] tracking-[-0.02em]'; /* 큰 카드 제목 */
 const H_CARD = 'text-[19px] lg:text-[22px] font-semibold leading-[1.3] tracking-[-0.015em]';        /* 카드 제목 */

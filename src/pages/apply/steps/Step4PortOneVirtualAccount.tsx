@@ -399,7 +399,7 @@ export default function Step4PortOneVirtualAccount() {
       />
 
       <section className="bg-white mb-4">
-        <header className="py-4 flex items-center justify-between gap-3">
+        <header className="py-4 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
           <h3 className={H_CARD} style={{ color: INK_900 }}>
             {t('apply.s4.summaryTitle')}
           </h3>
@@ -467,7 +467,7 @@ export default function Step4PortOneVirtualAccount() {
           </h3>
       </header>
 
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="mb-4 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
         {([
           { id: 'card' as const, label: '신용카드' },
           { id: 'va' as const, label: '무통장입금' },
@@ -480,7 +480,7 @@ export default function Step4PortOneVirtualAccount() {
               type="button"
               onClick={() => handleSelectPayMethod(opt.id)}
               aria-pressed={selected}
-              className={`min-w-35 h-12 px-5 rounded-md border ${T_BODY} font-semibold transition-colors cursor-pointer ${
+              className={`w-full sm:w-auto sm:min-w-35 h-12 px-5 rounded-md border ${T_BODY} font-semibold transition-colors cursor-pointer ${
                 selected
                   ? 'border-[#2563EB] bg-white text-[#2563EB]'
                   : 'border-[#E5E5E5] bg-white hover:bg-[#F8FAFC]'
@@ -533,7 +533,7 @@ export default function Step4PortOneVirtualAccount() {
                     <span className="text-status-danger ml-1">*</span>
                   </div>
                   <div className="flex-1  px-4 py-3 sm:py-4 flex items-center min-h-11">
-                    <div className="w-70">
+                    <div className="w-full sm:w-70">
                       <BankSelectWithLogos
                         id="va-bank"
                         labelId="va-bank-label"
@@ -601,7 +601,7 @@ export default function Step4PortOneVirtualAccount() {
                   </svg>
                 )}
               </div>
-              <span className={T_BODY} style={{ color: INK_900 }}>
+              <span className={`${T_BODY} break-keep`} style={{ color: INK_900 }}>
                 결제 진행 및 환불 규정에 동의합니다. (필수){' '}
                 <a
                   href="/terms"
@@ -639,7 +639,7 @@ export default function Step4PortOneVirtualAccount() {
                 !!error ||
                 (payMethodChoice === 'va' && !reqData.alreadyIssued && !bankCode)
               }
-              className="w-full sm:flex-1 rounded-xl text-[14px] lg:text-[15px] font-semibold text-white hover:bg-[#1D4ED8] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-sm flex items-center justify-center gap-2"
+              className="w-full sm:flex-1 h-12 rounded-xl text-[14px] lg:text-[15px] font-semibold text-white hover:bg-[#1D4ED8] disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer shadow-sm flex items-center justify-center gap-2"
               style={{ background: ACCENT }}
             >
               {paying ? (

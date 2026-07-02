@@ -58,42 +58,42 @@ export function ApplySidebar() {
         className="rounded-[20px] overflow-hidden"
         style={{ background: '#FFFFFF', border: `1px solid ${borderColor}` }}
       >
-        <div className="px-6 pt-8 pb-2">
+        <div className="px-5 pt-5 lg:px-6 lg:pt-8 pb-2">
           <div className="flex items-end justify-between gap-3">
             <div
-              className="text-[18px] lg:text-[20px] font-semibold"
+              className="text-[17px] sm:text-[18px] lg:text-[20px] font-semibold break-keep"
               style={{ color: borderColor }}
             >
               {heading}
             </div>
             {selectedCert && (
-              <div className="text-[12px] lg:text-[13px] font-medium text-right" style={{ color: GRAY_500 }}>
+              <div className="text-[12px] lg:text-[13px] font-medium text-right break-keep" style={{ color: GRAY_500 }}>
                 {certSub}
               </div>
             )}
           </div>
         </div>
 
-        <div className="px-6 pt-4 pb-5 space-y-2.5 m-5 rounded-lg" style={{ background: infoBg }}>
+        <div className="px-4 pt-3 pb-4 space-y-2 m-3 lg:px-6 lg:pt-4 lg:pb-5 lg:space-y-2.5 lg:m-5 rounded-lg" style={{ background: infoBg }}>
           <InfoRow label="등급" value={level} />
           <InfoRow label="시험 형식" value={format} />
           <InfoRow label="소요 시간" value={duration} />
         </div>
 
 
-        <div className="px-6 pt-4 pb-4 space-y-2.5">
+        <div className="px-5 pt-3 pb-3 space-y-2 lg:px-6 lg:pt-4 lg:pb-4 lg:space-y-2.5">
           <PriceRow label="날짜" value={examDate} />
           <PriceRow label="시간" value={examTime} />
         </div>
 
-        <div className="mx-6 border-t" style={{ borderColor: `#bbbbbb` }} />
+        <div className="mx-5 lg:mx-6 border-t" style={{ borderColor: `#bbbbbb` }} />
 
-        <div className="px-6 pt-2 pb-6">
+        <div className="px-5 pt-2 pb-5 lg:px-6 lg:pb-6">
           <div className="flex items-baseline justify-between">
             <span className="text-[14px] font-semibold" style={{ color: INK_900 }}>
               최종 결제금액
             </span>
-            <span className="text-[22px] lg:text-[24px] font-bold" style={{ color: INK_900 }}>
+            <span className="text-[20px] sm:text-[22px] lg:text-[24px] font-bold" style={{ color: INK_900 }}>
               {formatKRW(total)}
             </span>
           </div>

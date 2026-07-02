@@ -19,12 +19,12 @@ export function ApplySectionHeader({
   bottomGap = 'mb-6',
 }: Props) {
   return (
-    <div className={`${bottomGap} flex w-full place-content-between items-end border-b-[2px] pb-5`} style={{ borderColor: '#272727' }}>
-      <h2 className={H_SEC} style={{ color: INK_900 }}>
+    <div className={`${bottomGap} flex w-full flex-col items-start gap-1 sm:flex-row sm:place-content-between sm:items-end sm:gap-0 border-b-[2px] pb-4 sm:pb-5`} style={{ borderColor: '#272727' }}>
+      <h2 className={`${H_SEC} break-keep`} style={{ color: INK_900 }}>
         {title}
       </h2>
       {sub && (
-        <p className={`${T_SUB} mt-2`} style={{ color: GRAY_500 }}>
+        <p className={`${T_SUB} mt-1 sm:mt-2 break-keep`} style={{ color: GRAY_500 }}>
           {sub}
         </p>
       )}

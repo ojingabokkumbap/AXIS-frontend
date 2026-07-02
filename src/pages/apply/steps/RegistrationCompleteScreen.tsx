@@ -40,68 +40,68 @@ export default function RegistrationCompleteScreen({ regId }: { regId: string })
   }, [regId]);
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-10 text-center">
-      <div className="w-16 h-16 bg-[#DCFCE7] rounded-full flex items-center justify-center mx-auto mb-5">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <div className="max-w-lg mx-auto px-4 py-8 sm:py-10 text-center">
+      <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#DCFCE7] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-5">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 sm:w-8 sm:h-8">
           <polyline points="20 6 9 17 4 12" />
         </svg>
       </div>
 
-      <h1 className="text-[22px] font-bold text-[#0F172A] mb-2">{t('apply.complete.title')}</h1>
-      <p className="text-sm text-body mb-8">{t('apply.complete.sub')}</p>
+      <h1 className="text-[20px] sm:text-[22px] font-bold text-[#0F172A] mb-2 break-keep">{t('apply.complete.title')}</h1>
+      <p className="text-sm text-body mb-6 sm:mb-8 break-keep">{t('apply.complete.sub')}</p>
 
       {loading ? (
         <div className="py-8 flex justify-center">
           <div className="w-6 h-6 border-2 border-[#2563EB] border-t-transparent rounded-full animate-spin" />
         </div>
       ) : ticket ? (
-        <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-sm text-left mb-8">
-          <div className="bg-[#0F172A] px-6 py-4 text-white">
+        <div className="bg-white border border-[#E2E8F0] rounded-2xl overflow-hidden shadow-sm text-left mb-6 sm:mb-8">
+          <div className="bg-[#0F172A] px-5 sm:px-6 py-4 text-white">
             <div className="text-[11px] font-medium uppercase tracking-wider text-white/60 mb-0.5">
               {t('apply.complete.voucherTitle')}
             </div>
             <div className="text-[18px] font-bold">{certLabel(ticket.certType, ticket.level)}</div>
           </div>
-          <div className="px-6 py-4 space-y-3">
-            <div className="flex justify-between text-[13px]">
-              <span className="text-[#6B7280]">{t('apply.complete.regNo')}</span>
-              <span className="font-mono font-semibold text-[#0F172A]">{ticket.regNo ?? '—'}</span>
+          <div className="px-5 sm:px-6 py-4 space-y-3">
+            <div className="flex justify-between gap-3 text-[13px]">
+              <span className="text-[#6B7280] shrink-0">{t('apply.complete.regNo')}</span>
+              <span className="font-mono font-semibold text-[#0F172A] text-right break-all">{ticket.regNo ?? '—'}</span>
             </div>
-            <div className="flex justify-between text-[13px]">
-              <span className="text-[#6B7280]">{t('apply.complete.candidate')}</span>
-              <span className="font-medium text-[#0F172A]">{ticket.candidateName}</span>
+            <div className="flex justify-between gap-3 text-[13px]">
+              <span className="text-[#6B7280] shrink-0">{t('apply.complete.candidate')}</span>
+              <span className="font-medium text-[#0F172A] text-right">{ticket.candidateName}</span>
             </div>
-            <div className="flex justify-between text-[13px]">
-              <span className="text-[#6B7280]">{t('apply.complete.examDate')}</span>
-              <span className="font-medium text-[#0F172A]">
+            <div className="flex justify-between gap-3 text-[13px]">
+              <span className="text-[#6B7280] shrink-0">{t('apply.complete.examDate')}</span>
+              <span className="font-medium text-[#0F172A] text-right">
                 {formatDate(ticket.examDate, ticket.examStartTime)}
               </span>
             </div>
-            <div className="flex justify-between text-[13px]">
-              <span className="text-[#6B7280]">{t('apply.complete.venue')}</span>
-              <span className="font-medium text-[#0F172A]">{ticket.venue}</span>
+            <div className="flex justify-between gap-3 text-[13px]">
+              <span className="text-[#6B7280] shrink-0">{t('apply.complete.venue')}</span>
+              <span className="font-medium text-[#0F172A] text-right break-keep">{ticket.venue}</span>
             </div>
             {ticket.seatNumber && (
-              <div className="flex justify-between text-[13px]">
-                <span className="text-[#6B7280]">{t('apply.complete.seat')}</span>
-                <span className="font-medium text-[#0F172A]">{ticket.seatNumber}</span>
+              <div className="flex justify-between gap-3 text-[13px]">
+                <span className="text-[#6B7280] shrink-0">{t('apply.complete.seat')}</span>
+                <span className="font-medium text-[#0F172A] text-right">{ticket.seatNumber}</span>
               </div>
             )}
-            <div className="flex justify-between text-[13px]">
-              <span className="text-[#6B7280]">{t('apply.complete.session')}</span>
-              <span className="font-medium text-[#0F172A]">
+            <div className="flex justify-between gap-3 text-[13px]">
+              <span className="text-[#6B7280] shrink-0">{t('apply.complete.session')}</span>
+              <span className="font-medium text-[#0F172A] text-right">
                 {lang === 'ko'
                   ? `${ticket.year}년 ${ticket.roundNumber}회차`
                   : `${ticket.year} Round ${ticket.roundNumber}`}
               </span>
             </div>
           </div>
-          <div className="border-t border-dashed border-[#E2E8F0] px-6 py-3 text-[11px] text-[#9CA3AF]">
+          <div className="border-t border-dashed border-[#E2E8F0] px-5 sm:px-6 py-3 text-[11px] text-[#9CA3AF] break-keep">
             {t('apply.complete.footer')}
           </div>
         </div>
       ) : (
-        <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded-xl px-5 py-4 text-[13px] text-[#A16207] mb-8">
+        <div className="bg-[#FEF3C7] border border-[#FDE68A] rounded-xl px-5 py-4 text-[13px] text-[#A16207] mb-6 sm:mb-8 break-keep">
           {t('apply.complete.noVoucher')}
         </div>
       )}

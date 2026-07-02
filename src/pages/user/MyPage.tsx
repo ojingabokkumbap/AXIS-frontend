@@ -158,7 +158,7 @@ export default function MyPage() {
       </div>
 
       {error && (
-        <div className="mx-auto px-8 mt-3 w-full" style={{ maxWidth: 'var(--spacing-content-w)' }}>
+        <div className="mx-auto px-4 sm:px-6 lg:px-8 mt-3 w-full" style={{ maxWidth: 'var(--spacing-content-w)' }}>
           <InfoBox variant="important">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <span role="alert">{error}</span>
@@ -173,7 +173,7 @@ export default function MyPage() {
       <div className="flex-1">
         <div
           data-tour="mypage-content"
-          className="mx-auto px-8 py-10 pb-20"
+          className="mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 lg:pt-10 pb-14 sm:pb-16 lg:pb-20"
           style={{ maxWidth: 'var(--spacing-content-w)', minHeight: '585px' }}
         >
           {loading || !data ? (

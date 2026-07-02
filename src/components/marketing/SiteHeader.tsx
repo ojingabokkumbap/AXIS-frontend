@@ -102,7 +102,7 @@ export function SiteHeader({ active = null, compact = false }: Props) {
         }}
       >
         <div
-          className="mx-auto flex items-center justify-between "
+          className="mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-10"
           style={{ maxWidth: 1280, height: 80 }}
         >
           {/* Logo */}
@@ -306,38 +306,63 @@ export function SiteHeader({ active = null, compact = false }: Props) {
       {/* Mobile overlay */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 z-[999] flex flex-col items-center justify-center gap-7"
+          className="fixed inset-0 z-[1001] flex flex-col lg:hidden"
           style={{ background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(20px)' }}
         >
-          <button
-            type="button"
-            className="absolute top-5 right-6 text-[28px] bg-transparent border-none cursor-pointer"
-            onClick={() => setMobileOpen(false)}
-            aria-label={t('common.close')}
-            style={{ color: MUTED }}
+          {/* Top bar — mirrors the fixed header */}
+          <div
+            className="flex items-center justify-between shrink-0 px-4 sm:px-6"
+            style={{ height: 80, borderBottom: `1px solid ${BORDER}` }}
           >
-            ✕
-          </button>
-          <Link to="/about" className="text-[20px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.about')}</Link>
-          <Link to="/guide" className="text-[20px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.guide')}</Link>
-          <button type="button" className="text-[20px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit' }} onClick={() => { authNavigate(navigate, '/apply'); setMobileOpen(false); }}>{t('gnb.applyNav')}</button>
-          <button type="button" className="text-[20px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit' }} onClick={() => { navigate('/results'); setMobileOpen(false); }}>{t('gnb.announce')}</button>
-          <button type="button" className="text-[20px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit' }} onClick={() => { navigate('/verify-cert'); setMobileOpen(false); }}>{t('gnb.verify')}</button>
-          <button type="button" className="text-[20px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit' }} onClick={() => { authNavigate(navigate, '/demo/AXIS/L3'); setMobileOpen(false); }}>{t('gnb.cbtNav')}</button>
-          <Link to="/qna" className="text-[20px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.support')}</Link>
-          {loggedIn ? (
-            <>
-              <Link to="/mypage" className="text-[20px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.mypage')}</Link>
-              <button type="button" onClick={() => { handleLogout(); setMobileOpen(false); }} className="text-[20px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: BODY }}>{t('gnb.logout')}</button>
-            </>
-          ) : (
-            <Link to="/login" className="text-[20px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.login')}</Link>
-          )}
-          <div className="flex items-center gap-2 mt-4">
-            <button type="button" onClick={() => setLang('ko')} className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[14px] font-semibold border ${lang === 'ko' ? 'bg-[#191919] text-white border-[#191919]' : 'bg-white border-[#E5E5E5]'}`} style={{ color: lang === 'ko' ? '#fff' : INK }}>
+            <span
+              className="font-en"
+              style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em', color: INK }}
+            >
+              AXIS
+            </span>
+            <button
+              type="button"
+              className="p-2 -mr-2 text-[24px] leading-none bg-transparent border-none cursor-pointer"
+              onClick={() => setMobileOpen(false)}
+              aria-label={t('common.close')}
+              style={{ color: INK }}
+            >
+              ✕
+            </button>
+          </div>
+
+          {/* Scrollable nav list */}
+          <nav className="flex-1 overflow-y-auto px-4 sm:px-6 pt-2 pb-6">
+            <Link to="/about" className="flex items-center min-h-[52px] text-[18px] font-semibold no-underline" style={{ color: INK, borderBottom: '1px solid #F2F2F2' }} onClick={() => setMobileOpen(false)}>{t('gnb.about')}</Link>
+            <Link to="/guide" className="flex items-center min-h-[52px] text-[18px] font-semibold no-underline" style={{ color: INK, borderBottom: '1px solid #F2F2F2' }} onClick={() => setMobileOpen(false)}>{t('gnb.guide')}</Link>
+            <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { authNavigate(navigate, '/apply'); setMobileOpen(false); }}>{t('gnb.applyNav')}</button>
+            <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { navigate('/results'); setMobileOpen(false); }}>{t('gnb.announce')}</button>
+            <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { navigate('/verify-cert'); setMobileOpen(false); }}>{t('gnb.verify')}</button>
+            <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { authNavigate(navigate, '/demo/AXIS/L3'); setMobileOpen(false); }}>{t('gnb.cbtNav')}</button>
+            <Link to="/qna" className="flex items-center min-h-[52px] text-[18px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.support')}</Link>
+
+            {/* Auth section */}
+            <div className="mt-2 pt-2" style={{ borderTop: `1px solid ${BORDER}` }}>
+              {loggedIn ? (
+                <>
+                  <Link to="/mypage" className="flex items-center min-h-[52px] text-[16px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.mypage')}</Link>
+                  <button type="button" onClick={() => { handleLogout(); setMobileOpen(false); }} className="flex items-center w-full min-h-[52px] p-0 text-left text-[16px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: BODY, fontFamily: 'inherit' }}>{t('gnb.logout')}</button>
+                </>
+              ) : (
+                <Link to="/login" className="flex items-center min-h-[52px] text-[16px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.login')}</Link>
+              )}
+            </div>
+          </nav>
+
+          {/* Language toggle — pinned near bottom */}
+          <div
+            className="shrink-0 flex items-center gap-2 px-4 sm:px-6 pt-4"
+            style={{ borderTop: `1px solid ${BORDER}`, paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
+          >
+            <button type="button" onClick={() => setLang('ko')} className={`inline-flex items-center justify-center gap-1.5 flex-1 min-h-[44px] px-4 py-2 rounded-full text-[14px] font-semibold border ${lang === 'ko' ? 'bg-[#191919] text-white border-[#191919]' : 'bg-white border-[#E5E5E5]'}`} style={{ color: lang === 'ko' ? '#fff' : INK }}>
               <IconGlobe /> 한국어
             </button>
-            <button type="button" onClick={() => setLang('en')} className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-[14px] font-semibold border ${lang === 'en' ? 'bg-[#191919] text-white border-[#191919]' : 'bg-white border-[#E5E5E5]'}`} style={{ color: lang === 'en' ? '#fff' : INK }}>
+            <button type="button" onClick={() => setLang('en')} className={`inline-flex items-center justify-center gap-1.5 flex-1 min-h-[44px] px-4 py-2 rounded-full text-[14px] font-semibold border ${lang === 'en' ? 'bg-[#191919] text-white border-[#191919]' : 'bg-white border-[#E5E5E5]'}`} style={{ color: lang === 'en' ? '#fff' : INK }}>
               <IconGlobe /> English
             </button>
           </div>

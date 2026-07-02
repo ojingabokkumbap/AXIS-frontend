@@ -13,32 +13,32 @@ export function ApplyPreCheckSection() {
 
   return (
     <section className="mt-10 bg-white rounded-2xl border border-[#EEEEEE] overflow-hidden">
-      <div className="px-6 sm:px-8 pt-8 pb-6">
-        <h2 className="text-[22px] sm:text-[24px] font-bold tracking-tight text-black">
+      <div className="px-5 sm:px-8 pt-6 sm:pt-8 pb-5 sm:pb-6">
+        <h2 className="text-[20px] sm:text-[24px] font-bold tracking-tight text-black break-keep">
           {t('apply.precheck.title')}
         </h2>
-        <p className="mt-2 text-sm sm:text-[15px] text-[#666666] leading-relaxed">
+        <p className="mt-2 text-sm sm:text-[15px] text-[#666666] leading-relaxed break-keep">
           {t('apply.precheck.subtitle')}
         </p>
       </div>
-      <div className="mx-6 sm:mx-8 border-t border-[#EEEEEE]" />
+      <div className="mx-5 sm:mx-8 border-t border-[#EEEEEE]" />
 
-      <ul className="px-6 sm:px-8">
+      <ul className="px-5 sm:px-8">
         {ITEM_KEYS.map((item) => (
           <li key={item.num} className="border-t border-[#EEEEEE] first:border-t-0">
-            <div className="flex gap-5 sm:gap-6 py-8 sm:py-9">
+            <div className="flex gap-4 sm:gap-6 py-6 sm:py-9">
               <span
-                className="shrink-0 w-10 sm:w-12 text-[20px] sm:text-[22px] font-semibold tabular-nums leading-none pt-0.5"
+                className="shrink-0 w-9 sm:w-12 text-[19px] sm:text-[22px] font-semibold tabular-nums leading-none pt-0.5"
                 style={{ color: '#A0B0C0' }}
                 aria-hidden
               >
                 {item.num}
               </span>
               <div className="min-w-0 flex-1">
-                <h3 className="text-[16px] sm:text-[17px] font-bold text-black leading-snug">
+                <h3 className="text-[16px] sm:text-[17px] font-bold text-black leading-snug break-keep">
                   {t(item.title)}
                 </h3>
-                <p className="mt-2 text-sm sm:text-[15px] text-[#666666] leading-relaxed">
+                <p className="mt-2 text-sm sm:text-[15px] text-[#666666] leading-relaxed break-keep">
                   {t(item.desc)}
                 </p>
               </div>
@@ -47,7 +47,7 @@ export function ApplyPreCheckSection() {
         ))}
       </ul>
 
-      <div className="mx-6 sm:mx-8 border-t border-[#EEEEEE]" />
+      <div className="mx-5 sm:mx-8 border-t border-[#EEEEEE]" />
 
     </section>
   );

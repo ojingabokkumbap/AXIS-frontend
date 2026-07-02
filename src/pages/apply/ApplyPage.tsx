@@ -31,12 +31,13 @@ function StepIndicator({ current }: { current: number }) {
     { n: 5, label: t('apply.step.payment') },
   ];
   return (
-    <div className="mx-auto mb-8 lg:mb-10 flex w-full max-w-[980px] items-start justify-center">
+    <div className="mx-auto mb-8 lg:mb-10 w-full max-w-[980px] overflow-x-auto sm:overflow-visible">
+      <div className="mx-auto flex w-max sm:w-full items-start justify-center">
       {STEPS.map((s, i) => {
         const done = current > s.n;
         const active = current === s.n;
         return (
-          <div key={s.n} className="flex min-w-0 items-start my-8">
+          <div key={s.n} className="flex min-w-0 items-start my-4 sm:my-8">
             <div className="w-[82px] sm:w-[120px] flex-shrink-0">
               <div className="flex flex-col items-center min-w-0 text-center">
               <div
@@ -78,6 +79,7 @@ function StepIndicator({ current }: { current: number }) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
@@ -233,7 +235,7 @@ function ApplyPageInner() {
         subtitle={t('apply.subtitle')}
       />
 
-      <main className="flex-1 w-full mx-auto max-w-[1280px] px-6 lg:px-10 py-10 lg:py-16">
+      <main className="flex-1 w-full mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-16">
         {loggedIn && (
           <div data-tour="apply-steps">
             <StepIndicator current={step} />
@@ -242,7 +244,7 @@ function ApplyPageInner() {
 
         {loggedIn ? (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 lg:gap-8 items-start">
-            <div data-tour="apply-form" className="min-w-0">
+            <div data-tour="apply-form" className="min-w-0 order-last lg:order-none">
               <div
                 ref={stepTopRef}
                 className=""
@@ -251,13 +253,13 @@ function ApplyPageInner() {
                 <WizardRouter />
               </div>
             </div>
-            <div data-tour="apply-sidebar">
+            <div data-tour="apply-sidebar" className="order-first lg:order-none min-w-0">
               <ApplySidebar />
             </div>
           </div>
         ) : (
           <div
-            className="max-w-[640px] mx-auto rounded-[20px] p-8 sm:p-10 text-center"
+            className="max-w-[640px] mx-auto rounded-[20px] p-6 sm:p-10 text-center"
             style={{ background: '#FFFFFF', border: `1px solid ${BORDER}` }}
           >
             <p className="text-[16px] lg:text-[18px] font-semibold" style={{ color: INK_900 }}>
@@ -269,7 +271,7 @@ function ApplyPageInner() {
             <button
               type="button"
               onClick={() => navigate('/login', { state: { from: '/apply' } })}
-              className="mt-6 px-6 py-3 rounded-[10px] text-[14px] font-semibold border-none cursor-pointer transition-colors"
+              className="mt-6 w-full sm:w-auto px-6 py-3 rounded-[10px] text-[14px] font-semibold border-none cursor-pointer transition-colors"
               style={{ background: ACCENT, color: '#FFFFFF' }}
             >
               {t('apply.loginGate.btn')}

@@ -215,7 +215,7 @@ export function KebabMenu({ items }: { items: KebabItem[] }) {
         ref={btnRef}
         type="button"
         onClick={handleToggle}
-        className="w-7 h-7 inline-flex items-center justify-center rounded-md hover:bg-gray-100 cursor-pointer border border-transparent text-muted"
+        className="w-9 h-9 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-md hover:bg-gray-100 cursor-pointer border border-transparent text-muted flex-shrink-0"
         aria-label={t('mypage.actMenu.more' as never)}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -238,7 +238,7 @@ export function KebabMenu({ items }: { items: KebabItem[] }) {
                 setOpen(false);
                 item.onClick();
               }}
-              className={`flex flex-col text-left px-5 py-2 text-[13px] cursor-pointer transition-colors ${
+              className={`flex flex-col text-left px-5 py-2.5 sm:py-2 text-[13px] cursor-pointer transition-colors ${
                 item.danger ? 'text-status-danger hover:bg-red-50' : 'text-ink hover:bg-gray-50'
               }`}
             >
@@ -267,7 +267,7 @@ export function SubTabBar<K extends string>({
           key={tab.key}
           type="button"
           onClick={() => onChange(tab.key)}
-          className={`flex-1 px-4 py-3 text-[17px] font-medium mb-10 transition-all whitespace-nowrap cursor-pointer ${
+          className={`flex-1 px-2 sm:px-4 py-3 text-[15px] sm:text-[17px] font-medium mb-10 transition-all whitespace-nowrap cursor-pointer ${
             active === tab.key
               ? 'bg-blue-500 text-white'
               : ' text-gray-500 hover:text-ink border border-gray-300'

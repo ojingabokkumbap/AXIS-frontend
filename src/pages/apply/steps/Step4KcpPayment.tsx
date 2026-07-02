@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '@/i18n';
 import { useWizard } from '@/pages/apply/lib/WizardContext';
-import { H_CARD, T_BODY, T_INPUT, T_META, INK_900, GRAY_500, BORDER, ACCENT } from '@/pages/apply/lib/applyTokens';
+import { H_CARD, T_BODY, T_META, INK_900, GRAY_500, BORDER, ACCENT } from '@/pages/apply/lib/applyTokens';
 import { ApplySectionHeader } from '@/pages/apply/components/ApplySectionHeader';
 
 type PayMethod = 'va' | 'card' | 'kakao' | 'naver';
@@ -186,7 +186,7 @@ export function Step4KcpPayment() {
               id="kcp-bank"
               value={bankId}
               onChange={(e) => setBankId(e.target.value as BankId)}
-              className={`w-full max-w-105 h-11 px-3.5 rounded-md ${T_INPUT} bg-white border border-border transition-colors focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#2563EB]/30`}
+              className={`w-full max-w-105 h-11 px-3.5 rounded-md text-[16px] sm:text-[14px] lg:text-[15px] bg-white border border-border transition-colors focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#2563EB]/30`}
               style={{ color: INK_900 }}
             >
               {(['kb', 'shinhan', 'woori', 'hana', 'ibk', 'nh'] as const).map((id) => (
@@ -207,7 +207,7 @@ export function Step4KcpPayment() {
               checked={payConsent}
               onChange={(e) => setPayConsent(e.target.checked)}
             />
-            <span className={T_BODY} style={{ color: INK_900 }}>
+            <span className={`${T_BODY} break-keep`} style={{ color: INK_900 }}>
               {t('apply.kcp.consentPay')}{' '}
               <a
                 href="/terms"
@@ -252,7 +252,7 @@ export function Step4KcpPayment() {
           aria-modal="true"
           aria-labelledby="kcp-modal-title"
         >
-          <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full p-6 sm:p-8 border border-[#E2E8F0]">
+          <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto p-5 sm:p-8 border border-[#E2E8F0]">
             {/* REMOVE_BEFORE_PRODUCTION: remove DEMO badge for launch */}
             <span className="absolute top-4 right-4 text-[10px] font-semibold uppercase tracking-wide text-white bg-[#94A3B8] px-2 py-0.5 rounded">
               {t('apply.kcp.demoBadge')}

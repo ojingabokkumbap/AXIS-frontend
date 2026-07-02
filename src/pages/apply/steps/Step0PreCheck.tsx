@@ -22,10 +22,10 @@ export default function Step0PreCheck() {
         sub={t('apply.sPre.sub')}
       />
 
-      <ul className="mb-10 space-y-6">
+      <ul className="mb-8 sm:mb-10 space-y-4 sm:space-y-6">
         {ITEM_KEYS.map((item) => (
           <li key={item.num}>
-            <div className="flex gap-4 py-5 px-6 rounded-lg border border-[#E5E7EB]">
+            <div className="flex gap-3 sm:gap-4 py-4 px-4 sm:py-5 sm:px-6 rounded-lg border border-[#E5E7EB]">
               <span
                 className="shrink-0 w-9 sm:w-10 text-[18px] sm:text-[20px] font-semibold tabular-nums leading-none pt-0.5"
                 style={{ color: '#A0B0C0' }}
@@ -34,10 +34,10 @@ export default function Step0PreCheck() {
                 {item.num}
               </span>
               <div className="min-w-0 flex-1">
-                <h3 className={H_CARD} style={{ color: INK_900 }}>
+                <h3 className={`${H_CARD} break-keep`} style={{ color: INK_900 }}>
                   {t(item.title)}
                 </h3>
-                <p className={`mt-1.5 ${T_BODY}`} style={{ color: GRAY_500 }}>
+                <p className={`mt-1.5 ${T_BODY} break-keep`} style={{ color: GRAY_500 }}>
                   {t(item.desc)}
                 </p>
               </div>
@@ -59,7 +59,7 @@ export default function Step0PreCheck() {
           onChange={(e) => setAgreedToPrecheck(e.target.checked)}
           className="mt-0.5 w-5 h-5 accent-[#2563EB] cursor-pointer"
         />
-        <span className={`${T_BODY} font-medium`} style={{ color: INK_900 }}>
+        <span className={`${T_BODY} font-medium break-keep`} style={{ color: INK_900 }}>
           {t('apply.sPre.consentLabel')}
         </span>
       </label>
@@ -71,7 +71,7 @@ export default function Step0PreCheck() {
             disabled
             aria-hidden="true"
             tabIndex={-1}
-            className="flex-1 h-12 rounded-xl invisible pointer-events-none"
+            className="hidden sm:block flex-1 h-12 rounded-xl invisible pointer-events-none"
           >
             {t('apply.nav.prev')}
           </button>

@@ -106,7 +106,7 @@ function Toast({ message, onClose }: { message: string; onClose: () => void }) {
   }, [onClose]);
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-lg text-[14px] font-medium"
+    <div className="fixed bottom-8 left-4 right-4 text-center sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:text-left z-50 px-6 py-3 rounded-lg text-[14px] font-medium"
       style={{ background: 'var(--color-ink)', color: '#fff' }}>
       {message}
     </div>
@@ -348,12 +348,12 @@ export default function ResultsPage() {
         onChange={(k) => setActiveTab(k)}
       />
 
-      <main ref={mainRef} className="mx-auto py-16 px-8" style={{ maxWidth: 'var(--spacing-content-w)' }}>
+      <main ref={mainRef} className="mx-auto py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-lg:break-keep" style={{ maxWidth: 'var(--spacing-content-w)' }}>
 
         {activeTab === 'sessions' && (
           <>
             {/* Filter Chips + Session List */}
-            <section className="mb-14 reveal">
+            <section className="mb-10 sm:mb-14 reveal">
               <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>회차별 결과</h2>
               <p className={`${T_BODY} mb-2`} style={{ color: GRAY_500 }}>
                 발표가 완료된 회차는 <strong className="text-ink">확정 접수 인원</strong>과{' '}
@@ -389,7 +389,7 @@ export default function ResultsPage() {
                         setFilterTrack(tab);
                         setRoundsPage(1);
                       }}
-                      className={`flex-1 px-4 py-3 text-[17px] font-medium transition-all whitespace-nowrap cursor-pointer ${
+                      className={`flex-1 px-2 sm:px-4 py-3 text-[15px] sm:text-[17px] font-medium transition-all whitespace-nowrap cursor-pointer ${
                         active
                           ? 'bg-blue-500 text-white'
                           : ' text-gray-500 hover:text-ink'
@@ -407,7 +407,7 @@ export default function ResultsPage() {
 
 
 
-              <div className={TABLE_WRAP} aria-busy={roundsLoading}>
+              <div className={`${TABLE_WRAP} hidden md:block`} aria-busy={roundsLoading}>
                 <table className="data-table" style={{ minWidth: 940 }}>
                   <thead>
                     <tr>
@@ -531,6 +531,95 @@ export default function ResultsPage() {
                 </table>
               </div>
 
+              {/* Mobile: stacked cards (same data as the table) */}
+              <div className="md:hidden border-t-2 border-ink mt-4 mb-2" aria-busy={roundsLoading}>
+                {roundRows.map((s) => {
+                  const announced = s.publicationState === 'announced';
+                  const graded = announced && s.passCount != null && s.failCount != null;
+                  const pending =
+                    announced && s.passCount != null && s.failCount != null
+                      ? Math.max(0, s.registeredCount - (s.passCount + s.failCount))
+                      : 0;
+                  return (
+                    <div key={s.scheduleId} className="border-b border-border py-4">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-[13px] text-muted font-en">{s.roundNumber}회차</span>
+                        <span className="text-[13px] text-muted">{formatExamDateKst(s.examDate)}</span>
+                      </div>
+                      <div className="mt-1 text-[15.5px] font-semibold text-ink">
+                        {formatRoundCertLabel(s.certType, s.level)}
+                      </div>
+                      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                        {s.publicationState === 'announced' ? (
+                          <>
+                            <span
+                              className="text-[13px] font-semibold"
+                              style={{ color: 'var(--color-status-success)' }}
+                            >
+                              발표 완료
+                            </span>
+                            <button
+                              type="button"
+                              className="btn-text btn-sm"
+                              onClick={() => openPassList(s.scheduleId)}
+                            >
+                              상세보기 →
+                            </button>
+                          </>
+                        ) : s.publicationState === 'grading' ? (
+                          <span
+                            className="text-[13px] font-semibold"
+                            style={{ color: 'var(--color-status-grading)' }}
+                          >
+                            채점 중
+                          </span>
+                        ) : (
+                          <span className="text-[13px] font-semibold text-faint">발표 예정</span>
+                        )}
+                      </div>
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-[13px]">
+                        <span className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 bg-[#F8FAFC]">
+                          <span className="text-muted">접수</span>
+                          <strong className="font-en text-ink">{s.registeredCount}</strong>
+                          <span className="text-faint">명</span>
+                        </span>
+                        {graded && (
+                          <>
+                            <span
+                              className="inline-flex items-center gap-1 rounded-md px-2 py-1 font-semibold font-en"
+                              style={{
+                                background: 'rgba(5, 150, 105, 0.12)',
+                                color: 'var(--color-status-success)',
+                              }}
+                            >
+                              합격 {s.passCount}
+                            </span>
+                            <span
+                              className="inline-flex items-center gap-1 rounded-md px-2 py-1 font-semibold font-en"
+                              style={{
+                                background: 'rgba(148, 163, 184, 0.2)',
+                                color: 'var(--color-muted)',
+                              }}
+                            >
+                              불합격 {s.failCount}
+                            </span>
+                          </>
+                        )}
+                        {pending > 0 && (
+                          <span className="text-[12px] text-muted">미채점 {pending}명</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+                {roundsLoading && roundRows.length === 0 && (
+                  <p className="text-center text-muted py-8 text-[14px]">불러오는 중…</p>
+                )}
+                {!roundsLoading && roundRows.length === 0 && !roundsError && (
+                  <p className="text-center text-muted py-8 text-[14px]">해당 자격의 발표된 회차가 없습니다.</p>
+                )}
+              </div>
+
               {roundsLoading && roundRows.length > 0 && (
                 <p className="text-[14px] text-muted mt-3">불러오는 중…</p>
               )}
@@ -547,14 +636,14 @@ export default function ResultsPage() {
         )}
 
         {activeTab === 'lookup' && (
-          <section className="mb-14 reveal">
+          <section className="mb-10 sm:mb-14 reveal">
             <h2 className={`${H_CARD} text-black mb-4`} >내 결과 확인</h2>
             <p className={`${T_BODY} mb-6`} style={{ color: GRAY_500 }}>
               접수번호와 이름으로 본인의 시험 결과를 조회할 수 있습니다.
               로그인 상태라면 <Link to="/mypage" className="font-semibold text-ink underline underline-offset-4">마이페이지</Link>에서도 확인 가능합니다.
             </p>
 
-            <section className="mb-10 sm:mb-16 lg:mb-24 reveal py-5 px-8 sm:py-8 sm:px-6 lg:py-10 lg:px-12 rounded-md border border-[#e5e7eb]" style={{ background: '#f3f4f5' }}>
+            <section className="mb-10 sm:mb-16 lg:mb-24 reveal py-5 px-4 sm:py-8 sm:px-6 lg:py-10 lg:px-12 rounded-md border border-[#e5e7eb]" style={{ background: '#f3f4f5' }}>
               <form onSubmit={handleLookup} className="min-w-0">
                 <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
                   <label className="block flex-1 min-w-0">
@@ -602,12 +691,12 @@ export default function ResultsPage() {
               </form>
             </section>
 
-            <section className="mb-14 reveal">
+            <section className="mb-10 sm:mb-14 reveal">
               <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>채점 및 합격 기준</h2>
               <p className={`${T_BODY} mb-5`} style={{ color: GRAY_500 }}>
                 AXIS의 채점 방식과 합격 기준을 안내합니다.
               </p>
-              <div className="w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2">
+              <div className="hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2">
                 <table className="data-table" style={{ minWidth: 600 }}>
                   <thead>
                     <tr>
@@ -648,11 +737,41 @@ export default function ResultsPage() {
                   </tbody>
                 </table>
               </div>
+
+              {/* Mobile: stacked cards (same data as the table) */}
+              <div className="md:hidden border-t-2 border-ink mt-4 mb-2">
+                {[
+                  { level: 'L3', tier: 'Starter', comp: '객관식 40 + 실습 4', cut: '70점 이상', method: 'AI 자동채점 · 1시간 이내 발표' },
+                  { level: 'L2', tier: 'Practitioner', comp: '사례형 객관식 30 + 실습 3과제', cut: '70점 이상', method: 'AI 1차 + 전문가 검수 · 3일 이내' },
+                  { level: 'L1', tier: 'Leader', comp: '객관식 25 + 실행계획서 + 서술형 2', cut: '70점 이상', method: '전문가 채점 · 관리자 확정 · 7일 이내' },
+                ].map((row) => (
+                  <div key={row.level} className="border-b border-border py-4">
+                    <div className="text-[15.5px] text-ink">
+                      <strong>{row.level}</strong>{' '}
+                      <span className="text-[12.5px] text-light">({row.tier})</span>
+                    </div>
+                    <div className="mt-2 space-y-1.5 text-[14px]">
+                      <div className="flex gap-2">
+                        <span className="w-[70px] shrink-0 text-[12.5px] text-muted pt-0.5">평가 구성</span>
+                        <span>{row.comp}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="w-[70px] shrink-0 text-[12.5px] text-muted pt-0.5">합격 기준</span>
+                        <span>{row.cut}</span>
+                      </div>
+                      <div className="flex gap-2">
+                        <span className="w-[70px] shrink-0 text-[12.5px] text-muted pt-0.5">채점 방식</span>
+                        <span>{row.method}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
               <p className="text-[13px] text-light mt-3">※ 각주 : 합격은 총점 70점 이상, 실습형 최소기준 미달 시 별도 검토.</p>
             </section>
-            <div className="w-10 h-px bg-border mb-14" />
+            <div className="w-10 h-px bg-border mb-10 sm:mb-14" />
 
-            <section className="mb-14 reveal">
+            <section className="mb-10 sm:mb-14 reveal">
               <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>이의신청 안내</h2>
               <p className={`${T_BODY} mb-4`} style={{ color: GRAY_500 }}>
                 시험 결과에 이의가 있는 경우, 성적 발표일로부터 <strong className="text-ink font-semibold">7일 이내</strong>에 이의신청을 할 수 있습니다.

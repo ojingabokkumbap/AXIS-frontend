@@ -78,7 +78,7 @@ function FieldRow({
   );
 }
 
-const INPUT_CLASS = `w-full max-w-[420px] h-11 px-3.5 rounded-md ${T_INPUT} bg-white border border-[#E0E4ED] transition-colors focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#2563EB]/30`;
+const INPUT_CLASS = `w-full max-w-[420px] h-11 px-3.5 rounded-md text-[16px] sm:text-[14px] lg:text-[15px] bg-white border border-[#E0E4ED] transition-colors focus:outline-none focus:bg-white focus:ring-2 focus:ring-[#2563EB]/30`;
 
 function ConsentItem({
   text,
@@ -117,7 +117,7 @@ function ConsentItem({
           </svg>
         )}
       </div>
-      <span className={T_BODY} style={{ color: INK_900 }}>
+      <span className={`${T_BODY} break-keep`} style={{ color: INK_900 }}>
         {text}
       </span>
     </button>
@@ -397,7 +397,7 @@ export default function Step3InfoReview() {
                       const next = selected ? '' : opt.id;
                       setEligibilityType(next);
                     }}
-                    className={`relative px-3 py-2.5 rounded-md text-left transition-all cursor-pointer ${
+                    className={`relative px-3 py-3 sm:py-2.5 rounded-md text-left transition-all cursor-pointer ${
                       selected ? 'bg-white border border-blue-500' : 'bg-white border border-[#E5E5E5] hover:bg-[#EFF6FF]/60'
                     }`}
                   >

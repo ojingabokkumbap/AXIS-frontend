@@ -14,7 +14,6 @@ import {
 import {
   H_CARD,
   T_BODY,
-  T_INPUT,
   T_META,
   INK_900,
   GRAY_500,
@@ -64,7 +63,7 @@ function FieldRow({
         </span>
       </div>
       <div className="flex-1 min-w-0 px-4 py-3 sm:py-4">
-        <div className="flex items-center gap-3 flex-wrap">
+        <div className="flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:gap-3 sm:flex-wrap">
           {children}
           {help && (
             <p className={`${T_META} min-w-0 flex-1`} style={{ color: GRAY_500 }}>
@@ -77,8 +76,10 @@ function FieldRow({
   );
 }
 
-const DISABLED_FIELD_CLASS = `w-[350px] h-10 px-3.5 flex items-center rounded-md bg-[#F3F5F9] border border-[#E0E4ED] cursor-not-allowed select-none ${T_INPUT}`;
-const INPUT_CLASS = `w-[350px] h-10 px-3.5 rounded-md bg-white border border-[#E0E4ED] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 ${T_INPUT}`;
+/* 모바일: full-width·44px 높이·16px 텍스트(iOS 확대 방지), sm 이상은 기존 데스크톱 사이즈 유지 */
+const FIELD_TEXT = 'text-[16px] sm:text-[14px] lg:text-[15px]';
+const DISABLED_FIELD_CLASS = `w-full max-w-[350px] h-11 sm:h-10 px-3.5 flex items-center rounded-md bg-[#F3F5F9] border border-[#E0E4ED] cursor-not-allowed select-none ${FIELD_TEXT}`;
+const INPUT_CLASS = `w-full max-w-[350px] h-11 sm:h-10 px-3.5 rounded-md bg-white border border-[#E0E4ED] transition-colors focus:outline-none focus:ring-2 focus:ring-[#2563EB]/30 ${FIELD_TEXT}`;
 const INLINE_LINK_CLASS =
   'text-blue-500 font-semibold underline underline-offset-2 bg-transparent border-none cursor-pointer hover:text-blue-700 p-0';
 
@@ -379,7 +380,7 @@ export function ProfilePanel({
               type="button"
               onClick={handleNiceVerifyPhone}
               disabled={verifyingPhone || saving}
-              className="h-10 px-4 rounded-md text-[14px] font-semibold text-white bg-blue-500 hover:bg-blue-700 disabled:opacity-50 border-none cursor-pointer whitespace-nowrap"
+              className="w-full sm:w-auto h-11 sm:h-10 px-4 rounded-md text-[14px] font-semibold text-white bg-blue-500 hover:bg-blue-700 disabled:opacity-50 border-none cursor-pointer whitespace-nowrap"
             >
               {verifyingPhone
                 ? lang === 'ko'
@@ -462,12 +463,12 @@ export function ProfilePanel({
         </p>
       </InfoCallout>
 
-      <div className="flex items-center justify-center gap-4 mt-4">
+      <div className="flex flex-col items-stretch gap-3 mt-4 sm:flex-row sm:items-center sm:justify-center sm:gap-4">
         <button
           type="button"
           onClick={handleSaveProfile}
           disabled={saving || verifyingPhone}
-          className="h-11 px-8 rounded-md text-[16px] font-semibold text-white bg-blue-500 hover:bg-blue-700 disabled:opacity-50 border-none cursor-pointer transition-colors"
+          className="w-full sm:w-auto h-11 px-8 rounded-md text-[16px] font-semibold text-white bg-blue-500 hover:bg-blue-700 disabled:opacity-50 border-none cursor-pointer transition-colors"
           style={{ fontFamily: 'inherit' }}
         >
           {saving
@@ -480,7 +481,7 @@ export function ProfilePanel({
         </button>
         <button
           type="button"
-          className="h-11 px-8 rounded-md text-[16px] font-semibold text-white bg-gray-600 hover:bg-gray-700 border-none cursor-pointer transition-colors"
+          className="w-full sm:w-auto h-11 px-8 rounded-md text-[16px] font-semibold text-white bg-gray-600 hover:bg-gray-700 border-none cursor-pointer transition-colors"
           style={{ fontFamily: 'inherit' }}
         >
           {lang === 'ko' ? '회원탈퇴' : 'Delete Account'}

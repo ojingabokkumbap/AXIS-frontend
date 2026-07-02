@@ -20,7 +20,7 @@ import {
 import type { DashboardDto, ResultDto } from '../types';
 import { InfoCallout } from '@/components/InfoCallout';
 
-const TABLE_WRAP = 'w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
+const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 
 function ResultsSection({ data }: { data: DashboardDto }) {
   const { t, lang } = useI18n();
@@ -38,6 +38,27 @@ function ResultsSection({ data }: { data: DashboardDto }) {
     if (!popup) window.open(url, '_blank', 'noopener');
     else popup.focus();
   };
+
+  // 데스크톱 테이블/모바일 카드가 같은 케밥 메뉴 항목을 공유한다.
+  const kebabItems = (r: ResultDto) => [
+    { label: t('mypage.scores.detail'), onClick: () => setScoreDetailFor(r) },
+    {
+      label: t('mypage.scores.appeal'),
+      onClick: () =>
+        navigate('/qna', {
+          state: {
+            prefill: {
+              category: 'EXAM' as InquiryCategory,
+              title: `[Score Appeal] ${certLabel(r.certType, r.level)} · ${formatExamRoundLabel(r.roundNumber, r.scheduleYear, 'en')}`,
+            },
+          },
+        }),
+    },
+    {
+      label: t('mypage.scores.evidence'),
+      onClick: () => navigate(`/cbt/sessions/${r.id}/evidence`),
+    },
+  ];
 
   return (
     <>
@@ -103,27 +124,7 @@ function ResultsSection({ data }: { data: DashboardDto }) {
                           <span className="text-[15.5px] text-ink font-en">{r.totalScore}</span>
                         )}
                         <Badge tone={badge.tone}>{t(badge.labelKey)}</Badge>
-                        <KebabMenu
-                          items={[
-                            { label: t('mypage.scores.detail'), onClick: () => setScoreDetailFor(r) },
-                            {
-                              label: t('mypage.scores.appeal'),
-                              onClick: () =>
-                                navigate('/qna', {
-                                  state: {
-                                    prefill: {
-                                      category: 'EXAM' as InquiryCategory,
-                                      title: `[Score Appeal] ${certLabel(r.certType, r.level)} · ${formatExamRoundLabel(r.roundNumber, r.scheduleYear, 'en')}`,
-                                    },
-                                  },
-                                }),
-                            },
-                            {
-                              label: t('mypage.scores.evidence'),
-                              onClick: () => navigate(`/cbt/sessions/${r.id}/evidence`),
-                            },
-                          ]}
-                        />
+                        <KebabMenu items={kebabItems(r)} />
                       </div>
                     </td>
                     <td>
@@ -137,6 +138,64 @@ function ResultsSection({ data }: { data: DashboardDto }) {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="md:hidden mt-4 border-t-2 border-ink">
+        {data.results.length === 0 ? (
+          <EmptyState description={t('mypage.scores.emptyHint')}>
+            {t('mypage.scores.empty')}
+          </EmptyState>
+        ) : (
+          data.results.map((r) => {
+            const badge = resultStatusBadge(r);
+            const examDateText = r.submittedAt ? formatExamDate(r.submittedAt) : '—';
+            const announcedText = r.gradedAt
+              ? formatExamDate(r.gradedAt)
+              : r.status === 'SUBMITTED'
+                ? t('mypage.scores.pending')
+                : '—';
+            const attemptSuffix = formatAttemptSuffix(r.attemptNo, lang);
+            return (
+              <div key={r.id} className="border-b border-border py-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-muted font-en mb-0.5">
+                      {formatExamRoundLabel(r.roundNumber, r.scheduleYear, lang)}
+                      {attemptSuffix && (
+                        <span className="ml-1.5 text-[#9CA3AF]">{attemptSuffix}</span>
+                      )}
+                    </div>
+                    <div className="text-[16px] font-semibold text-ink break-keep">
+                      {certLabel(r.certType, r.level)}
+                    </div>
+                  </div>
+                  <KebabMenu items={kebabItems(r)} />
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  {r.totalScore != null && (
+                    <span className="text-[22px] font-semibold text-ink font-en">{r.totalScore}</span>
+                  )}
+                  <Badge tone={badge.tone}>{t(badge.labelKey)}</Badge>
+                </div>
+                <div className="mt-2 space-y-1.5 text-[13px]">
+                  <div className="flex justify-between gap-3">
+                    <span className="text-light flex-shrink-0">{t('mypage.scores.col.examDate')}</span>
+                    <span className="text-ink text-right break-keep">{examDateText}</span>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <span className="text-light flex-shrink-0">{t('mypage.scores.col.announced')}</span>
+                    <span className="text-ink text-right break-keep">{announcedText}</span>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <Btn variant="blue" className="w-full min-h-[44px]" onClick={() => openConfirmation(r)}>
+                    {t('mypage.act.confirmationPdf' as never)}
+                  </Btn>
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
 
       <ScoreDetailModal

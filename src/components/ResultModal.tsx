@@ -144,7 +144,7 @@ export function ResultModal({ title, headerBg = '#2563EB', onClose, children, fo
 export function ResultModalInlineText({ children, className = '' }: ResultModalInlineTextProps) {
   return (
     <p
-      className={`w-full min-w-0 whitespace-nowrap text-[16px] sm:text-[20px] leading-[1.7] ${className}`.trim()}
+      className={`w-full min-w-0 break-keep sm:whitespace-nowrap text-[16px] sm:text-[20px] leading-[1.7] ${className}`.trim()}
     >
       {children}
     </p>

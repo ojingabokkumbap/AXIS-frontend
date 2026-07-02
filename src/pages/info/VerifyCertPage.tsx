@@ -237,7 +237,7 @@ function VerifyResultModalView({ result, onClose }: { result: ModalResult; onClo
           description="이 자격증은 유효기간이 만료되었습니다. 갱신을 통해 자격을 유지할 수 있습니다."
           descriptionColor="#D97706"
           rows={[
-            { label: '자격증 번호', value: result.certNo, valueClass: 'font-en font-semibold' },
+            { label: '자격증 번호', value: result.certNo, valueClass: 'font-en font-semibold break-all' },
             { label: '소지자', value: result.holder, valueClass: 'font-semibold' },
             { label: '자격 종류', value: `${result.track} · ${result.level}` },
             { label: '취득일', value: result.issuedAt, valueClass: 'font-en' },
@@ -255,7 +255,7 @@ function VerifyResultModalView({ result, onClose }: { result: ModalResult; onClo
           description="이 자격증은 현재 정지 상태입니다. 공식 자격으로 인정되지 않습니다."
           descriptionColor="#D97706"
           rows={[
-            { label: '자격증 번호', value: result.certNo, valueClass: 'font-en font-semibold' },
+            { label: '자격증 번호', value: result.certNo, valueClass: 'font-en font-semibold break-all' },
             { label: '소지자', value: result.holder, valueClass: 'font-semibold' },
             { label: '사유', value: result.reason },
           ]}
@@ -271,7 +271,7 @@ function VerifyResultModalView({ result, onClose }: { result: ModalResult; onClo
         description="이 자격증은 취소 처리되었습니다. 공식 자격으로 인정되지 않습니다."
         descriptionColor="#DC2626"
         rows={[
-          { label: '자격증 번호', value: result.certNo, valueClass: 'font-en font-semibold' },
+          { label: '자격증 번호', value: result.certNo, valueClass: 'font-en font-semibold break-all' },
           { label: '소지자', value: result.holder, valueClass: 'font-semibold' },
           { label: '취소일', value: result.cancelledAt, valueClass: 'font-en' },
         ]}
@@ -361,12 +361,12 @@ export default function VerifyCertPage() {
 
       <main
         ref={mainRef}
-        className="mx-auto flex-1 w-full min-w-0 py-6 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8"
+        className="mx-auto flex-1 w-full min-w-0 py-6 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-lg:break-keep"
         style={{ maxWidth: 'var(--spacing-content-w)' }}
       >
 
         <h2 className={`${H_CARD} text-black mb-6`} >자격증 조회</h2>
-        <section className="mb-10 sm:mb-16 lg:mb-24 reveal py-5 px-8 sm:py-8 sm:px-6 lg:py-10 lg:px-12 rounded-md border border-[#e5e7eb]" style={{ background: '#f3f4f5' }}>
+        <section className="mb-10 sm:mb-16 lg:mb-24 reveal py-5 px-4 sm:py-8 sm:px-6 lg:py-10 lg:px-12 rounded-md border border-[#e5e7eb]" style={{ background: '#f3f4f5' }}>
 
             <form onSubmit={handleVerify} className="min-w-0">
               <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">

@@ -9,7 +9,7 @@ import {
 } from '../primitives';
 import type { DashboardDto } from '../types';
 
-const TABLE_WRAP = 'w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
+const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 
 const CATEGORY_LABEL: Record<InquiryCategory, { ko: string; en: string }> = {
   REGISTRATION: { ko: '접수 문의', en: 'Registration' },
@@ -121,6 +121,7 @@ export function InquiryPanel({ data: _data }: { data: DashboardDto }) {
           <div className="h-12 rounded-lg bg-[#F3F5F9] animate-pulse" />
         </div>
       ) : (
+        <>
         <div className={TABLE_WRAP}>
           <table className="data-table" style={{ minWidth: 720 }}>
             <thead>
@@ -172,6 +173,49 @@ export function InquiryPanel({ data: _data }: { data: DashboardDto }) {
             </tbody>
           </table>
         </div>
+
+        <div className="md:hidden mt-4 border-t-2 border-ink">
+          {inquiries.length === 0 ? (
+            <EmptyState description={lang === 'ko' ? '문의 작성은 고객센터 1:1 문의에서 진행해 주세요.' : 'To write an inquiry, please use the Customer Center 1:1 Inquiry.'}>
+              {lang === 'ko' ? '문의 내역이 없습니다.' : 'No inquiry history yet.'}
+            </EmptyState>
+          ) : (
+            inquiries.map((inq) => {
+              const status = STATUS_CONFIG[inq.status];
+              return (
+                <div
+                  key={inq.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => handleViewDetail(inq)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleViewDetail(inq);
+                    }
+                  }}
+                  className="border-b border-border py-4 cursor-pointer hover:bg-gray-50"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <span className="text-[12px] text-muted">{getCategoryLabel(inq.category)}</span>
+                    <span
+                      className={`inline-flex flex-shrink-0 items-center rounded-full border px-2.5 py-1 text-[12px] leading-none font-semibold ${status.textClass} ${status.bgClass} ${status.borderClass}`}
+                    >
+                      {lang === 'ko' ? status.labelKo : status.labelEn}
+                    </span>
+                  </div>
+                  <div className="mt-1.5 text-[15px] font-semibold text-ink leading-[1.5] break-keep line-clamp-2">
+                    {inq.title}
+                  </div>
+                  <div className="mt-1.5 text-[12px] text-muted font-en">
+                    {new Date(inq.createdAt).toLocaleDateString(lang === 'ko' ? 'ko-KR' : 'en-US')}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+        </>
       )}
     </>
   );

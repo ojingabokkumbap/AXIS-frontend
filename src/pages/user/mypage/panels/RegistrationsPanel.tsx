@@ -10,7 +10,7 @@ import {
   SectionTitle,
 } from '../primitives';
 
-const TABLE_WRAP = 'w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
+const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 import {
   ExamGateModal,
   ReceiptModal,
@@ -25,6 +25,51 @@ import {
   regBadge,
 } from '../helpers';
 import type { DashboardDto, RegistrationDto } from '../types';
+
+function registrationStatusView(
+  r: RegistrationDto,
+  t: ReturnType<typeof useI18n>['t'],
+): { statusText: string; statusCls: string } {
+  const deadlineExpired = r.examDeadlineExpired;
+  if (r.status === 'PAID' && deadlineExpired && r.examDeadline) {
+    return {
+      statusText: t('sec.registrations.status.paidExpired' as never, { date: formatExamDate(r.examDeadline) }),
+      statusCls: 'text-status-danger font-semibold',
+    };
+  }
+  if (r.status === 'PAID' && r.examDeadline) {
+    return {
+      statusText: t('sec.registrations.status.paidUntil' as never, { date: formatExamDate(r.examDeadline) }),
+      statusCls: 'font-medium',
+    };
+  }
+  if (r.status === 'PAID') {
+    return {
+      statusText: t('sec.registrations.status.paid' as never),
+      statusCls: 'text-ink font-semibold text-[14px]',
+    };
+  }
+  if (r.status === 'PENDING_PAYMENT') {
+    return {
+      statusText: r.seatHeldUntil
+        ? t('sec.registrations.status.pendingUntil' as never, { date: formatLocalDateTime(r.seatHeldUntil) })
+        : t('sec.registrations.status.pending30' as never),
+      statusCls: 'text-status-grading font-semibold text-[14px]',
+    };
+  }
+  if (r.status === 'REFUNDED') {
+    return {
+      statusText: r.latestPayment?.refundAmount
+        ? t('sec.registrations.status.refundedAmount' as never, { amount: formatKrw(r.latestPayment.refundAmount) })
+        : t('sec.registrations.status.refunded' as never),
+      statusCls: 'text-muted text-[14px]',
+    };
+  }
+  if (r.status === 'CANCELLED') {
+    return { statusText: t('sec.registrations.status.cancelled' as never), statusCls: 'text-muted' };
+  }
+  return { statusText: regBadge(r.status).text, statusCls: 'text-muted' };
+}
 
 function RegistrationsHero({ data }: { data: DashboardDto }) {
   const { t } = useI18n();
@@ -59,24 +104,24 @@ function RegistrationsHero({ data }: { data: DashboardDto }) {
       <div className="relative overflow-hidden rounded-[22px] bg-[#DDEAFE] px-6 py-6 sm:px-8 sm:py-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
-            <h2 className="text-[24px] font-semibold tracking-[-0.03em] text-black sm:text-[28px]">
+            <h2 className="text-[22px] font-semibold tracking-[-0.03em] text-black break-keep sm:text-[28px]">
               {t('sec.registrations.summary.greeting' as never, { name: data.profile.name })}
             </h2>
-            <p className="text-[15px] text-[#475467]">
+            <p className="text-[14px] sm:text-[15px] text-[#475467] break-keep">
               {t('sec.registrations.summary.caption' as never)}
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-5 sm:gap-8 lg:min-w-[360px]">
+          <div className="grid grid-cols-3 gap-3 sm:gap-8 lg:min-w-[360px]">
             {summaryItems.map((item) => {
               const Icon = item.icon;
               return (
                 <div key={item.key} className="text-center">
-                  <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-white text-[#2F67DA]">
+                  <div className="mx-auto mb-3 flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-white text-[#2F67DA]">
                     <Icon className="h-6 w-6" strokeWidth={2.1} />
                   </div>
-                  <div className="text-[15px] font-medium text-[#344054]">{item.label}</div>
-                  <div className="mt-3 mb-3 font-en text-[40px] font-semibold leading-none tracking-[-0.03em] text-black">
+                  <div className="text-[13px] sm:text-[15px] font-medium text-[#344054] break-keep">{item.label}</div>
+                  <div className="mt-3 mb-3 font-en text-[32px] sm:text-[40px] font-semibold leading-none tracking-[-0.03em] text-black">
                     {item.value}
                   </div>
                 </div>
@@ -96,17 +141,17 @@ function RegistrationsHero({ data }: { data: DashboardDto }) {
             navigate('/qna?tab=notice');
           }
         }}
-        className="relative overflow-hidden rounded-[22px] bg-[#D8F3E6] px-6 py-6 transition-transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-[#60CDB0] cursor-pointer sm:px-8 sm:py-7"
+        className="relative overflow-hidden rounded-[22px] bg-[#D8F3E6] px-6 pt-6 pb-12 transition-transform hover:scale-[1.01] focus:outline-none focus:ring-2 focus:ring-[#60CDB0] cursor-pointer sm:px-8 sm:py-7"
       >
         <div className="max-w-[240px]">
-          <h3 className="text-[24px] font-semibold tracking-[-0.03em] text-black sm:text-[28px]">
+          <h3 className="text-[22px] font-semibold tracking-[-0.03em] text-black break-keep sm:text-[28px]">
             {t('sec.registrations.notice.title' as never)}
           </h3>
-          <p className="mt-2 text-[15px] leading-[1.7] text-[#375166]">
+          <p className="mt-2 text-[14px] sm:text-[15px] leading-[1.7] text-[#375166] break-keep">
             {t('sec.registrations.notice.body' as never)}
           </p>
         </div>
-        <Megaphone className="pointer-events-none absolute bottom-7 right-7 h-16 w-16 text-[#60CDB0]" strokeWidth={1.9} />
+        <Megaphone className="pointer-events-none absolute bottom-5 right-5 h-12 w-12 sm:bottom-7 sm:right-7 sm:h-16 sm:w-16 text-[#60CDB0]" strokeWidth={1.9} />
       </div>
     </section>
   );
@@ -184,34 +229,7 @@ function RegistrationsSection({
             ) : (
               data.registrations.map((r) => {
                 const deadlineExpired = r.examDeadlineExpired;
-                let statusText: string;
-                let statusCls: string;
-                if (r.status === 'PAID' && deadlineExpired && r.examDeadline) {
-                  statusText = t('sec.registrations.status.paidExpired' as never, { date: formatExamDate(r.examDeadline) });
-                  statusCls = 'text-status-danger font-semibold';
-                } else if (r.status === 'PAID' && r.examDeadline) {
-                  statusText = t('sec.registrations.status.paidUntil' as never, { date: formatExamDate(r.examDeadline) });
-                  statusCls = 'font-medium';
-                } else if (r.status === 'PAID') {
-                  statusText = t('sec.registrations.status.paid' as never);
-                  statusCls = 'text-ink font-semibold text-[14px]';
-                } else if (r.status === 'PENDING_PAYMENT') {
-                  statusText = r.seatHeldUntil
-                    ? t('sec.registrations.status.pendingUntil' as never, { date: formatLocalDateTime(r.seatHeldUntil) })
-                    : t('sec.registrations.status.pending30' as never);
-                  statusCls = 'text-status-grading font-semibold text-[14px]';
-                } else if (r.status === 'REFUNDED') {
-                  statusText = r.latestPayment?.refundAmount
-                    ? t('sec.registrations.status.refundedAmount' as never, { amount: formatKrw(r.latestPayment.refundAmount) })
-                    : t('sec.registrations.status.refunded' as never);
-                  statusCls = 'text-muted text-[14px]';
-                } else if (r.status === 'CANCELLED') {
-                  statusText = t('sec.registrations.status.cancelled' as never);
-                  statusCls = 'text-muted';
-                } else {
-                  statusText = regBadge(r.status).text;
-                  statusCls = 'text-muted';
-                }
+                const { statusText, statusCls } = registrationStatusView(r, t);
                 return (
                   <tr key={r.id}>
                     <td className="text-muted font-en">
@@ -276,6 +294,89 @@ function RegistrationsSection({
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="md:hidden mt-4 border-t-2 border-ink">
+        {data.registrations.length === 0 ? (
+          <EmptyState description={t('sec.registrations.empty.hint' as never)}>
+            {t('sec.registrations.empty.title' as never)}
+          </EmptyState>
+        ) : (
+          data.registrations.map((r) => {
+            const deadlineExpired = r.examDeadlineExpired;
+            const { statusText, statusCls } = registrationStatusView(r, t);
+            return (
+              <div key={r.id} className="border-b border-border py-4">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0">
+                    <div className="text-[11px] text-muted font-en mb-0.5">
+                      {t('sec.registrations.roundSuffix' as never, { n: r.schedule.roundNumber })}
+                    </div>
+                    <div className="text-[16px] font-semibold text-ink break-keep">
+                      {certLabel(r.certType, r.level)}
+                    </div>
+                  </div>
+                  {r.status === 'PAID' && (
+                    <KebabMenu
+                      items={[
+                        { label: t('sec.registrations.act.receiptView' as never), onClick: () => setReceiptReg(r) },
+                        { label: t('sec.registrations.act.refundPolicy' as never), onClick: () => setRefundOpen(true) },
+                      ]}
+                    />
+                  )}
+                </div>
+                <div className="mt-3 space-y-1.5 text-[13px]">
+                  <div className="flex justify-between gap-3">
+                    <span className="text-light flex-shrink-0">{t('sec.registrations.col.status' as never)}</span>
+                    <span className={`text-right break-keep ${statusCls}`}>{statusText}</span>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <span className="text-light flex-shrink-0">{t('sec.registrations.col.examDate' as never)}</span>
+                    <span className="text-ink text-right break-keep">
+                      {formatExamDate(r.schedule.examDate, r.schedule.examStartTime)}
+                    </span>
+                  </div>
+                </div>
+                {((r.status === 'PAID' && !deadlineExpired) ||
+                  r.status === 'PENDING_PAYMENT' ||
+                  r.status === 'CANCELLED' ||
+                  r.status === 'REFUNDED') && (
+                  <div className="mt-3 flex flex-col gap-2">
+                    {r.status === 'PAID' && !deadlineExpired && (
+                      <Btn
+                        variant="blue"
+                        className="w-full min-h-[44px]"
+                        onClick={() => openPrintPopup(`/mypage/voucher/${encodeURIComponent(r.id)}`, `axis-voucher-${r.id}`)}
+                      >
+                        {t('mypage.act.printVoucher' as never)}
+                      </Btn>
+                    )}
+                    {r.status === 'PENDING_PAYMENT' && (
+                      <>
+                        <Btn variant="orange" className="w-full min-h-[44px]" onClick={() => onPayNow(r)}>
+                          {t('sec.registrations.act.pay' as never)}
+                        </Btn>
+                        <Btn
+                          variant="danger"
+                          className="w-full min-h-[44px]"
+                          onClick={() => handleCancel(r.id)}
+                          disabled={busyId === r.id}
+                        >
+                          {busyId === r.id ? t('sec.registrations.act.cancelling' as never) : t('sec.registrations.act.cancel' as never)}
+                        </Btn>
+                      </>
+                    )}
+                    {(r.status === 'CANCELLED' || r.status === 'REFUNDED') && (
+                      <Btn variant="blue" className="w-full min-h-[44px]" onClick={() => setReceiptReg(r)}>
+                        {t('mypage.act.receipt' as never)}
+                      </Btn>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })
+        )}
       </div>
 
       <ReceiptModal

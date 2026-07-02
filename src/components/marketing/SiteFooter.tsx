@@ -60,10 +60,10 @@ export function SiteFooter() {
       className="bg-white"
       style={{ borderTop: `1px solid #bfbfbf`, color: BODY }}
     >
-      <div className="mx-auto px-6 lg:px-10 pt-16 lg:pt-20 pb-8" style={{ maxWidth: 1280 }}>
+      <div className="mx-auto px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-20 pb-8" style={{ maxWidth: 1280 }}>
 
         {/* ── Top: 다칼럼 ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10">
 
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
@@ -73,7 +73,7 @@ export function SiteFooter() {
             >
               AXIS
             </div>
-            <p className="mt-4 text-[14px] leading-[1.7]" style={{ color: MUTED }}>
+            <p className="mt-4 text-[14px] leading-[1.7] max-lg:break-keep" style={{ color: MUTED }}>
               AI 시대의 실무 역량을 검증하는<br />
               민간자격 검정 플랫폼
             </p>
@@ -99,7 +99,7 @@ export function SiteFooter() {
           </div>
 
           {/* 연락처 */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <div className={colHead} style={{ color: INK }}>{t('footer.contact')}</div>
             <div className="text-[20px] font-bold font-en mb-1" style={{ color: INK }}>
               {t('footer.phone')}
@@ -140,11 +140,11 @@ export function SiteFooter() {
 
         {/* ── Bottom bar ── */}
         <div
-          className="mt-14 pt-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between"
+          className="mt-10 md:mt-14 pt-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between"
           style={{ borderTop: `1px solid #bfbfbf` }}
         >
           {/* Copyright + 회사 정보 */}
-          <div className="text-[13px] leading-[1.9]" style={{ color: MUTED }}>
+          <div className="text-[13px] leading-[1.9] max-lg:break-keep" style={{ color: MUTED }}>
             <div className="font-medium" style={{ color: BODY }}>{t('footer.copyright')}</div>
             <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5">
               <span>{t('footer.company')}</span>

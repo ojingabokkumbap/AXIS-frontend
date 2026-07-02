@@ -20,7 +20,7 @@ import { localizeEligibilityNote } from '../eligibilityNote';
 import { InfoCallout } from '@/components/InfoCallout';
 import { ResultModal, ResultModalButton, ResultModalInlineText } from '@/components/ResultModal';
 
-const TABLE_WRAP = 'w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
+const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 
 const ELIG_RESUBMIT_OPTION_IDS = ['L2_CERT', 'MGMT_2Y', 'AX_LEADER_COURSE'] as const;
 type EligOptionId = (typeof ELIG_RESUBMIT_OPTION_IDS)[number];
@@ -53,7 +53,7 @@ function StatusPill({ tone, children }: { tone: StatusPillTone; children: ReactN
 
 function StatusCellWrap({ children }: { children: ReactNode }) {
   return (
-    <div className="inline-flex flex-col gap-2 max-w-[280px] py-1">{children}</div>
+    <div className="inline-flex flex-col gap-2 max-w-full md:max-w-[280px] py-1">{children}</div>
   );
 }
 
@@ -172,11 +172,19 @@ function ExamStatusCell({
   return <span className="text-[13px] text-muted">—</span>;
 }
 
-function VoucherButton({ regId, label }: { regId: string; label: string }) {
+function VoucherButton({
+  regId,
+  label,
+  className = 'btn-sm min-w-[88px]',
+}: {
+  regId: string;
+  label: string;
+  className?: string;
+}) {
   return (
     <Btn
       variant="blue"
-      className="btn-sm min-w-[88px]"
+      className={className}
       onClick={() => openPrintPopup(`/mypage/voucher/${encodeURIComponent(regId)}`, `axis-voucher-${regId}`)}
     >
       {label}
@@ -336,6 +344,108 @@ export function MyExamsPanel({
   const refundAmountLabel = (reg: RegistrationDto) =>
     `KRW ${(reg.latestPayment?.amount ?? reg.fee ?? 0).toLocaleString()}`;
 
+  // 데스크톱 테이블/모바일 카드가 같은 액션 버튼 세트를 공유한다.
+  // mobile=true일 때만 full-width 클래스로 바뀌며 로직은 동일하다.
+  const renderRowActions = (
+    r: RegistrationDto,
+    state: ReturnType<typeof registrationExamEntryState>,
+    mobile: boolean,
+  ) => {
+    const voucherLabel = t('mypage.act.voucher' as never);
+    const cls = (desktop: string) => (mobile ? 'w-full min-h-[44px]' : desktop);
+    const voucherCls = mobile ? 'w-full min-h-[44px]' : 'btn-sm min-w-[88px]';
+    if (r.status !== 'PAID') {
+      return (
+        <Btn variant="orange" className={cls('btn-sm')} onClick={() => onPayNow(r)}>
+          Pay Now
+        </Btn>
+      );
+    }
+    if (state.gate === 'eligibility_rejected') {
+      return (
+        <>
+          {!r.eligibilityRefundRequested && (
+            <Btn
+              variant="primary"
+              className={cls('btn-sm min-w-[108px]')}
+              onClick={() => openResubmit(r)}
+            >
+              {t('mypage.exams.act.resubmit')}
+            </Btn>
+          )}
+          {isEligibilityRefundEligible(r) && (
+            <Btn
+              variant="default"
+              className={cls('btn-sm min-w-[96px]')}
+              disabled={refundBusy && refundReg?.id === r.id}
+              onClick={() => setRefundReg(r)}
+            >
+              {t('mypage.exams.act.refund100')}
+            </Btn>
+          )}
+          <VoucherButton regId={r.id} label={voucherLabel} className={voucherCls} />
+        </>
+      );
+    }
+    if (state.gate === 'eligibility_pending') {
+      return (
+        <>
+          {isEligibilityRefundEligible(r) && (
+            <Btn
+              variant="default"
+              className={cls('btn-sm min-w-[96px]')}
+              disabled={refundBusy && refundReg?.id === r.id}
+              onClick={() => setRefundReg(r)}
+            >
+              {t('mypage.exams.act.refund100')}
+            </Btn>
+          )}
+          <VoucherButton regId={r.id} label={voucherLabel} className={voucherCls} />
+        </>
+      );
+    }
+    if (state.gate === 'eligibility_missing_doc') {
+      return (
+        <>
+          {!r.eligibilityRefundRequested && (
+            <Btn
+              variant="primary"
+              className={cls('btn-sm min-w-[96px]')}
+              onClick={() => openResubmit(r)}
+            >
+              {t('mypage.exams.act.submitDoc')}
+            </Btn>
+          )}
+          {isEligibilityRefundEligible(r) && (
+            <Btn
+              variant="default"
+              className={cls('btn-sm min-w-[96px]')}
+              disabled={refundBusy && refundReg?.id === r.id}
+              onClick={() => setRefundReg(r)}
+            >
+              {t('mypage.exams.act.refund100')}
+            </Btn>
+          )}
+          <VoucherButton regId={r.id} label={voucherLabel} className={voucherCls} />
+        </>
+      );
+    }
+    return (
+      <>
+        <Btn
+          variant="primary"
+          className={cls('btn-sm min-w-[96px]')}
+          disabled={!state.canEnter || enterBusyId === r.id}
+          title={state.hint}
+          onClick={() => setStartReg(r)}
+        >
+          {enterBusyId === r.id ? '…' : t('mypage.exams.act.startExam')}
+        </Btn>
+        <VoucherButton regId={r.id} label={voucherLabel} className={voucherCls} />
+      </>
+    );
+  };
+
   return (
     <>
       <SectionTitle title={t('sec.schedule.title')} sub="" />
@@ -366,11 +476,11 @@ export function MyExamsPanel({
       </InfoCallout>
 
       <div className="mb-3 flex items-center justify-end">
-        <label className="relative block w-[160px] min-w-[160px]">
+        <label className="relative block w-full sm:w-[160px] sm:min-w-[160px]">
           <select
             value={selectedCertKey}
             onChange={(e) => setSelectedCertKey(e.target.value)}
-            className="h-[40px] w-full appearance-none rounded-none border border-gray-200 bg-white pl-3 pr-10 text-[16px] leading-none  outline-none"
+            className="h-11 sm:h-[40px] w-full appearance-none rounded-none border border-gray-200 bg-white pl-3 pr-10 text-[16px] leading-none  outline-none"
             aria-label={t('mypage.exams.filterAria')}
           >
             <option value="ALL">{t('mypage.exams.filterAll')}</option>
@@ -413,7 +523,6 @@ export function MyExamsPanel({
             ) : (
               filteredUpcomingMine.map((r) => {
                 const state = registrationExamEntryState(r);
-                const voucherLabel = t('mypage.act.voucher' as never);
                 return (
                   <tr key={r.id}>
                     <td>
@@ -436,86 +545,7 @@ export function MyExamsPanel({
                     </td>
                     <td className="text-right">
                       <div className="inline-flex gap-2 flex-wrap justify-end items-center">
-                        {r.status === 'PAID' ? (
-                          state.gate === 'eligibility_rejected' ? (
-                            <>
-                              {!r.eligibilityRefundRequested && (
-                                <Btn
-                                  variant="primary"
-                                  className="btn-sm min-w-[108px]"
-                                  onClick={() => openResubmit(r)}
-                                >
-                                  {t('mypage.exams.act.resubmit')}
-                                </Btn>
-                              )}
-                              {isEligibilityRefundEligible(r) && (
-                                <Btn
-                                  variant="default"
-                                  className="btn-sm min-w-[96px]"
-                                  disabled={refundBusy && refundReg?.id === r.id}
-                                  onClick={() => setRefundReg(r)}
-                                >
-                                  {t('mypage.exams.act.refund100')}
-                                </Btn>
-                              )}
-                              <VoucherButton regId={r.id} label={voucherLabel} />
-                            </>
-                          ) : state.gate === 'eligibility_pending' ? (
-                            <>
-                              {isEligibilityRefundEligible(r) && (
-                                <Btn
-                                  variant="default"
-                                  className="btn-sm min-w-[96px]"
-                                  disabled={refundBusy && refundReg?.id === r.id}
-                                  onClick={() => setRefundReg(r)}
-                                >
-                                  {t('mypage.exams.act.refund100')}
-                                </Btn>
-                              )}
-                              <VoucherButton regId={r.id} label={voucherLabel} />
-                            </>
-                          ) : state.gate === 'eligibility_missing_doc' ? (
-                            <>
-                              {!r.eligibilityRefundRequested && (
-                                <Btn
-                                  variant="primary"
-                                  className="btn-sm min-w-[96px]"
-                                  onClick={() => openResubmit(r)}
-                                >
-                                  {t('mypage.exams.act.submitDoc')}
-                                </Btn>
-                              )}
-                              {isEligibilityRefundEligible(r) && (
-                                <Btn
-                                  variant="default"
-                                  className="btn-sm min-w-[96px]"
-                                  disabled={refundBusy && refundReg?.id === r.id}
-                                  onClick={() => setRefundReg(r)}
-                                >
-                                  {t('mypage.exams.act.refund100')}
-                                </Btn>
-                              )}
-                              <VoucherButton regId={r.id} label={voucherLabel} />
-                            </>
-                          ) : (
-                            <>
-                              <Btn
-                                variant="primary"
-                                className="btn-sm min-w-[96px]"
-                                disabled={!state.canEnter || enterBusyId === r.id}
-                                title={state.hint}
-                                onClick={() => setStartReg(r)}
-                              >
-                                {enterBusyId === r.id ? '…' : t('mypage.exams.act.startExam')}
-                              </Btn>
-                              <VoucherButton regId={r.id} label={voucherLabel} />
-                            </>
-                          )
-                        ) : (
-                          <Btn variant="orange" className="btn-sm" onClick={() => onPayNow(r)}>
-                            Pay Now
-                          </Btn>
-                        )}
+                        {renderRowActions(r, state, false)}
                       </div>
                     </td>
                   </tr>
@@ -524,6 +554,46 @@ export function MyExamsPanel({
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="md:hidden mt-4 border-t-2 border-ink">
+        {filteredUpcomingMine.length === 0 ? (
+          <EmptyState description={t('mypage.exams.empty', { cert: selectedCertLabel })}>
+            —
+          </EmptyState>
+        ) : (
+          filteredUpcomingMine.map((r) => {
+            const state = registrationExamEntryState(r);
+            return (
+              <div key={r.id} className="border-b border-border py-4">
+                <div className="min-w-0">
+                  <div className="text-[11px] text-muted font-en mb-0.5">
+                    {t('mypage.exams.round', { n: r.schedule.roundNumber })}
+                  </div>
+                  <div className="text-[16px] font-semibold text-ink break-keep">
+                    {certLabel(r.certType, r.level)}
+                  </div>
+                </div>
+                <div className="mt-2.5">
+                  <ExamStatusCell
+                    r={r}
+                    gate={state.gate}
+                    deadlineExpired={r.examDeadlineExpired}
+                  />
+                </div>
+                <div className="mt-2.5 flex justify-between gap-3 text-[13px]">
+                  <span className="text-light flex-shrink-0">{t('mypage.exams.col.examDate')}</span>
+                  <span className="text-ink text-right break-keep">
+                    {formatExamDate(r.schedule.examDate, r.schedule.examStartTime)}
+                  </span>
+                </div>
+                <div className="mt-3 flex flex-col gap-2">
+                  {renderRowActions(r, state, true)}
+                </div>
+              </div>
+            );
+          })
+        )}
       </div>
 
       {openCount === 0 && (
