@@ -93,38 +93,49 @@ export function NoticeAccordion({
               borderBottom: isHome ? undefined : `1px solid ${BORDER_LIGHT}`,
             }}
           >
+            {/*
+              One flex-wrap layout, two shapes via `order` + `basis`:
+              - mobile: row 1 = pill · date · chevron, row 2 = full-width title
+              - md+:    pill · title · date · chevron on a single row
+              Pills get a uniform min-width so every title starts at the same x.
+            */}
             <button
               type="button"
               onClick={() => onToggle(n.id)}
               className={[
-                'w-full text-left bg-transparent border-none cursor-pointer',
+                'w-full text-left bg-transparent border-none cursor-pointer flex flex-wrap items-center gap-y-2.5',
                 isHome
-                  ? 'flex flex-wrap items-center gap-x-5 gap-y-3 px-6 lg:px-8 py-5 lg:py-8 reveal'
-                  : 'flex items-center gap-4 py-5 lg:py-6 group',
+                  ? 'gap-x-4 md:gap-x-5 px-5 md:px-6 lg:px-8 py-5 md:py-6 lg:py-8 reveal'
+                  : 'gap-x-4 py-5 lg:py-6 group',
               ].join(' ')}
               aria-expanded={isOpen}
             >
               <span
-                className="text-[14px] lg:text-[15px] font-semibold shrink-0 px-3 py-1.5 rounded-full"
+                className="order-1 inline-flex items-center justify-center text-center shrink-0 min-w-[88px] md:min-w-[112px] px-3 py-1.5 rounded-full text-[13px] md:text-[14px] lg:text-[15px] font-semibold whitespace-nowrap"
                 style={{ background: tagBg, color: tagColor }}
               >
                 {pickTag(n)}
               </span>
               <span
                 className={[
-                  'flex-1 min-w-0 font-semibold transition-colors',
+                  'order-4 basis-full md:order-2 md:basis-auto md:flex-1 min-w-0 font-semibold break-keep transition-colors',
                   isHome
-                    ? 'text-[19px] lg:text-[22px] leading-[1.3] tracking-[-0.015em]'
-                    : 'text-[17px] lg:text-[19px] leading-[1.4]',
+                    ? 'text-[17px] md:text-[19px] lg:text-[22px] leading-[1.35] tracking-[-0.015em]'
+                    : 'text-[16px] md:text-[17px] lg:text-[19px] leading-[1.4]',
                 ].join(' ')}
                 style={{ color: INK_900 }}
               >
                 {pickTitle(n)}
               </span>
-              <span className="shrink-0 text-[14px] lg:text-[15px]" style={{ color: GRAY_300 }}>
+              <span
+                className="order-2 ml-auto md:order-3 md:ml-0 shrink-0 whitespace-nowrap text-[13px] md:text-[14px] lg:text-[15px]"
+                style={{ color: GRAY_300 }}
+              >
                 {formatNoticeDate(n.createdAt, lang)}
               </span>
-              <NoticeChevron open={isOpen} />
+              <span className="order-3 md:order-4 shrink-0 inline-flex">
+                <NoticeChevron open={isOpen} />
+              </span>
             </button>
 
             <div
@@ -139,7 +150,7 @@ export function NoticeAccordion({
                 className={[
                   'whitespace-pre-wrap break-words',
                   isHome
-                    ? 'px-6 lg:px-8 pb-6 lg:pb-8 text-[15px] lg:text-[17px] leading-[1.75] tracking-[-0.005em]'
+                    ? 'px-5 md:px-6 lg:px-8 pb-6 lg:pb-8 text-[15px] lg:text-[17px] leading-[1.75] tracking-[-0.005em]'
                     : 'pb-6 lg:pb-8 text-[16px] lg:text-[18px] leading-[1.85] tracking-[-0.005em]',
                 ].join(' ')}
                 style={{ color: GRAY_500, paddingLeft: isHome ? undefined : 0 }}
