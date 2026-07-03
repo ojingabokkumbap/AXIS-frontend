@@ -1488,6 +1488,7 @@ export const en = {
   'certGuide.hero.subtitle': 'Explore the AXIS certification framework\nbuilt for the AI era',
   'certGuide.overviewTitle': 'About {cert}',
   'certGuide.view': 'View',
+  'certGuide.download': 'Download',
   'certGuide.levels.title': 'Level Structure',
   'certGuide.levels.th.level': 'Level',
   'certGuide.levels.th.target': 'Audience',

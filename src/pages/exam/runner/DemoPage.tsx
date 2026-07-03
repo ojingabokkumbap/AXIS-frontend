@@ -24,8 +24,8 @@ import {
 } from 'lucide-react';
 import { demoApi, proctorApi, aiProctorApi, type CertType, type CertLevel } from '@/services/api';
 import { useI18n, LangToggle } from '@/i18n';
-import { ProgressBar } from '@/components/verify/ProgressBar';
-import { EXAM, ExamPageHeader, ExamExitConfirmModal } from '@/pages/exam/shared';
+import { EXAM, ExamPageHeader, ExamExitConfirmModal, InfoRow, StepperNav } from '@/pages/exam/shared';
+import { Stepper, type StepperStep } from '@/components/Stepper';
 import {
   useProctorMonitorLive,
   ProctorLivePipPreview,
@@ -336,177 +336,140 @@ function DemoExamPicker({
 }) {
   const { t } = useI18n();
 
+  // exam-ready 의 InfoRow 와 동일한 카드 양식(라벨 열 + 값)으로 선택 UI를 구성.
+  const rowWrap = `flex items-center ${EXAM.surface.card} ${EXAM.layout.cardPaddingX} ${EXAM.layout.cardPaddingY}`;
+  const labelCls = `${EXAM.text.label} ${EXAM.color.muted} shrink-0 w-[clamp(110px,9vw,220px)]`;
+  const optBtn = (selected: boolean) =>
+    `text-left rounded-xl border px-[clamp(14px,1.1vw,26px)] py-[clamp(10px,0.9vw,18px)] transition-colors ${
+      selected
+        ? 'shadow-sm'
+        : 'border-[var(--exam-border,#E2E8F0)] bg-white hover:border-[var(--exam-text-muted,#94A3B8)]'
+    }`;
+
   return (
-    <div className="mb-[clamp(16px,1.4vw,28px)] rounded-xl border border-[var(--exam-border,#E2E8F0)] bg-[var(--exam-surface-2,#F8FAFC)] p-[clamp(14px,1.2vw,22px)]">
-      <p className={`${EXAM.text.pill} ${EXAM.color.brand} uppercase tracking-wide font-bold mb-3`}>
-        {t('demo.picker.title' as never)}
-      </p>
-
-      <p className={`${EXAM.text.helper} ${EXAM.color.muted} font-semibold mb-2`}>
-        {t('demo.picker.cert' as never)}
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
-        {DEMO_CERT_OPTIONS.map((c) => {
-          const selected = certType === c.id;
-          const accent = CERT_COLORS[c.id];
-          return (
-            <button
-              key={c.id}
-              type="button"
-              onClick={() => onChange(c.id, level)}
-              className={`text-left rounded-lg border px-3 py-2.5 transition-colors ${
-                selected
-                  ? 'shadow-sm'
-                  : 'border-[var(--exam-border,#E2E8F0)] bg-white hover:border-[var(--exam-text-muted,#94A3B8)]'
-              }`}
-              style={
-                selected
-                  ? { borderColor: accent, backgroundColor: `${accent}14` }
-                  : undefined
-              }
-            >
-              <div
-                className={`${EXAM.text.helper} font-bold leading-snug`}
-                style={{ color: selected ? accent : undefined }}
+    <>
+      {/* 시리즈 선택 — InfoRow 와 동일한 카드 양식 */}
+      <div className={rowWrap}>
+        <span className={labelCls}>{t('demo.picker.cert' as never)}</span>
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-[clamp(8px,0.7vw,16px)]">
+          {DEMO_CERT_OPTIONS.map((c) => {
+            const selected = certType === c.id;
+            const accent = CERT_COLORS[c.id];
+            return (
+              <button
+                key={c.id}
+                type="button"
+                onClick={() => onChange(c.id, level)}
+                className={optBtn(selected)}
+                style={selected ? { borderColor: accent, backgroundColor: `${accent}14` } : undefined}
               >
-                {CERT_LABEL[c.id]}
-              </div>
-              <div className={`${EXAM.text.pill} ${EXAM.color.muted} mt-0.5 line-clamp-2`}>
-                {t(c.nameKey)}
-              </div>
-            </button>
-          );
-        })}
+                <div
+                  className={`${EXAM.text.value} font-bold leading-snug`}
+                  style={{ color: selected ? accent : undefined }}
+                >
+                  {CERT_LABEL[c.id]}
+                </div>
+                <div className={`${EXAM.text.helper} ${EXAM.color.muted} mt-0.5 line-clamp-2`}>
+                  {t(c.nameKey)}
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <p className={`${EXAM.text.helper} ${EXAM.color.muted} font-semibold mb-2`}>
-        {t('demo.picker.level' as never)}
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-        {DEMO_LEVEL_OPTIONS.map((l) => {
-          const selected = level === l.id;
-          const accent = CERT_COLORS[certType];
-          return (
-            <button
-              key={l.id}
-              type="button"
-              onClick={() => onChange(certType, l.id)}
-              className={`text-left rounded-lg border px-3 py-2.5 transition-colors ${
-                selected
-                  ? 'shadow-sm'
-                  : 'border-[var(--exam-border,#E2E8F0)] bg-white hover:border-[var(--exam-text-muted,#94A3B8)]'
-              }`}
-              style={
-                selected
-                  ? { borderColor: accent, backgroundColor: `${accent}14` }
-                  : undefined
-              }
-            >
-              <div
-                className={`${EXAM.text.helper} font-bold leading-snug`}
-                style={{ color: selected ? accent : undefined }}
+      {/* 등급 선택 */}
+      <div className={rowWrap}>
+        <span className={labelCls}>{t('demo.picker.level' as never)}</span>
+        <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-[clamp(8px,0.7vw,16px)]">
+          {DEMO_LEVEL_OPTIONS.map((l) => {
+            const selected = level === l.id;
+            const accent = CERT_COLORS[certType];
+            return (
+              <button
+                key={l.id}
+                type="button"
+                onClick={() => onChange(certType, l.id)}
+                className={optBtn(selected)}
+                style={selected ? { borderColor: accent, backgroundColor: `${accent}14` } : undefined}
               >
-                {t(l.labelKey)}
-              </div>
-              <div className={`${EXAM.text.pill} ${EXAM.color.muted} mt-0.5 line-clamp-2`}>
-                {t(l.subKey)}
-              </div>
-            </button>
-          );
-        })}
+                <div
+                  className={`${EXAM.text.value} font-bold leading-snug`}
+                  style={{ color: selected ? accent : undefined }}
+                >
+                  {t(l.labelKey)}
+                </div>
+                <div className={`${EXAM.text.helper} ${EXAM.color.muted} mt-0.5 line-clamp-2`}>
+                  {t(l.subKey)}
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <p className={`${EXAM.text.pill} ${EXAM.color.muted} mt-3 leading-relaxed`}>
+      <p className={`${EXAM.text.helper} ${EXAM.color.muted} leading-relaxed`}>
         {t('demo.picker.note' as never)}
       </p>
-    </div>
+    </>
   );
 }
 
-function DemoFlowShell({
-  step,
-  totalSteps,
-  title,
-  description,
-  badge,
-  children,
-  footer,
-  width = 'max-w-[1120px]',
+/**
+ * 데모 전용 전체화면 진입 게이트. 데모는 진입~종료까지 브라우저 전체화면으로
+ * 진행되므로, 전체화면이 아닌 모든 시점(최초 진입/Esc 로 빠져나온 뒤)에서 이
+ * 화면을 띄워 다시 전체화면으로 들어오게 한다. (시험 진행 구간은 자체 exit 처리)
+ */
+function DemoFullscreenGate({
+  onEnter,
+  error,
+  displayState,
+  lang,
 }: {
-  step: number;
-  totalSteps: number;
-  title: ReactNode;
-  description?: ReactNode;
-  badge?: ReactNode;
-  children: ReactNode;
-  footer?: ReactNode;
-  width?: string;
+  onEnter: () => void;
+  error: string | null;
+  displayState: DisplayState;
+  lang: 'ko' | 'en';
 }) {
+  const { t } = useI18n();
   return (
-    <main className="flex-1 min-h-0 overflow-y-auto">
-      <div className={`mx-auto w-full ${width} px-5 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10`}>
-        <div className="mb-5 sm:mb-6">
-          <ProgressBar current={step} total={totalSteps} />
-        </div>
-        <div className="rounded-[28px] border border-[#DCE5F0] bg-white shadow-[0_20px_70px_rgba(15,23,42,0.08)] overflow-hidden">
-          <div className="border-b border-[#E8EEF5] bg-[linear-gradient(180deg,#F8FBFF_0%,#F4F8FC_100%)] px-6 py-6 sm:px-8 sm:py-7">
-            {badge ? <div className="mb-3">{badge}</div> : null}
-            <h1 className="text-[24px] sm:text-[32px] font-semibold tracking-[-0.03em] text-[#0F172A] leading-[1.2]">
-              {title}
-            </h1>
-            {description ? (
-              <p className="mt-3 max-w-[760px] text-[14px] sm:text-[16px] leading-[1.7] text-[#475569] break-keep">
-                {description}
+    <div className="h-screen w-screen bg-[#F8FAFC] flex flex-col overflow-hidden">
+      <DemoMultiDisplayNotice state={displayState} lang={lang} />
+      <ExamPageHeader title={t('demo.gate.title' as never)} hideClock />
+      <main className="flex-1 min-h-0 w-full flex flex-col items-center justify-center overflow-hidden">
+        <div className={`w-full ${EXAM.layout.container} ${EXAM.layout.containerPx} ${EXAM.layout.containerPy} h-full flex items-center`}>
+          <section className="w-full h-full flex flex-col justify-center relative">
+            <div className="absolute top-0 right-0 z-10">
+              <LangToggle />
+            </div>
+            <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding} text-center max-w-[clamp(480px,40vw,820px)] mx-auto w-full`}>
+              <div className="mx-auto w-[clamp(56px,4.5vw,96px)] h-[clamp(56px,4.5vw,96px)] rounded-full bg-[#EFF6FF] flex items-center justify-center mb-[clamp(12px,1vw,24px)]">
+                <Maximize2 className={`w-[clamp(26px,2.2vw,44px)] h-[clamp(26px,2.2vw,44px)] ${EXAM.color.brand}`} />
+              </div>
+              <h2 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink} mb-[clamp(8px,0.7vw,16px)]`}>
+                {t('demo.gate.title' as never)}
+              </h2>
+              <p className={`${EXAM.text.body} ${EXAM.color.body} mb-[clamp(20px,1.6vw,40px)] leading-relaxed`}>
+                {t('demo.gate.body1' as never)}{' '}
+                <span className={`font-semibold ${EXAM.color.ink}`}>{t('demo.gate.bodyFs' as never)}</span>
+                {t('demo.gate.body2' as never)}
               </p>
-            ) : null}
-          </div>
-          <div className="px-6 py-6 sm:px-8 sm:py-8">{children}</div>
-          {footer ? <div className="border-t border-[#E8EEF5] bg-[#F8FAFC] px-6 py-4 sm:px-8">{footer}</div> : null}
+              <button
+                type="button"
+                onClick={onEnter}
+                className={`${EXAM.button.primaryLg} ${EXAM.text.buttonLg}`}
+              >
+                {t('demo.gate.btn' as never)}
+              </button>
+              {error && (
+                <div className={`mt-[clamp(12px,1vw,24px)] px-4 py-3 ${EXAM.surface.warningBox} ${EXAM.text.helper} ${EXAM.color.warning}`}>
+                  {error}
+                </div>
+              )}
+            </div>
+          </section>
         </div>
-      </div>
-    </main>
-  );
-}
-
-function DemoCallout({
-  tone = 'info',
-  title,
-  children,
-}: {
-  tone?: 'info' | 'warn' | 'danger';
-  title: ReactNode;
-  children: ReactNode;
-}) {
-  const styles =
-    tone === 'warn'
-      ? 'border-[#FDE68A] bg-[#FFFBEB]'
-      : tone === 'danger'
-        ? 'border-[#FECACA] bg-[#FEF2F2]'
-        : 'border-[#BFDBFE] bg-[#EFF6FF]';
-  const titleColor =
-    tone === 'warn' ? 'text-[#92400E]' : tone === 'danger' ? 'text-[#B91C1C]' : 'text-[#1D4ED8]';
-
-  return (
-    <section className={`rounded-2xl border px-4 py-4 sm:px-5 ${styles}`}>
-      <h3 className={`text-[14px] sm:text-[15px] font-semibold ${titleColor}`}>{title}</h3>
-      <div className="mt-2 text-[13px] sm:text-[14px] leading-[1.7] text-[#334155]">{children}</div>
-    </section>
-  );
-}
-
-function DemoFact({
-  label,
-  value,
-}: {
-  label: ReactNode;
-  value: ReactNode;
-}) {
-  return (
-    <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-4">
-      <div className="text-[12px] font-medium tracking-[0.02em] text-[#64748B]">{label}</div>
-      <div className="mt-1 text-[18px] sm:text-[22px] font-semibold tracking-[-0.02em] text-[#0F172A]">
-        {value}
-      </div>
+      </main>
     </div>
   );
 }
@@ -521,6 +484,8 @@ export default function DemoPage() {
   const [answers, setAnswers] = useState<Record<string, string | null>>({});
   const [activeIdx, setActiveIdx] = useState(0);
   const [startedAt, setStartedAt] = useState<number | null>(null);
+  // 인트로 안내를 exam-ready 처럼 단계별 페이지로 나누기 위한 스텝 인덱스.
+  const [introStep, setIntroStep] = useState(0);
   const [now, setNow] = useState(Date.now());
   const [submitting, setSubmitting] = useState(false);
   const [result, setResult] = useState<GradeResult | null>(null);
@@ -931,19 +896,68 @@ export default function DemoPage() {
       });
   }, [certType, level]);
 
+  // 카메라/마이크 권한을 전체화면 진입 "전"(창 모드)에서 미리 확보한다.
+  // 전체화면 상태에서 getUserMedia 프롬프트가 뜨면 브라우저가 프롬프트를 주소창에
+  // 표시하려고 전체화면을 강제로 빠져나간다. 따라서 권한 프롬프트는 반드시 창
+  // 모드에서 끝내둬야 '데모 시작' 클릭 시 전체화면이 유지된다. 중복 호출/동시
+  // 호출을 막기 위해 진행 중 promise 를 캐시한다.
+  const mediaProbeRef = useRef<Promise<void> | null>(null);
+  const ensureMediaPermission = useCallback((): Promise<void> => {
+    if (!mediaProbeRef.current) {
+      // navigator.mediaDevices 는 비보안 컨텍스트(HTTP·비 localhost)나 임베드
+      // 프리뷰(iframe)에서 undefined 일 수 있다. 그 경우 조용히 skip 해야
+      // getUserMedia 접근이 동기적으로 throw 되어 데모 시작이 끊기는 걸 막는다.
+      const getUM = navigator.mediaDevices?.getUserMedia?.bind(navigator.mediaDevices);
+      if (!getUM) {
+        mediaProbeRef.current = Promise.resolve();
+      } else {
+        mediaProbeRef.current = getUM({ video: true, audio: true })
+          .then((probe) => {
+            probe.getTracks().forEach((tr) => tr.stop());
+          })
+          .catch(() => {
+            // 거부 시: 프록터 훅이 이후 ERROR verdict 를 노출. 재시도 가능하도록 캐시 해제.
+            mediaProbeRef.current = null;
+          });
+      }
+    }
+    return mediaProbeRef.current;
+  }, []);
+
   const handleStart = useCallback(async () => {
-    // Pre-acquire camera + mic permission BEFORE entering fullscreen.
-    // Browsers block the permission prompt inside fullscreen mode, so
-    // the proctor hook's getUserMedia call would silently fail.
+    // 전체화면은 클릭 제스처 안에서 즉시 요청(best-effort). 권한은 앞 단계에서
+    // 미리 확보돼 있으면 프롬프트 없이 즉시 resolve → 전체화면 유지. 권한/전체화면이
+    // 실패하거나 미지원이어도 절대 throw 하지 않고 데모는 반드시 시작한다.
+    // (전체화면 실패 시엔 이후 전체화면 게이트가 폴백으로 안내한다.)
+    const fsPromise = fullscreen.enterFullscreen();
     try {
-      const probe = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      probe.getTracks().forEach((tr) => tr.stop());
+      await ensureMediaPermission();
     } catch {
-      // If denied, the proctor hook will surface the ERROR verdict.
+      /* 권한 미지원/거부 — 무시 */
+    }
+    try {
+      await fsPromise;
+    } catch {
+      /* 전체화면 실패 — 게이트가 폴백 */
+    }
+    setStartedAt(Date.now());
+  }, [ensureMediaPermission, fullscreen]);
+
+  // 데모 전체화면 진입(최초/재진입 게이트에서 호출). 카메라·마이크 권한 프롬프트가
+  // 전체화면을 깨지 않도록 권한을 창 모드에서 먼저 확보한 뒤 전체화면에 들어간다.
+  const handleEnterDemoFullscreen = useCallback(async () => {
+    try {
+      await ensureMediaPermission();
+    } catch {
+      /* 권한 미지원/거부 — 무시 */
     }
     await fullscreen.enterFullscreen();
-    setStartedAt(Date.now());
-  }, [fullscreen]);
+  }, [ensureMediaPermission, fullscreen]);
+
+  // 데모를 떠날 때(마이페이지/홈/접수 이동, 브라우저 뒤로가기 등) 브라우저 전체화면을
+  // 확실히 해제한다. document.fullscreenElement 가 있을 때만 동작하므로 StrictMode
+  // 이중 마운트에서도 안전(초기엔 전체화면이 아니라 no-op).
+  useEffect(() => () => demoExitFullscreenSafely(), []);
 
   useEffect(() => {
     if (!startedAt || result) return;
@@ -982,9 +996,8 @@ export default function DemoPage() {
       }));
       const res = await demoApi.grade(certType, level, payload);
       setResult(res.data);
-      // Demo is over — drop fullscreen so the result page is readable and
-      // the user isn't trapped behind an Esc keypress (some browsers eat it).
-      demoExitFullscreenSafely();
+      // 데모는 결과·증명서·검증 화면까지 브라우저 전체화면을 유지한다. 전체화면
+      // 해제는 데모를 완전히 떠날 때(언마운트 클린업)만 수행한다.
     } catch (e: any) {
       setError(e.response?.data?.message || 'Submit failed');
     } finally {
@@ -1045,6 +1058,22 @@ export default function DemoPage() {
           </span>
         </div>
       </div>
+    );
+  }
+
+  // ── 데모 전체화면 게이트 (진입~종료 전 구간) ──────────────────────────
+  // 데모는 인트로·시험·결과·증명서·검증까지 브라우저 전체화면으로 진행된다.
+  // 시험 진행(live) 구간은 자체 exit 처리(FullscreenExitModal + strike)가 있으므로
+  // 여기서 제외하고, 그 외 모든 화면에서 전체화면이 아니면(최초 진입/Esc 이탈)
+  // 진입 게이트를 띄워 다시 전체화면으로 들어오게 한다.
+  if (!fullscreen.state.active && !live) {
+    return (
+      <DemoFullscreenGate
+        onEnter={() => void handleEnterDemoFullscreen()}
+        error={fullscreen.state.error}
+        displayState={displayState}
+        lang={lang}
+      />
     );
   }
 
@@ -1157,142 +1186,200 @@ export default function DemoPage() {
     );
   }
 
-  // ── Intro screen (before user clicks Start) — 라이트 EXAM 카드 ───
+  // ── Intro screen (before user clicks Start) — exam-ready 스텝 방식 ───
   if (!startedAt) {
     if (!certType || !level) return null;
     const certLabel = `${CERT_LABEL[certType]} · ${level}`;
+    const venueLabel = lang === 'ko' ? '온라인 CBT (감독)' : 'Online CBT (proctored)';
+
+    const INTRO_STEPS: StepperStep[] = [
+      { label: lang === 'ko' ? '시험 선택' : 'Select' },
+      { label: lang === 'ko' ? '시험 정보' : 'Exam Info' },
+      { label: lang === 'ko' ? '본인인증 생략' : 'Identity' },
+      { label: lang === 'ko' ? '데모 안내' : 'Demo Notes' },
+      { label: lang === 'ko' ? '감시 규칙' : 'Proctoring' },
+    ];
+    const lastIntroStep = INTRO_STEPS.length - 1;
+    const goIntroPrev = () => {
+      if (introStep === 0) navigate('/mypage');
+      else setIntroStep((s) => s - 1);
+    };
+    const goIntroNext = () => {
+      if (introStep < lastIntroStep) {
+        // 마지막(감시 규칙) 단계로 들어갈 때 카메라/마이크 권한을 창 모드에서 미리
+        // 확보한다. 그래야 '데모 시작' 클릭 시 프롬프트 없이 전체화면이 유지된다.
+        if (introStep === lastIntroStep - 1) void ensureMediaPermission();
+        setIntroStep((s) => s + 1);
+        return;
+      }
+      void handleStart();
+    };
+
+    const bulletList = 'list-disc list-outside pl-8 sm:pl-10 space-y-[clamp(10px,0.9vw,18px)]';
+    const bulletItem = `${EXAM.text.value} ${EXAM.color.ink} font-medium`;
+
     return (
-      <div className="min-h-screen w-full bg-[#F8FAFC] flex flex-col font-sans [&_svg]:stroke-[1.5]">
+      <div className="h-screen w-full bg-[#F8FAFC] flex flex-col overflow-hidden font-sans [&_svg]:stroke-[1.5]">
         <DemoMultiDisplayNotice state={displayState} lang={lang} />
-        <main className="flex-1 min-h-0 overflow-y-auto">
-          <div className={`${EXAM.layout.container} ${EXAM.layout.containerPx} ${EXAM.layout.containerPy}`}>
-            <button
-              onClick={() => navigate('/mypage')}
-              className={`${EXAM.text.helper} ${EXAM.color.muted} hover:text-[var(--exam-text,#0F172A)] mb-4 inline-flex items-center gap-1`}
-            >
-              ← {lang === 'ko' ? '마이페이지로' : 'Back to My Page'}
-            </button>
+        <ExamPageHeader title={lang === 'ko' ? '무료 데모 시험' : 'Free Demo Exam'} hideClock />
 
-            <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding}`}>
-              <div>
-                <DemoExamPicker certType={certType} level={level} onChange={handleDemoSelection} />
-              </div>
-              <div
-                className="inline-flex items-center px-2.5 py-1 rounded-md text-[clamp(12px,0.85vw,18px)] font-semibold mb-3"
-                style={{ background: `${color}1A`, color }}
-              >
-                {certLabel}
-              </div>
-              <h2 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink} mb-2`}>
-                {lang === 'ko' ? '무료 데모 시험' : 'Free Demo Exam'}
-              </h2>
-              <p className={`${EXAM.text.body} ${EXAM.color.body} mb-[clamp(16px,1.4vw,32px)]`}>
-                {paper.questions.length} {lang === 'ko' ? '문항' : 'sample MCQs'} · {DEMO_DURATION_MIN}
-                {lang === 'ko' ? '분' : ' minutes'} · {lang === 'ko' ? '감독 연습' : 'Proctored practice'}
-              </p>
+        {/* Stepper — exam-ready 와 동일한 상단 스텝 인디케이터 */}
+        <div className={`bg-white border-b border-[#E5E7EB] ${EXAM.layout.containerPx} pt-[clamp(10px,1.2vw,25px)] pb-[clamp(10px,1.1vw,10px)] shrink-0`}>
+          <Stepper steps={INTRO_STEPS} currentIndex={introStep} className={EXAM.layout.container} />
+        </div>
 
-              <div className={`${EXAM.surface.infoBox} px-[clamp(16px,1.4vw,28px)] py-[clamp(12px,1vw,20px)] mb-3`}>
-                <div className={`${EXAM.text.pill} ${EXAM.color.brand} uppercase tracking-wide font-bold mb-1.5`}>
-                  {lang === 'ko' ? '본인인증 생략 안내' : 'Identity verification — skipped for demo'}
-                </div>
-                <p className={`${EXAM.text.helper} ${EXAM.color.body} mb-2`}>
-                  {lang === 'ko'
-                    ? '데모에서는 본인인증(신분증 OCR · 얼굴 대조)을 생략합니다.'
-                    : 'For this demo, identity verification (ID OCR + face match) is skipped.'}
-                </p>
-                <ul className={`${EXAM.text.helper} ${EXAM.color.body} space-y-1 list-disc pl-4`}>
-                  <li>
-                    {lang === 'ko'
-                      ? '실제 시험에서는 신분증과 카메라가 반드시 필요합니다.'
-                      : 'A government ID and a working camera are required.'}
-                  </li>
-                  <li>
-                    {lang === 'ko'
-                      ? '얼굴 대조에 실패하면 입장이 거부됩니다.'
-                      : 'Failing the face match blocks your entry.'}
-                  </li>
-                </ul>
-              </div>
-
-              <ul className={`${EXAM.text.bodySm} ${EXAM.color.body} space-y-2 mb-[clamp(16px,1.4vw,32px)] list-disc pl-5`}>
-                <li>
-                  {lang === 'ko'
-                    ? '아래 시작 버튼을 누르면 타이머가 시작됩니다.'
-                    : 'The timer starts when you click Start Demo.'}
-                </li>
-                <li>
-                  {lang === 'ko'
-                    ? '문제 간 자유롭게 이동하고 답변을 변경할 수 있습니다.'
-                    : 'You can navigate freely between questions and change answers before submitting.'}
-                </li>
-                <li>
-                  {lang === 'ko'
-                    ? '데모 답안은 저장되지 않으며, 점수는 즉시 계산됩니다.'
-                    : 'Demo answers are not stored — your score is computed and shown immediately.'}
-                </li>
-                <li>
-                  {lang === 'ko'
-                    ? '이 데모는 자격 인증에 반영되지 않습니다.'
-                    : 'This demo is not scored toward certification.'}
-                </li>
-              </ul>
-
-              <div className={`${EXAM.surface.infoBox} px-[clamp(16px,1.4vw,28px)] py-[clamp(12px,1vw,20px)] mb-3`}>
-                <div className={`${EXAM.text.pill} ${EXAM.color.brand} uppercase tracking-wide font-bold mb-1.5`}>
-                  {lang === 'ko' ? '데모 모드 안내' : 'Demo Mode — No Termination'}
-                </div>
-                <ul className={`${EXAM.text.helper} ${EXAM.color.body} space-y-1 list-disc pl-4`}>
-                  <li>
-                    {lang === 'ko'
-                      ? '실제 시험과 동일한 감시 시스템이 작동하지만, 데모에서는 절대 강제 종료되지 않습니다.'
-                      : 'The full proctoring system runs (camera, mic, fullscreen) but you will NEVER be terminated in demo mode.'}
-                  </li>
-                  <li>
-                    {lang === 'ko'
-                      ? '모든 위반 사항은 스크린샷과 함께 기록되며, 시험 종료 후 AI가 분석 리포트를 제공합니다.'
-                      : 'All violations are recorded with screenshot proof. After the exam, AI will analyze your behavior and show what went wrong.'}
-                  </li>
-                </ul>
-              </div>
-
-              <div className={`${EXAM.surface.warningBox} px-[clamp(16px,1.4vw,28px)] py-[clamp(12px,1vw,20px)] mb-[clamp(20px,1.6vw,40px)]`}>
-                <div className={`${EXAM.text.pill} ${EXAM.color.warning} uppercase tracking-wide font-bold mb-1.5`}>
-                  {lang === 'ko' ? '감시 규칙 (실제 시험과 동일)' : 'Proctoring rules (same as real exam)'}
-                </div>
-                <ul className={`${EXAM.text.helper} text-[#A16207] space-y-1 list-disc pl-4`}>
-                  <li>
-                    {lang === 'ko'
-                      ? '데모는 전체화면에서 진행됩니다. 전체화면을 벗어나면 경고가 발생합니다.'
-                      : 'The demo runs in fullscreen. Leaving fullscreen triggers a warning.'}
-                  </li>
-                  <li>
-                    {lang === 'ko'
-                      ? '카메라가 켜진 상태 — 얼굴 인식과 시선이 모니터링됩니다.'
-                      : 'Your camera stays on — face presence and gaze are monitored.'}
-                  </li>
-                  <li>
-                    {lang === 'ko'
-                      ? '마이크가 켜진 상태 — 시험 중 정숙을 유지하세요.'
-                      : 'Your microphone stays on — remain silent for the full duration.'}
-                  </li>
-                  <li>{lang === 'ko' ? '하나의 디스플레이만 허용됩니다.' : 'Only one display is allowed.'}</li>
-                </ul>
-              </div>
-
-              <div className="flex flex-col gap-2.5">
-                <button
-                  onClick={handleStart}
-                  className={`${EXAM.button.primaryLg} ${EXAM.text.buttonLg} w-full!`}
+        <main className="flex-1 min-h-0 w-full flex flex-col items-center justify-center overflow-hidden">
+          <div className={`w-full ${EXAM.layout.container} ${EXAM.layout.containerPx} ${EXAM.layout.containerPy} h-full flex items-center`}>
+            <section className="w-full h-full flex flex-col justify-center">
+              <div className="flex items-center justify-between gap-4 mb-[clamp(16px,1.4vw,40px)] shrink-0">
+                <h2 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink}`}>{INTRO_STEPS[introStep].label}</h2>
+                <div
+                  className="inline-flex items-center px-2.5 py-1 rounded-md text-[clamp(12px,0.85vw,18px)] font-semibold shrink-0"
+                  style={{ background: `${color}1A`, color }}
                 >
-                  {lang === 'ko'
-                    ? `데모 시작 — ${paper.questions.length}문항 · ${DEMO_DURATION_MIN}분`
-                    : `Start Demo — ${paper.questions.length} questions · ${DEMO_DURATION_MIN} min`}
-                </button>
+                  {certLabel}
+                </div>
               </div>
-              {fullscreen.state.error && (
-                <div className={`mt-3 ${EXAM.text.helper} ${EXAM.color.warning}`}>{fullscreen.state.error}</div>
-              )}
-            </div>
+
+              <div className="flex-1 min-h-0 overflow-y-auto pr-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                {/* Step 0 — 시험 선택 */}
+                {introStep === 0 && (
+                  <div className="space-y-[clamp(12px,1vw,28px)]">
+                    <DemoExamPicker certType={certType} level={level} onChange={handleDemoSelection} />
+                  </div>
+                )}
+
+                {/* Step 1 — 시험 정보 */}
+                {introStep === 1 && (
+                  <div className="space-y-[clamp(12px,1vw,28px)]">
+                    <InfoRow label={lang === 'ko' ? '시험명' : 'Exam'} value={certLabel} />
+                    <InfoRow
+                      label={lang === 'ko' ? '문항 수' : 'Questions'}
+                      value={`${paper.questions.length}${lang === 'ko' ? '문항' : ' MCQs'}`}
+                    />
+                    <InfoRow
+                      label={lang === 'ko' ? '시험 시간' : 'Duration'}
+                      value={`${DEMO_DURATION_MIN}${lang === 'ko' ? '분' : ' min'}`}
+                    />
+                    <InfoRow label={lang === 'ko' ? '응시 방식' : 'Mode'} value={venueLabel} />
+                  </div>
+                )}
+
+                {/* Step 2 — 본인인증 생략 */}
+                {introStep === 2 && (
+                  <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding} min-h-[clamp(360px,48vh,560px)] flex items-center`}>
+                    <ul className={bulletList}>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '데모에서는 본인인증(신분증 OCR · 얼굴 대조)을 생략합니다.'
+                          : 'For this demo, identity verification (ID OCR + face match) is skipped.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '실제 시험에서는 신분증과 카메라가 반드시 필요합니다.'
+                          : 'A government ID and a working camera are required in the real exam.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '얼굴 대조에 실패하면 입장이 거부됩니다.'
+                          : 'Failing the face match blocks your entry.'}
+                      </li>
+                    </ul>
+                  </div>
+                )}
+
+                {/* Step 3 — 데모 안내 */}
+                {introStep === 3 && (
+                  <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding} min-h-[clamp(360px,48vh,560px)] flex items-center`}>
+                    <ul className={bulletList}>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '다음 단계에서 데모를 시작하면 타이머가 시작됩니다.'
+                          : 'The timer starts once you begin the demo on the next step.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '문제 간 자유롭게 이동하고 답변을 변경할 수 있습니다.'
+                          : 'You can navigate freely between questions and change answers before submitting.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '데모 답안은 저장되지 않으며, 점수는 즉시 계산됩니다.'
+                          : 'Demo answers are not stored — your score is computed and shown immediately.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '실제 시험과 동일한 감시 시스템이 작동하지만, 데모에서는 절대 강제 종료되지 않습니다.'
+                          : 'The full proctoring system runs, but you will NEVER be terminated in demo mode.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '모든 위반 사항은 스크린샷과 함께 기록되며, 종료 후 AI 분석 리포트를 제공합니다.'
+                          : 'All violations are recorded with screenshots; an AI report is shown afterwards.'}
+                      </li>
+                      <li className={`${bulletItem} ${EXAM.color.muted}`}>
+                        {lang === 'ko'
+                          ? '이 데모는 자격 인증에 반영되지 않습니다.'
+                          : 'This demo is not scored toward certification.'}
+                      </li>
+                    </ul>
+                  </div>
+                )}
+
+                {/* Step 4 — 감시 규칙 */}
+                {introStep === 4 && (
+                  <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding} min-h-[clamp(360px,48vh,560px)] flex items-center`}>
+                    <ul className={bulletList}>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '데모는 전체화면에서 진행됩니다. 전체화면을 벗어나면 경고가 발생합니다.'
+                          : 'The demo runs in fullscreen. Leaving fullscreen triggers a warning.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '카메라가 켜진 상태 — 얼굴 인식과 시선이 모니터링됩니다.'
+                          : 'Your camera stays on — face presence and gaze are monitored.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko'
+                          ? '마이크가 켜진 상태 — 시험 중 정숙을 유지하세요.'
+                          : 'Your microphone stays on — remain silent for the full duration.'}
+                      </li>
+                      <li className={bulletItem}>
+                        {lang === 'ko' ? '하나의 디스플레이만 허용됩니다.' : 'Only one display is allowed.'}
+                      </li>
+                      <li className={`${bulletItem} ${EXAM.color.danger}`}>
+                        {lang === 'ko'
+                          ? '실제 시험에서는 규칙을 반복 위반하면 시험이 강제로 종료됩니다.'
+                          : 'In the real exam, repeated violations force-terminate the session.'}
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-4">
+                {fullscreen.state.error && (
+                  <div className={`mb-3 ${EXAM.text.helper} ${EXAM.color.warning}`}>{fullscreen.state.error}</div>
+                )}
+                <StepperNav
+                  onPrev={goIntroPrev}
+                  onNext={goIntroNext}
+                  prevLabel={
+                    introStep === 0 ? (lang === 'ko' ? '마이페이지' : 'My Page') : lang === 'ko' ? '이전' : 'Back'
+                  }
+                  nextLabel={
+                    introStep < lastIntroStep
+                      ? lang === 'ko'
+                        ? '다음'
+                        : 'Next'
+                      : lang === 'ko'
+                        ? '데모 시작'
+                        : 'Start Demo'
+                  }
+                />
+              </div>
+            </section>
           </div>
         </main>
       </div>
@@ -1306,48 +1393,15 @@ export default function DemoPage() {
   const timerColor =
     remainingMs < 5 * 60_000 ? '#FFDE65' : remainingMs < 10 * 60_000 ? '#FCD34D' : undefined;
 
-  /* ── 전체화면 게이트 — Runner 의 fsgate 레이아웃 ── */
+  /* ── 전체화면 게이트 — 시험 도중 Esc 등으로 전체화면을 벗어난 경우 재진입 ── */
   if (!fullscreen.state.active) {
     return (
-      <>
-        <div className="h-screen w-screen bg-[#F8FAFC] flex flex-col overflow-hidden">
-          <DemoMultiDisplayNotice state={displayState} lang={lang} />
-          <main className="flex-1 min-h-0 w-full flex flex-col items-center justify-center overflow-hidden">
-            <div className={`w-full ${EXAM.layout.container} ${EXAM.layout.containerPx} ${EXAM.layout.containerPy} h-full flex items-center`}>
-              <section className="w-full h-full flex flex-col justify-center relative">
-                <div className="absolute top-0 right-0 z-10">
-                  <LangToggle />
-                </div>
-                <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding} text-center max-w-[clamp(480px,40vw,820px)] mx-auto w-full`}>
-                  <div className="mx-auto w-[clamp(56px,4.5vw,96px)] h-[clamp(56px,4.5vw,96px)] rounded-full bg-[#EFF6FF] flex items-center justify-center mb-[clamp(12px,1vw,24px)]">
-                    <Maximize2 className={`w-[clamp(26px,2.2vw,44px)] h-[clamp(26px,2.2vw,44px)] ${EXAM.color.brand}`} />
-                  </div>
-                  <h2 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink} mb-[clamp(8px,0.7vw,16px)]`}>
-                    {t('demo.gate.title' as never)}
-                  </h2>
-                  <p className={`${EXAM.text.body} ${EXAM.color.body} mb-[clamp(20px,1.6vw,40px)] leading-relaxed`}>
-                    {t('demo.gate.body1' as never)}{' '}
-                    <span className={`font-semibold ${EXAM.color.ink}`}>{t('demo.gate.bodyFs' as never)}</span>
-                    {t('demo.gate.body2' as never)}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={fullscreen.enterFullscreen}
-                    className={`${EXAM.button.primaryLg} ${EXAM.text.buttonLg}`}
-                  >
-                    {t('demo.gate.btn' as never)}
-                  </button>
-                  {fullscreen.state.error && (
-                    <div className={`mt-[clamp(12px,1vw,24px)] px-4 py-3 ${EXAM.surface.warningBox} ${EXAM.text.helper} ${EXAM.color.warning}`}>
-                      {fullscreen.state.error}
-                    </div>
-                  )}
-                </div>
-              </section>
-            </div>
-          </main>
-        </div>
-      </>
+      <DemoFullscreenGate
+        onEnter={() => void handleEnterDemoFullscreen()}
+        error={fullscreen.state.error}
+        displayState={displayState}
+        lang={lang}
+      />
     );
   }
 
@@ -2268,13 +2322,11 @@ function DemoResultView({
   const certLabel = `${CERT_LABEL[result.certType]} · ${result.level}`;
 
   return (
-    <div className="min-h-screen w-full bg-[#F8FAFC] flex flex-col font-sans [&_svg]:stroke-[1.5]">
-      {/* 액션 바 — 상단 GNB 대신 이 페이지 전용 컨트롤만 표시 */}
-      <div className="bg-[var(--exam-surface,#fff)] border-b border-[var(--exam-border,#E5E7EB)]">
+    <div className="h-screen w-full bg-[#F8FAFC] flex flex-col overflow-hidden font-sans [&_svg]:stroke-[1.5]">
+      <ExamPageHeader title={lang === 'ko' ? '데모 결과 리포트' : 'Demo Exam Report'} hideClock />
+      {/* 액션 바 — 배지 + 이 페이지 전용 컨트롤 */}
+      <div className="bg-[var(--exam-surface,#fff)] border-b border-[var(--exam-border,#E5E7EB)] shrink-0">
         <div className="max-w-[clamp(720px,65vw,2200px)] mx-auto px-[clamp(16px,2vw,48px)] py-[clamp(10px,0.9vw,18px)]">
-          <h1 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink} mb-3`}>
-            {lang === 'ko' ? '데모 결과 리포트' : 'Demo Exam Report'}
-          </h1>
           <div className="flex items-center justify-between gap-3 flex-wrap">
           <span
             className="inline-flex items-center px-2.5 py-1 rounded-md text-[clamp(12px,0.85vw,18px)] font-semibold"
@@ -2956,12 +3008,10 @@ function DemoCertificateView({
   ) : null;
 
   return (
-    <div className="min-h-screen w-full bg-[#F8FAFC] flex flex-col font-sans [&_svg]:stroke-[1.5]">
-      <div className="bg-[var(--exam-surface,#fff)] border-b border-[var(--exam-border,#E5E7EB)]">
+    <div className="h-screen w-full bg-[#F8FAFC] flex flex-col overflow-hidden font-sans [&_svg]:stroke-[1.5]">
+      <ExamPageHeader title={lang === 'ko' ? '체험용 자격증' : 'Demo Certificate'} hideClock />
+      <div className="bg-[var(--exam-surface,#fff)] border-b border-[var(--exam-border,#E5E7EB)] shrink-0">
         <div className="max-w-[clamp(720px,65vw,2200px)] mx-auto px-[clamp(16px,2vw,48px)] py-[clamp(10px,0.9vw,18px)]">
-          <h1 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink} mb-3`}>
-            {lang === 'ko' ? '체험용 자격증' : 'Demo Certificate'}
-          </h1>
           <div className="flex items-center justify-between gap-3 flex-wrap">
           <div className="flex items-center gap-2.5">
             <span
@@ -3107,12 +3157,10 @@ function DemoVerifyView({
       : '';
 
   return (
-    <div className="min-h-screen w-full bg-[#F8FAFC] flex flex-col font-sans [&_svg]:stroke-[1.5]">
+    <div className="h-screen w-full bg-[#F8FAFC] flex flex-col overflow-hidden font-sans [&_svg]:stroke-[1.5]">
+      <ExamPageHeader title={lang === 'ko' ? '자격 검증 체험' : 'Verify Demo'} hideClock />
       <main className="flex-1 min-h-0 overflow-y-auto">
         <div className="max-w-[clamp(720px,65vw,2200px)] mx-auto px-[clamp(16px,2vw,48px)] py-[clamp(16px,1.4vw,40px)]">
-          <h1 className={`${EXAM.text.sectionTitle} ${EXAM.color.ink} mb-3`}>
-            {lang === 'ko' ? '자격 검증 체험' : 'Verify Demo'}
-          </h1>
           <div className="flex items-center gap-2.5 mb-6">
             <span
               className="inline-flex items-center px-2.5 py-1 rounded-md text-[clamp(12px,0.85vw,18px)] font-semibold"

@@ -5,8 +5,8 @@ import { SiteHeader } from '@/components/marketing/SiteHeader';
 import { SiteFooter } from '@/components/marketing/SiteFooter';
 import { PageHeroSolid } from '@/components/marketing/PageHeroSolid';
 import { PageTabs } from '@/components/marketing/PageTabs';
-import { PdfPreviewModal } from '@/components/PdfPreviewModal';
 import { INFO_PDF_MAP, type InfoPdfId } from '@/constants/infoPdfDocuments';
+import { openPublicPdf } from '@/utils/openPublicPdf';
 import ctaBg from '@/assets/cta-bg.jpg';
 
 type CertTab = 'axis' | 'axis-c' | 'axis-h';
@@ -283,7 +283,6 @@ export default function CertGuidePage() {
     ['axis', 'axis-c', 'axis-h'].includes(initialCert) ? initialCert : 'axis',
   );
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [previewPdfId, setPreviewPdfId] = useState<InfoPdfId | null>(null);
   const revealRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -311,7 +310,7 @@ export default function CertGuidePage() {
   }, [activeTab]);
 
   const data = CERT_DATA[lang][activeTab];
-  const previewPdf = previewPdfId ? INFO_PDF_MAP[previewPdfId] : null;
+  const openInfoPdf = (pdfId: InfoPdfId) => openPublicPdf(INFO_PDF_MAP[pdfId].url);
 
   return (
     <div className="min-h-screen bg-white" style={{ fontFamily: 'var(--font-sans)' }}>
@@ -346,7 +345,9 @@ export default function CertGuidePage() {
               <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>{data.examGuide.title}</h2>
               <p className={`${T_BODY} mb-6`} style={{ color: GRAY_500 }}>{data.examGuide.body}</p>
               <div className="border-t-2 border-ink mt-4">
-                {data.examGuide.rows.map((row) => (
+                {data.examGuide.rows.map((row) => {
+                  const pdf = INFO_PDF_MAP[row.id as InfoPdfId];
+                  return (
                   <div
                     key={row.id}
                     className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 py-5"
@@ -361,14 +362,22 @@ export default function CertGuidePage() {
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
-                        onClick={() => setPreviewPdfId(row.id as InfoPdfId)}
+                        onClick={() => openInfoPdf(row.id as InfoPdfId)}
                         className="inline-flex h-10 items-center justify-center rounded-full border border-blue-600 bg-white px-5 text-[14px] font-semibold text-blue-700 transition-colors hover:bg-blue-50"
                       >
                         {t('certGuide.view' as never)}
                       </button>
+                      <a
+                        href={pdf.url}
+                        download={pdf.downloadName}
+                        className="inline-flex h-10 items-center justify-center rounded-full border border-[#D1D5DB] bg-white px-5 text-[14px] font-semibold text-[#374151] no-underline transition-colors hover:bg-[#F9FAFB]"
+                      >
+                        {t('certGuide.download' as never)}
+                      </a>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
             <div className="w-10 h-px  mb-14" />
@@ -533,11 +542,18 @@ export default function CertGuidePage() {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => setPreviewPdfId('axis-exam-info-b2c')}
+                  onClick={() => openInfoPdf('axis-exam-info-b2c')}
                   className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center rounded-full border border-white/85 bg-transparent px-6 sm:px-7 text-[15px] sm:text-[16px] font-semibold !text-white hover:!text-white touch-manipulation"
                 >
-                  {t('certGuide.cta.info' as never)}
+                  {t('certGuide.cta.info' as never)} · {t('certGuide.view' as never)}
                 </button>
+                <a
+                  href={INFO_PDF_MAP['axis-exam-info-b2c'].url}
+                  download={INFO_PDF_MAP['axis-exam-info-b2c'].downloadName}
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center rounded-full border border-white/65 bg-white/10 px-6 sm:px-7 text-[15px] sm:text-[16px] font-semibold !text-white no-underline hover:bg-white/15 touch-manipulation"
+                >
+                  {t('certGuide.cta.info' as never)} · {t('certGuide.download' as never)}
+                </a>
               </div>
             </div>
           </div>
@@ -545,14 +561,6 @@ export default function CertGuidePage() {
       </main>
 
       <SiteFooter />
-      {previewPdf ? (
-        <PdfPreviewModal
-          title={previewPdf.title}
-          url={previewPdf.url}
-          downloadName={previewPdf.downloadName}
-          onClose={() => setPreviewPdfId(null)}
-        />
-      ) : null}
     </div>
   );
 }

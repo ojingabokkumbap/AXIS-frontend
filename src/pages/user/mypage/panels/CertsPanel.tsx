@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useI18n } from '@/i18n';
 import type { InquiryCategory } from '@/services/api';
+import { userApi } from '@/services/api';
 import {
   Btn,
   SectionTitle,
@@ -10,7 +11,7 @@ import { DigitalBadgeModal } from '../SharedModals';
 import { certLabel, formatExamDate } from '../helpers';
 import type { CertificateDto, DashboardDto } from '../types';
 import { InfoCallout } from '@/components/InfoCallout';
-import { openPrintPopup } from '@/utils/openPrintPopup';
+import { openProtectedPdf } from '@/utils/openProtectedPdf';
 
 const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 
@@ -19,8 +20,11 @@ export function CertsPanel({ data }: { data: DashboardDto }) {
   const navigate = useNavigate();
   const [badgeFor, setBadgeFor] = useState<CertificateDto | null>(null);
 
-  const openCertificate = (cert: CertificateDto) =>
-    openPrintPopup(`/mypage/certificate/${encodeURIComponent(cert.certNumber)}`, `axis-cert-${cert.certNumber}`);
+  const openCertificate = async (cert: CertificateDto) =>
+    openProtectedPdf(
+      async () => (await userApi.downloadCertificatePdf(cert.certNumber)).data,
+      `${cert.certNumber}.pdf`,
+    );
 
   const requestPhysicalCopy = () =>
     navigate('/qna', {

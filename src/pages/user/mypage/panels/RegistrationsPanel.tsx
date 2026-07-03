@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ClipboardCheck, FileText, Megaphone, MessageCircle, ScrollText } from 'lucide-react';
 import { useI18n } from '@/i18n';
 import { InfoCallout } from '@/components/InfoCallout';
+import { userApi } from '@/services/api';
 import {
   Btn,
   EmptyState,
@@ -21,10 +22,10 @@ import {
   formatExamDate,
   formatKrw,
   formatLocalDateTime,
-  openPrintPopup,
   regBadge,
 } from '../helpers';
 import type { DashboardDto, RegistrationDto } from '../types';
+import { openProtectedPdf } from '@/utils/openProtectedPdf';
 
 function registrationStatusView(
   r: RegistrationDto,
@@ -252,7 +253,12 @@ function RegistrationsSection({
                           <Btn
                             variant="blue"
                             className="btn-sm bg-blue-500"
-                            onClick={() => openPrintPopup(`/mypage/voucher/${encodeURIComponent(r.id)}`, `axis-voucher-${r.id}`)}
+                            onClick={() =>
+                              openProtectedPdf(
+                                async () => (await userApi.downloadVoucherPdf(r.id)).data,
+                                `AXIS_voucher_${r.id}.pdf`,
+                              )
+                            }
                           >
                             {t('mypage.act.printVoucher' as never)}
                           </Btn>
@@ -346,7 +352,12 @@ function RegistrationsSection({
                       <Btn
                         variant="blue"
                         className="w-full min-h-[44px]"
-                        onClick={() => openPrintPopup(`/mypage/voucher/${encodeURIComponent(r.id)}`, `axis-voucher-${r.id}`)}
+                        onClick={() =>
+                          openProtectedPdf(
+                            async () => (await userApi.downloadVoucherPdf(r.id)).data,
+                            `AXIS_voucher_${r.id}.pdf`,
+                          )
+                        }
                       >
                         {t('mypage.act.printVoucher' as never)}
                       </Btn>

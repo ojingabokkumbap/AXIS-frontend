@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { InquiryCategory } from '@/services/api';
+import { userApi, type InquiryCategory } from '@/services/api';
 import { useI18n } from '@/i18n';
 import {
   Badge,
@@ -19,6 +19,7 @@ import {
 } from '../helpers';
 import type { DashboardDto, ResultDto } from '../types';
 import { InfoCallout } from '@/components/InfoCallout';
+import { openProtectedPdf } from '@/utils/openProtectedPdf';
 
 const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 
@@ -27,17 +28,11 @@ function ResultsSection({ data }: { data: DashboardDto }) {
   const navigate = useNavigate();
   const [scoreDetailFor, setScoreDetailFor] = useState<ResultDto | null>(null);
 
-  const openConfirmation = (r: ResultDto) => {
-    const url = `/mypage/confirmation/${encodeURIComponent(r.id)}`;
-    const w = 860;
-    const h = Math.min(1040, window.screen.availHeight - 40);
-    const left = window.screenX + Math.max(0, (window.outerWidth - w) / 2);
-    const top = window.screenY + Math.max(0, (window.outerHeight - h) / 2);
-    const features = `popup=yes,width=${w},height=${h},left=${Math.round(left)},top=${Math.round(top)},resizable=yes,scrollbars=yes`;
-    const popup = window.open(url, `axis-confirm-${r.id}`, features);
-    if (!popup) window.open(url, '_blank', 'noopener');
-    else popup.focus();
-  };
+  const openConfirmation = async (r: ResultDto) =>
+    openProtectedPdf(
+      async () => (await userApi.downloadConfirmationPdf(r.id)).data,
+      `AXIS_confirmation_${r.id}.pdf`,
+    );
 
   // 데스크톱 테이블/모바일 카드가 같은 케밥 메뉴 항목을 공유한다.
   const kebabItems = (r: ResultDto) => [

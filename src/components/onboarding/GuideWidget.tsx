@@ -51,16 +51,6 @@ export function GuideWidget() {
       {open && (
         <div className="w-[300px] max-w-[86vw] overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5">
           <div className="flex items-center gap-3 bg-white px-4 py-3">
-            <video
-              src={GUIDE_MASCOT_SRC}
-              poster={GUIDE_MASCOT_POSTER}
-              muted
-              loop
-              autoPlay
-              playsInline
-              className="h-9 w-9 shrink-0 rounded-full bg-blue-50 object-cover ring-1 ring-black/10"
-              style={{ objectPosition: 'center 18%' }}
-            />
             <span className="text-[14px] font-semibold text-[#191919]">
               {t('guide.popover.title')}
             </span>
@@ -102,10 +92,10 @@ export function GuideWidget() {
       {/* ── 첫 방문 힌트 말풍선 ── */}
       {showHint && (
         <button
-          key={pathname}
+          key={`hint-${pathname}`}
           type="button"
           onClick={() => setOpen(true)}
-          style={{ animation: 'axis-guide-pop 560ms cubic-bezier(0.34,1.56,0.64,1) both' }}
+          style={{ animation: 'axis-guide-pop 500ms cubic-bezier(0.34,1.56,0.64,1) 460ms both' }}
           className="group relative rounded-full bg-blue-500 px-3.5 py-2 text-[12.5px] font-medium text-white shadow-lg"
         >
           {t('guide.widget.hint')}
@@ -120,7 +110,7 @@ export function GuideWidget() {
           key={pathname} 로 라우트가 바뀔 때마다 래퍼가 리마운트되어 등장 애니메이션이 재생된다.
           (등장 애니메이션은 래퍼가, hover 리프트는 버튼이 담당 — transform 충돌 방지) */}
       <div
-        key={pathname}
+        key={`orb-${pathname}`}
         style={{ animation: 'axis-guide-pop 560ms cubic-bezier(0.34,1.56,0.64,1) both' }}
       >
         <button

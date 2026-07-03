@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState, type ReactNode } from 'react';
 import { isAxiosError } from 'axios';
 import { useI18n } from '@/i18n';
-import { registrationsApi } from '@/services/api';
+import { registrationsApi, userApi } from '@/services/api';
 import {
   Btn,
   EmptyState,
@@ -12,13 +12,13 @@ import {
   formatExamDate,
   formatLocalDateTime,
   isEligibilityRefundEligible,
-  openPrintPopup,
   registrationExamEntryState,
 } from '../helpers';
 import type { DashboardDto, ExamEntryGateKind, RegistrationDto } from '../types';
 import { localizeEligibilityNote } from '../eligibilityNote';
 import { InfoCallout } from '@/components/InfoCallout';
 import { ResultModal, ResultModalButton, ResultModalInlineText } from '@/components/ResultModal';
+import { openProtectedPdf } from '@/utils/openProtectedPdf';
 
 const TABLE_WRAP = 'hidden md:block w-full overflow-x-auto border-t-2 border-ink mt-4 mb-2';
 
@@ -185,7 +185,12 @@ function VoucherButton({
     <Btn
       variant="blue"
       className={className}
-      onClick={() => openPrintPopup(`/mypage/voucher/${encodeURIComponent(regId)}`, `axis-voucher-${regId}`)}
+      onClick={() =>
+        openProtectedPdf(
+          async () => (await userApi.downloadVoucherPdf(regId)).data,
+          `AXIS_voucher_${regId}.pdf`,
+        )
+      }
     >
       {label}
     </Btn>

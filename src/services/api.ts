@@ -228,6 +228,18 @@ export const userApi = {
   changePassword: (data: { currentPassword: string; newPassword: string }) =>
     api.post('/auth/change-password', data),
   getDashboard: () => api.get('/users/me/dashboard'),
+  downloadCertificatePdf: (certNumber: string) =>
+    api.get<Blob>(`/certificates/mine/${encodeURIComponent(certNumber)}/download`, {
+      responseType: 'blob',
+    }),
+  downloadConfirmationPdf: (resultId: string) =>
+    api.get<Blob>(`/results/mine/${encodeURIComponent(resultId)}/confirmation.pdf`, {
+      responseType: 'blob',
+    }),
+  downloadVoucherPdf: (registrationId: string) =>
+    api.get<Blob>(`/registrations/${encodeURIComponent(registrationId)}/voucher.pdf`, {
+      responseType: 'blob',
+    }),
 };
 
 // Schedules API

@@ -727,7 +727,7 @@ export const ko = {
   'demo.gate.bodyFs': '전체화면',
   'demo.gate.body2':
     '에서만 진행됩니다. 아래 버튼을 누르면 전체화면이 활성화되고 데모가 시작됩니다.',
-  'demo.gate.btn': '전체화면으로 데모 시작',
+  'demo.gate.btn': '데모시작',
   'demo.exitConfirm.title': '데모를 종료하시겠습니까?',
   'demo.exitConfirm.body':
     '홈으로 이동하면 데모가 종료됩니다. 지금까지의 답안은 저장되지 않습니다.',
@@ -1521,6 +1521,7 @@ export const ko = {
   'certGuide.hero.subtitle': 'AI 시대를 선도하는\nAXIS 자격 체계를 확인하세요',
   'certGuide.overviewTitle': '{cert} 개요',
   'certGuide.view': '바로보기',
+  'certGuide.download': '다운로드',
   'certGuide.levels.title': '등급 체계',
   'certGuide.levels.th.level': '등급',
   'certGuide.levels.th.target': '대상',
