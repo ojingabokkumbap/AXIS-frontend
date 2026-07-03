@@ -1840,6 +1840,9 @@ export const ko = {
     '데모·실전 시험은 웹캠 감독과 전체화면 환경이 필요해 데스크톱/노트북에서만 응시할 수 있습니다. 시험 당일에는 꼭 PC로 접속해 주세요.',
   'siteTour.mobileGuide.confirm': '확인했어요',
   'siteTour.mobileGuide.close': '닫기',
+  'siteTour.mobileGuide.next': '다음',
+  'siteTour.mobileGuide.skip': '건너뛰기',
+  'siteTour.mobileGuide.prev': '이전',
 
   // ── 자격 안내 (CertGuidePage) — 본문 콘텐츠는 페이지 내 언어별 데이터 맵 사용
   'certGuide.hero.subtitle': 'AI 시대를 선도하는\nAXIS 자격 체계를 확인하세요',
@@ -1900,6 +1903,12 @@ export const ko = {
   'results.empty': '해당 자격의 발표된 회차가 없습니다.',
   'results.pagination.aria': '회차 목록 페이지',
   'results.mobileReg': '접수',
+  'results.filter.all': '전체',
+  'results.filter.statusAria': '상태 필터',
+  'results.filter.period': '시험일',
+  'results.filter.from': '시험일 시작',
+  'results.filter.to': '시험일 종료',
+  'results.filter.reset': '초기화',
 
   'results.lookup.title': '내 결과 확인',
   'results.lookup.desc':

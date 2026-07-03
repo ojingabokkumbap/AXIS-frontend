@@ -349,12 +349,19 @@ export const resultsApi = {
     api.post<PublicLookupResponse>('/results/public/lookup', body),
   publicRounds: (opts?: {
     certType?: 'AXIS' | 'AXIS_C' | 'AXIS_H';
+    status?: PublicRoundPublicationState;
+    /** 시험일 범위 (KST, YYYY-MM-DD) */
+    from?: string;
+    to?: string;
     page?: number;
     pageSize?: number;
   }) =>
     api.get<PublicRoundsListResponse>('/results/public/rounds', {
       params: {
         ...(opts?.certType ? { certType: opts.certType } : {}),
+        ...(opts?.status ? { status: opts.status } : {}),
+        ...(opts?.from ? { from: opts.from } : {}),
+        ...(opts?.to ? { to: opts.to } : {}),
         ...(opts?.page != null ? { page: opts.page } : {}),
         ...(opts?.pageSize != null ? { pageSize: opts.pageSize } : {}),
       },

@@ -6,7 +6,12 @@ import { SiteFooter } from '@/components/marketing/SiteFooter';
 import { PageHeroSolid } from '@/components/marketing/PageHeroSolid';
 import { PageTabs } from '@/components/marketing/PageTabs';
 import { ResultModal, ResultModalEmpty, ResultModalRows } from '@/components/ResultModal';
-import { resultsApi, type PublicPassListResponse, type PublicRoundRow } from '@/services/api';
+import {
+  resultsApi,
+  type PublicPassListResponse,
+  type PublicRoundPublicationState,
+  type PublicRoundRow,
+} from '@/services/api';
 import { InfoCallout } from '@/components/InfoCallout';
 
 /* ─────────────────────────────────────────────────────────────
@@ -23,6 +28,16 @@ const FIELD_INPUT =
 type FilterTab = 'AXIS' | 'AXIS-C' | 'AXIS-H';
 
 type ResultsTab = 'sessions' | 'lookup';
+
+const STATUS_FILTERS: { key: 'all' | PublicRoundPublicationState; color: string }[] = [
+  { key: 'all', color: 'var(--color-ink)' },
+  { key: 'announced', color: 'var(--color-status-success)' },
+  { key: 'grading', color: 'var(--color-status-grading)' },
+  { key: 'upcoming', color: '#64748B' },
+];
+
+const DATE_INPUT =
+  'h-11 sm:h-10 rounded-md border bg-white px-3 text-[16px] sm:text-[14px] text-ink focus-visible:outline-2 focus-visible:outline-blue focus-visible:outline-offset-2';
 
 function formatExamDateKst(iso: string): string {
   const s = new Intl.DateTimeFormat('sv-SE', {
@@ -305,6 +320,9 @@ export default function ResultsPage() {
 
   const [activeTab, setActiveTab] = useState<ResultsTab>('sessions');
   const [filterTrack, setFilterTrack] = useState<FilterTab>('AXIS');
+  const [filterStatus, setFilterStatus] = useState<'all' | PublicRoundPublicationState>('all');
+  const [filterDateFrom, setFilterDateFrom] = useState('');
+  const [filterDateTo, setFilterDateTo] = useState('');
   const [roundsPage, setRoundsPage] = useState(1);
   const [roundRows, setRoundRows] = useState<PublicRoundRow[]>([]);
   const [roundsMeta, setRoundsMeta] = useState<{
@@ -353,6 +371,9 @@ export default function ResultsPage() {
     resultsApi
       .publicRounds({
         certType: filterTabToCertType(filterTrack),
+        ...(filterStatus !== 'all' ? { status: filterStatus } : {}),
+        ...(filterDateFrom ? { from: filterDateFrom } : {}),
+        ...(filterDateTo ? { to: filterDateTo } : {}),
         page: roundsPage,
         pageSize: ROUNDS_PAGE_SIZE,
       })
@@ -388,7 +409,7 @@ export default function ResultsPage() {
     return () => {
       cancelled = true;
     };
-  }, [activeTab, filterTrack, roundsPage, roundsReloadTick]);
+  }, [activeTab, filterTrack, filterStatus, filterDateFrom, filterDateTo, roundsPage, roundsReloadTick]);
 
   const openPassList = (scheduleId: string) => {
     setModalEntryPage(1);
@@ -506,7 +527,7 @@ export default function ResultsPage() {
                 </InfoCallout>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 mb-10">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
                 {filterTabs.map((tab) => {
                   const active = filterTrack === tab;
                   return (
@@ -527,6 +548,85 @@ export default function ResultsPage() {
                     </button>
                   );
                 })}
+              </div>
+
+              <div className="mb-10 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t('results.filter.statusAria' as never)}>
+                  {STATUS_FILTERS.map((f) => {
+                    const active = filterStatus === f.key;
+                    return (
+                      <button
+                        key={f.key}
+                        type="button"
+                        onClick={() => {
+                          setFilterStatus(f.key);
+                          setRoundsPage(1);
+                        }}
+                        className="inline-flex items-center gap-1.5 h-10 sm:h-9 px-4 rounded-full border text-[14px] font-semibold whitespace-nowrap transition-colors cursor-pointer"
+                        style={
+                          active
+                            ? { background: f.color, borderColor: f.color, color: '#fff' }
+                            : { background: '#fff', borderColor: 'var(--color-border)', color: 'var(--color-muted)' }
+                        }
+                      >
+                        {f.key !== 'all' && (
+                          <span
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{ background: active ? '#fff' : f.color }}
+                            aria-hidden
+                          />
+                        )}
+                        {f.key === 'all'
+                          ? t('results.filter.all' as never)
+                          : t(`results.status.${f.key}` as never)}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="text-[13px] font-medium text-muted whitespace-nowrap">
+                    {t('results.filter.period' as never)}
+                  </span>
+                  <input
+                    type="date"
+                    value={filterDateFrom}
+                    max={filterDateTo || undefined}
+                    onChange={(e) => {
+                      setFilterDateFrom(e.target.value);
+                      setRoundsPage(1);
+                    }}
+                    aria-label={t('results.filter.from' as never)}
+                    className={DATE_INPUT}
+                    style={{ borderColor: '#e5e7eb' }}
+                  />
+                  <span className="text-faint" aria-hidden>–</span>
+                  <input
+                    type="date"
+                    value={filterDateTo}
+                    min={filterDateFrom || undefined}
+                    onChange={(e) => {
+                      setFilterDateTo(e.target.value);
+                      setRoundsPage(1);
+                    }}
+                    aria-label={t('results.filter.to' as never)}
+                    className={DATE_INPUT}
+                    style={{ borderColor: '#e5e7eb' }}
+                  />
+                  {(filterDateFrom || filterDateTo) && (
+                    <button
+                      type="button"
+                      className="btn-text btn-sm"
+                      onClick={() => {
+                        setFilterDateFrom('');
+                        setFilterDateTo('');
+                        setRoundsPage(1);
+                      }}
+                    >
+                      {t('results.filter.reset' as never)}
+                    </button>
+                  )}
+                </div>
               </div>
 
               {roundsError && roundRows.length === 0 && !roundsLoading ? (

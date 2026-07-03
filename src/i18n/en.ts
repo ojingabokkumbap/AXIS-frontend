@@ -1808,6 +1808,9 @@ export const en = {
     'Demo and real exams need webcam proctoring and a fullscreen environment, so they can only be taken on a desktop or laptop. Please switch to a PC on exam day.',
   'siteTour.mobileGuide.confirm': 'Got it',
   'siteTour.mobileGuide.close': 'Close',
+  'siteTour.mobileGuide.next': 'Next',
+  'siteTour.mobileGuide.skip': 'Skip',
+  'siteTour.mobileGuide.prev': 'Back',
 
   // ── Cert Guide (CertGuidePage) — body content lives in a per-language data map in the page
   'certGuide.hero.subtitle': 'Explore the AXIS certification framework\nbuilt for the AI era',
@@ -1868,6 +1871,12 @@ export const en = {
   'results.empty': 'No announced rounds for this certification yet.',
   'results.pagination.aria': 'Round list pages',
   'results.mobileReg': 'Registered',
+  'results.filter.all': 'All',
+  'results.filter.statusAria': 'Status filter',
+  'results.filter.period': 'Exam date',
+  'results.filter.from': 'Exam date from',
+  'results.filter.to': 'Exam date to',
+  'results.filter.reset': 'Reset',
 
   'results.lookup.title': 'Check My Result',
   'results.lookup.desc':
