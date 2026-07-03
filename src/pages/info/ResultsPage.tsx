@@ -153,6 +153,57 @@ function LookupResultModalView({ result, onClose }: { result: LookupModalResult;
   );
 }
 
+function PublicationBadge({ state }: { state: 'announced' | 'grading' | 'upcoming' }) {
+  const { t } = useI18n();
+  const style =
+    state === 'announced'
+      ? { background: 'rgba(5, 150, 105, 0.1)', color: 'var(--color-status-success)' }
+      : state === 'grading'
+        ? { background: 'rgba(217, 119, 6, 0.1)', color: 'var(--color-status-grading)' }
+        : { background: '#F1F5F9', color: 'var(--color-muted)' };
+  return (
+    <span
+      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[12.5px] font-semibold whitespace-nowrap"
+      style={style}
+    >
+      <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'currentColor' }} aria-hidden />
+      {t(`results.status.${state}` as never)}
+    </span>
+  );
+}
+
+function EmptyRounds() {
+  const { t } = useI18n();
+  return (
+    <div className="flex flex-col items-center gap-3 py-10">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-faint" aria-hidden>
+        <path d="M6 5h12l2 8v6H4v-6l2-8Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+        <path d="M4 13h4l2 3h4l2-3h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <p className="text-[14px] text-muted">{t('results.empty' as never)}</p>
+    </div>
+  );
+}
+
+function RoundsErrorState({ kind, onRetry }: { kind: 'server' | 'generic'; onRetry: () => void }) {
+  const { t } = useI18n();
+  return (
+    <div className="border-t-2 border-ink mt-4 mb-2">
+      <div className="flex flex-col items-center gap-3 border-b border-border px-4 py-12 text-center">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" className="text-faint" aria-hidden>
+          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+          <path d="M12 7.5V12.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+          <circle cx="12" cy="16" r="1" fill="currentColor" />
+        </svg>
+        <p className="max-w-[420px] break-keep text-[14px] text-muted">{t(`results.error.${kind}` as never)}</p>
+        <button type="button" className="btn-secondary btn-sm mt-1" onClick={onRetry}>
+          {t('common.retry')}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function Toast({ message, onClose }: { message: string; onClose: () => void }) {
   useEffect(() => {
     const timer = setTimeout(onClose, 3500);
@@ -265,6 +316,7 @@ export default function ResultsPage() {
   const [roundsLoading, setRoundsLoading] = useState(false);
   // Stored as an error *kind* so the message re-translates on language switch.
   const [roundsError, setRoundsError] = useState<'server' | 'generic' | null>(null);
+  const [roundsReloadTick, setRoundsReloadTick] = useState(0);
   const [modalEntryPage, setModalEntryPage] = useState(1);
   const [passModal, setPassModal] = useState<
     | { scheduleId: string; loading: true }
@@ -336,7 +388,7 @@ export default function ResultsPage() {
     return () => {
       cancelled = true;
     };
-  }, [activeTab, filterTrack, roundsPage]);
+  }, [activeTab, filterTrack, roundsPage, roundsReloadTick]);
 
   const openPassList = (scheduleId: string) => {
     setModalEntryPage(1);
@@ -442,7 +494,7 @@ export default function ResultsPage() {
                 {t('results.sessions.descPost' as never)}
               </p>
 
-              <div className="mb-10">
+              <div className="mb-10 rounded-lg border border-[#DBEAFE] bg-[#F5F9FF] px-4 py-4 sm:px-5 sm:py-5 space-y-2.5">
                 <InfoCallout tone="blue">
                   <p>{t('results.callout1' as never)}</p>
                 </InfoCallout>
@@ -454,7 +506,7 @@ export default function ResultsPage() {
                 </InfoCallout>
               </div>
 
-              <div className="flex items-center mb-10 w-full border border-gray-300 divide-x divide-gray-300">
+              <div className="flex flex-wrap items-center gap-2 mb-10">
                 {filterTabs.map((tab) => {
                   const active = filterTrack === tab;
                   return (
@@ -465,10 +517,10 @@ export default function ResultsPage() {
                         setFilterTrack(tab);
                         setRoundsPage(1);
                       }}
-                      className={`flex-1 px-2 sm:px-4 py-3 text-[15px] sm:text-[17px] font-medium transition-all whitespace-nowrap cursor-pointer ${
+                      className={`inline-flex items-center h-10 sm:h-11 px-5 sm:px-6 rounded-full border text-[14.5px] sm:text-[15.5px] font-semibold font-en whitespace-nowrap transition-colors cursor-pointer ${
                         active
-                          ? 'bg-blue-500 text-white'
-                          : ' text-gray-500 hover:text-ink'
+                          ? 'bg-blue-500 border-blue-500 text-white'
+                          : 'bg-white border-gray-300 text-gray-500 hover:text-ink hover:border-gray-400'
                       }`}
                     >
                       {tab}
@@ -477,11 +529,16 @@ export default function ResultsPage() {
                 })}
               </div>
 
-              {roundsError && (
+              {roundsError && roundRows.length === 0 && !roundsLoading ? (
+                <RoundsErrorState
+                  kind={roundsError}
+                  onRetry={() => setRoundsReloadTick((n) => n + 1)}
+                />
+              ) : (
+                <>
+              {roundsError && roundRows.length > 0 && (
                 <p className="text-[14px] text-red-600 mb-4">{t(`results.error.${roundsError}` as never)}</p>
               )}
-
-
 
               <div className={`${TABLE_WRAP} hidden md:block`} aria-busy={roundsLoading}>
                 <table className="data-table" style={{ minWidth: 940 }}>
@@ -522,14 +579,9 @@ export default function ResultsPage() {
                           </td>
                           <td className="text-muted">{formatExamDateKst(s.examDate)}</td>
                           <td>
-                            {s.publicationState === 'announced' ? (
-                              <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2">
-                                <span
-                                  className="text-[13px] font-semibold"
-                                  style={{ color: 'var(--color-status-success)' }}
-                                >
-                                  {t('results.status.announced' as never)}
-                                </span>
+                            <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:gap-2">
+                              <PublicationBadge state={s.publicationState} />
+                              {announced && (
                                 <button
                                   type="button"
                                   className="btn-text btn-sm"
@@ -537,17 +589,8 @@ export default function ResultsPage() {
                                 >
                                   {t('results.detail' as never)}
                                 </button>
-                              </div>
-                            ) : s.publicationState === 'grading' ? (
-                              <span
-                                className="text-[13px] font-semibold"
-                                style={{ color: 'var(--color-status-grading)' }}
-                              >
-                                {t('results.status.grading' as never)}
-                              </span>
-                            ) : (
-                              <span className="text-[13px] font-semibold text-faint">{t('results.status.upcoming' as never)}</span>
-                            )}
+                              )}
+                            </div>
                           </td>
                           <td className="text-center">
                             <span style={{ fontFamily: 'var(--font-en)' }}>
@@ -598,8 +641,8 @@ export default function ResultsPage() {
                     )}
                     {!roundsLoading && roundRows.length === 0 && !roundsError && (
                       <tr>
-                        <td colSpan={7} className="text-center text-muted py-8">
-                          {t('results.empty' as never)}
+                        <td colSpan={7}>
+                          <EmptyRounds />
                         </td>
                       </tr>
                     )}
@@ -626,31 +669,15 @@ export default function ResultsPage() {
                         {formatRoundCertLabel(s.certType, s.level)}
                       </div>
                       <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                        {s.publicationState === 'announced' ? (
-                          <>
-                            <span
-                              className="text-[13px] font-semibold"
-                              style={{ color: 'var(--color-status-success)' }}
-                            >
-                              {t('results.status.announced' as never)}
-                            </span>
-                            <button
-                              type="button"
-                              className="btn-text btn-sm"
-                              onClick={() => openPassList(s.scheduleId)}
-                            >
-                              {t('results.detail' as never)}
-                            </button>
-                          </>
-                        ) : s.publicationState === 'grading' ? (
-                          <span
-                            className="text-[13px] font-semibold"
-                            style={{ color: 'var(--color-status-grading)' }}
+                        <PublicationBadge state={s.publicationState} />
+                        {announced && (
+                          <button
+                            type="button"
+                            className="btn-text btn-sm"
+                            onClick={() => openPassList(s.scheduleId)}
                           >
-                            {t('results.status.grading' as never)}
-                          </span>
-                        ) : (
-                          <span className="text-[13px] font-semibold text-faint">{t('results.status.upcoming' as never)}</span>
+                            {t('results.detail' as never)}
+                          </button>
                         )}
                       </div>
                       <div className="mt-2 flex flex-wrap items-center gap-2 text-[13px]">
@@ -691,10 +718,10 @@ export default function ResultsPage() {
                 {roundsLoading && roundRows.length === 0 && (
                   <p className="text-center text-muted py-8 text-[14px]">{t('results.loading' as never)}</p>
                 )}
-                {!roundsLoading && roundRows.length === 0 && !roundsError && (
-                  <p className="text-center text-muted py-8 text-[14px]">{t('results.empty' as never)}</p>
-                )}
+                {!roundsLoading && roundRows.length === 0 && !roundsError && <EmptyRounds />}
               </div>
+                </>
+              )}
 
               {roundsLoading && roundRows.length > 0 && (
                 <p className="text-[14px] text-muted mt-3">{t('results.loading' as never)}</p>
