@@ -45,7 +45,7 @@ export function PageHero({
       />
 
       <div
-        className="relative mx-auto w-full min-h-[inherit] px-4 sm:px-6 lg:px-10 flex flex-col justify-center pt-24 sm:pt-28 lg:pt-36 pb-12 sm:pb-20 lg:pb-24"
+        className="relative mx-auto w-full min-h-[inherit] px-5 sm:px-6 lg:px-10 flex flex-col justify-center pt-24 sm:pt-28 lg:pt-36 pb-12 sm:pb-20 lg:pb-24"
         style={{ maxWidth: 1280 }}
       >
         <h1 className="text-[28px] sm:text-[40px] lg:text-[54px] font-semibold leading-[1.2] sm:leading-[1.15] tracking-tight text-white">

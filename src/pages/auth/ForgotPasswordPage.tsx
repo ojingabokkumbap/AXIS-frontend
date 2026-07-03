@@ -241,7 +241,7 @@ export default function ForgotPasswordPage() {
         }}
       />
 
-      <main className="mx-auto w-full max-w-[var(--spacing-content-w)] px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
+      <main className="mx-auto w-full max-w-[var(--spacing-content-w)] px-5 py-12 sm:px-6 sm:py-20 lg:px-8">
         <div className="grid gap-10 sm:gap-8 sm:rounded-xl sm:border sm:border-[#E0E4ED] sm:p-6 lg:grid-cols-[1fr_1fr] lg:gap-12 lg:p-10">
           <section className="bg-white sm:p-4">
             <h2 className="mb-6 text-[22px] font-semibold tracking-[-0.02em] text-gray-800 sm:text-[26px] lg:mb-8 lg:text-[30px]">{t('forgot.heroTitle')}</h2>

@@ -20,7 +20,7 @@ export function PageHeroSolid({
       className={`relative overflow-hidden min-h-[70px] ${bgClassName} py-14`}
     >
       <div
-        className="relative mx-auto w-full min-h-[inherit] px-4 sm:px-6 lg:px-10 flex flex-col justify-center"
+        className="relative mx-auto w-full min-h-[inherit] px-5 sm:px-6 lg:px-10 flex flex-col justify-center"
         style={{ maxWidth: 1280 }}
       >
         <h1 className="text-[28px] sm:text-[35px] font-semibold leading-[1.2] sm:leading-[1.15] tracking-tight text-white">

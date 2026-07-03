@@ -17,6 +17,7 @@ export const en = {
   'gnb.guide': 'Cert Guide',
   'gnb.applyNav': 'Register',
   'gnb.cbtNav': 'Take Demo Exam',
+  'gnb.demoBadge': 'Try Now',
   'gnb.announce': 'Results',
   'gnb.verify': 'Verify Cert',
   'gnb.support': 'Support',
@@ -1479,338 +1480,9 @@ export const en = {
   'fsgate.title': 'Ready to take the exam',
   'fsgate.body': 'The exam runs in fullscreen only. Click the button below to enter fullscreen and start the exam.',
   'fsgate.body2': 'Leaving fullscreen accumulates warnings. Three warnings forces termination.',
-  // ── Demo Tour (game-style spotlight tutorial) ─────────
-  'demoTour.controls.next': 'Next',
-  'demoTour.controls.prev': 'Previous',
-  'demoTour.controls.skip': 'Skip tutorial',
-  'demoTour.controls.finish': 'Got it',
-  'demoTour.controls.realExam': 'On the real exam',
-  'demoTour.controls.replay': 'Replay tutorial',
-  'demoTour.controls.progress': 'Step {i} of {n}',
-
-  // 1) Intro tour — before clicking Start
-  'demoTour.intro.welcome.title': 'Welcome to the Demo Exam tutorial',
-  'demoTour.intro.welcome.body':
-    'The demo walks you through ① prep → ② exam → ③ report → ④ sample certificate → ⑤ verify flow. Each screen auto-starts a guide (up to 5 steps).',
-  'demoTour.intro.welcome.real':
-    "This tutorial doesn't appear in the real exam. Use the demo to get comfortable now.",
-
-  'demoTour.intro.picker.title': 'Pick your series and level',
-  'demoTour.intro.picker.body':
-    'Switch freely between AXIS / AXIS-C / AXIS-H and L3 / L2 / L1 to try different demos.',
-  'demoTour.intro.picker.real':
-    'Locked to the series and level you registered for. No changes allowed.',
-
-  'demoTour.intro.rules.title': 'Proctoring rules — identical to the real exam',
-  'demoTour.intro.rules.body':
-    'Fullscreen-only, camera + microphone ON, single display. Every rule above is enforced here too.',
-  'demoTour.intro.rules.real':
-    'Three strikes = automatic forced termination, plus up to a 2-year ban if cheating is confirmed.',
-
-  'demoTour.intro.start.title': 'Press here when ready',
-  'demoTour.intro.start.body':
-    'Hitting Start switches the browser to fullscreen and starts the timer.',
-  'demoTour.intro.start.real':
-    'Same flow — but the real exam adds ID-OCR and live face match gates before this step.',
-
-  'demoTour.intro.help.title': 'Need a refresher? Look bottom-right.',
-  'demoTour.intro.help.body':
-    'Tap the Site guide compass button in the bottom-right corner to replay this page guide anytime.',
-
-  // 1b) Gate tour — fullscreen entry screen
-  'demoTour.gate.welcome.title': 'Fullscreen entry screen',
-  'demoTour.gate.welcome.body':
-    'If the browser blocks fullscreen after Start, you land here. Same security step as the real exam.',
-  'demoTour.gate.welcome.real':
-    'You cannot enter the question screen without fullscreen in the real exam either.',
-
-  'demoTour.gate.enter.title': 'Allow fullscreen',
-  'demoTour.gate.enter.body':
-    'Press the button below to enter fullscreen and open the exam UI. Camera and mic activate too.',
-  'demoTour.gate.enter.real':
-    'Leaving fullscreen accumulates warnings — three strikes force-terminate in the real exam.',
-
-  'demoTour.gate.help.title': 'Need a refresher? Look bottom-right.',
-  'demoTour.gate.help.body':
-    'Use the Site guide button in the bottom-right corner to replay this screen guide.',
-
-  // 2) Runner tour — live exam screen
-  'demoTour.runner.timer.title': 'Server-side timer — the real clock',
-  'demoTour.runner.timer.body':
-    'The countdown in the header is a mirror of the server clock. Refreshing or opening a new tab will not pause time.',
-  'demoTour.runner.timer.real':
-    "Same authority. When time hits zero on the server, your answers are auto-submitted whether you're done or not.",
-
-  'demoTour.runner.toolbar.title': 'Layout · zoom · theme · alerts',
-  'demoTour.runner.toolbar.body':
-    'Change layout, zoom, and theme. The bell shows proctor alerts; strike counters at the bottom track gaze, voice, and screen-exit violations.',
-  'demoTour.runner.toolbar.real':
-    'Identical in the real exam — feel free to customize for comfort anytime.',
-
-  'demoTour.runner.question.title': 'Question card — read, click, done',
-  'demoTour.runner.question.body':
-    "Read the stem, click an option. Your answer auto-saves instantly and you can change it any time before submit.",
-  'demoTour.runner.question.real':
-    'Same — but the real exam detects duplicate-tab edits via version conflict and shows a warning.',
-
-  'demoTour.runner.sheet.title': 'Answer sheet — fast navigation',
-  'demoTour.runner.sheet.body':
-    'Jump to any question by clicking its number. Answered ones are color-coded; use the flag (🚩) to revisit later.',
-  'demoTour.runner.sheet.real':
-    'Pixel-identical UI in the real exam. Worth memorizing the shortcuts now.',
-
-  'demoTour.runner.violations.title': 'Violation counters — yes, the demo counts too',
-  'demoTour.runner.violations.body':
-    'Gaze drift (GAZE), voice (VOICE) and screen exit (LEAVE) accumulate here when triggered.',
-  'demoTour.runner.violations.real':
-    'Demo never terminates. Real exam: 3 strikes on any counter → forced termination + possible 2-year ban.',
-
-  'demoTour.runner.submit.title': 'Submit button',
-  'demoTour.runner.submit.body':
-    "When you're done, click here. The demo grades instantly and opens the report. Violations are logged but never force-terminate in demo mode.",
-  'demoTour.runner.submit.real':
-    'MCQs grade instantly; L2/L1 essays and deliverables go through expert review and publish in 7–14 days.',
-
-  // 2b) Fullscreen-exit overlay tour — mid-exam leave warning
-  'demoTour.fsExit.welcome.title': 'Fullscreen exit warning',
-  'demoTour.fsExit.welcome.body':
-    'Pressing Esc or leaving fullscreen triggers this overlay. Return immediately to keep the exam running.',
-  'demoTour.fsExit.welcome.real':
-    'Same in the real exam — every fullscreen exit is logged as a proctoring violation.',
-
-  'demoTour.fsExit.warn.title': 'Warning counter',
-  'demoTour.fsExit.warn.body':
-    'Each exit adds one warning. The demo counter still increments, but you are never force-terminated.',
-  'demoTour.fsExit.warn.real':
-    'Real exam: three strikes force-terminate the session; confirmed cheating can mean a 2-year ban.',
-
-  'demoTour.fsExit.demo.title': 'Demo safety net',
-  'demoTour.fsExit.demo.body':
-    'The green note means demo mode never terminates you — use it to learn your violation patterns safely.',
-  'demoTour.fsExit.demo.real':
-    'There is no safety net in the real exam. Every strike counts.',
-
-  'demoTour.fsExit.resume.title': 'Resume fullscreen',
-  'demoTour.fsExit.resume.body':
-    'Click here to re-enter fullscreen right away. The server timer keeps running while this modal is open.',
-  'demoTour.fsExit.resume.real':
-    'Same button in the real exam. Proctors may intervene if you stay out too long.',
-
-  'demoTour.fsExit.help.title': 'Need a refresher? Look bottom-right.',
-  'demoTour.fsExit.help.body':
-    'Replay the fullscreen-exit guide from the Site guide button in the bottom-right corner.',
-
-  // 3) Result tour — report screen
-  'demoTour.result.score.title': 'Score summary',
-  'demoTour.result.score.body':
-    'Per-subject and total scores. The demo shows numbers only — no pass/fail verdict.',
-  'demoTour.result.score.real':
-    'Real exam: any subject below 40% is an instant fail. Pass needs total ≥ 60% AND every subject ≥ 40%.',
-
-  'demoTour.result.tabs.title': 'Report tabs — three views',
-  'demoTour.result.tabs.body':
-    'Switch between ① Proctor summary (violations), ② Real-exam coaching (AI analysis), and ③ Score reference.',
-  'demoTour.result.tabs.real':
-    'Published real-exam results follow a similar layout for scores and proctoring records.',
-
-  'demoTour.result.coaching.title': 'AI behavioral coaching',
-  'demoTour.result.coaching.body':
-    'Every violation captured during the demo with a screenshot. Use it to spot habits before the real test.',
-  'demoTour.result.coaching.real':
-    'In the real exam this analysis goes live to proctors — you can only view it later if you file a dispute.',
-
-  'demoTour.result.cert.title': 'Demo certificate',
-  'demoTour.result.cert.body':
-    'Click "Get demo certificate" to generate a watermarked sample certificate (no legal effect).',
-  'demoTour.result.cert.real':
-    'Pass the real exam and you receive a KRIVET-PQI-registered certificate, valid for 3 years.',
-
-  'demoTour.result.help.title': 'Need a refresher? Look bottom-right.',
-  'demoTour.result.help.body':
-    'Replay the report guide anytime from the Site guide button in the bottom-right corner.',
-
-  // 4) Certificate tour
-  'demoTour.cert.welcome.title': 'Demo certificate screen',
-  'demoTour.cert.welcome.body':
-    'Preview the certificate layout you would receive after passing. Numbers start with DEMO- and have no legal effect.',
-  'demoTour.cert.welcome.real':
-    'A real pass issues a KRIVET-registered number valid for 3 years.',
-
-  'demoTour.cert.info.title': 'Demo disclaimer',
-  'demoTour.cert.info.body':
-    'Practice only — not stored permanently. Same PDF and QR verify flow as the real certificate.',
-  'demoTour.cert.info.real':
-    'Real certificates download anytime from My Page.',
-
-  'demoTour.cert.preview.title': 'PDF preview',
-  'demoTour.cert.preview.body':
-    'Same layout, watermark, and QR as the real certificate. Zoom and print work too.',
-  'demoTour.cert.preview.real':
-    'Real PDFs use the same format; QR opens the public verify page.',
-
-  'demoTour.cert.continue.title': 'Try verification',
-  'demoTour.cert.continue.body':
-    'Continue to scan the QR and walk through the public verify flow.',
-  'demoTour.cert.continue.real':
-    'Real certificates verify the same way via QR.',
-
-  'demoTour.cert.help.title': 'Need a refresher? Look bottom-right.',
-  'demoTour.cert.help.body':
-    'Replay this screen guide from the Site guide button in the bottom-right corner.',
-
-  // 5) Verify tour
-  'demoTour.verify.welcome.title': 'Verification demo screen',
-  'demoTour.verify.welcome.body':
-    'Scan the demo certificate QR to open the public verify page. Demo numbers show as "practice only".',
-  'demoTour.verify.welcome.real':
-    'Real certificate QR shows holder, level, and validity on the same page.',
-
-  'demoTour.verify.qr.title': 'QR code · verify preview',
-  'demoTour.verify.qr.body':
-    'Scan the QR or open the link to see the verify result. The right panel previews the outcome format.',
-  'demoTour.verify.qr.real':
-    'Partners can also bulk-verify via API.',
-
-  'demoTour.verify.apply.title': 'Register for the real exam',
-  'demoTour.verify.apply.body':
-    'Done practicing? Jump to the official registration wizard from here.',
-  'demoTour.verify.apply.real':
-    'Register → pay → check eligible exams on My Page.',
-
-  'demoTour.verify.mypage.title': 'Go to My Page',
-  'demoTour.verify.mypage.body':
-    'Manage registrations, eligible exams, scores, and certificates in one place.',
-
-  'demoTour.verify.help.title': 'Need a refresher? Look bottom-right.',
-  'demoTour.verify.help.body':
-    'Replay the verification demo guide from the Site guide button in the bottom-right corner.',
-
   'fsgate.btn': 'Enter fullscreen and start exam',
   'fsgate.hint':
     'Your browser will request screen sharing. Please pick your entire screen — proctors monitor live.',
-
-  // ── Site-wide onboarding tours ───────────────────────────
-  'siteTour.controls.next': 'Next',
-  'siteTour.controls.prev': 'Previous',
-  'siteTour.controls.skip': 'Skip guide',
-  'siteTour.controls.finish': 'Done',
-  'siteTour.controls.realExam': 'Demo vs real exam',
-  'siteTour.controls.help': 'Site guide',
-  'siteTour.controls.progress': 'Step {i} of {n}',
-
-  'siteTour.journey.title': 'Welcome to AXIS',
-  'siteTour.journey.subtitle':
-    'Four steps from registration to the real exam — plus how the free demo differs from the live test.',
-  'siteTour.journey.step1.title': 'Register for an exam',
-  'siteTour.journey.step1.body': 'Pick your series, level, and session, then complete payment.',
-  'siteTour.journey.step2.title': 'Manage on My Page',
-  'siteTour.journey.step2.body': 'Track registrations, eligible exams, scores, and certificates in one place.',
-  'siteTour.journey.step3.title': 'Demo exam (practice)',
-  'siteTour.journey.step3.body': 'Try the identical UI and proctoring rules with zero termination risk.',
-  'siteTour.journey.step4.title': 'Take the real exam',
-  'siteTour.journey.step4.body': 'From My Page → Enter exam, pass ID verification, then start the official test.',
-  'siteTour.journey.badge.demo': 'Demo',
-  'siteTour.journey.badge.real': 'Live',
-  'siteTour.journey.startTour': 'Start home page guide',
-  'siteTour.journey.skip': 'Maybe later',
-
-  'siteTour.home.welcome.title': 'Welcome to AXIS',
-  'siteTour.home.welcome.body':
-    'This guide walks through the main menu and explains demo (practice) vs the real exam.',
-  'siteTour.home.nav.title': 'Top navigation',
-  'siteTour.home.nav.body':
-    'Access cert guides, registration, results, verification, support, and more from here.',
-  'siteTour.home.hero.title': 'Get started — register or learn',
-  'siteTour.home.hero.body':
-    'Use "Register" to sign up for an official exam, or "Cert Guide" to read the format first.',
-  'siteTour.home.hero.real':
-    'The real exam starts from My Page after registration and payment — not directly from home.',
-  'siteTour.home.demoNav.title': 'Demo exam — practice mode',
-  'siteTour.home.demoNav.body':
-    'When logged in, use this menu for a free demo. Learn the UI and proctoring rules before test day.',
-  'siteTour.home.demoNav.real':
-    'Demo: no forced termination, scores are reference-only, no legal certificate. Live: 3 strikes = termination + official grading.',
-  'siteTour.home.quick.title': 'Quick links',
-  'siteTour.home.quick.body': 'Jump to frequently used pages in one click.',
-
-  'siteTour.mypage.welcome.title': 'My Page — your exam hub',
-  'siteTour.mypage.welcome.body':
-    'Everything from registration to scores and certificates lives here.',
-  'siteTour.mypage.tabs.title': 'Tab navigation',
-  'siteTour.mypage.tabs.body':
-    'Switch between registrations, eligible exams, scores, certificates, and profile.',
-  'siteTour.mypage.registrations.title': 'Registrations',
-  'siteTour.mypage.registrations.body':
-    'Complete pending payments or cancel before the exam window opens.',
-  'siteTour.mypage.registrations.real':
-    'Only paid registrations appear under "Eligible exams" for the live test.',
-  'siteTour.mypage.exams.title': 'Eligible exams — enter the live test',
-  'siteTour.mypage.exams.body':
-    'Click "Enter exam" to go through ID verification → environment check → fullscreen exam.',
-  'siteTour.mypage.exams.real':
-    'Only live exams count toward pass/fail and certificates. Demos never appear here.',
-  'siteTour.mypage.demo.title': 'Practice via the demo menu',
-  'siteTour.mypage.demo.body':
-    'Use the top "Take Demo Exam" link anytime for free practice before the real thing.',
-  'siteTour.mypage.demo.real':
-    'Demo: repeat anytime. Live: only during your registered session (re-exam rules apply separately).',
-
-  'siteTour.apply.welcome.title': 'Registration — 5 steps',
-  'siteTour.apply.welcome.body':
-    'Pre-check → series & level → schedule → review → payment.',
-  'siteTour.apply.welcome.real':
-    'After payment, enter the live exam from My Page — separate from the demo.',
-  'siteTour.apply.steps.title': 'Progress indicator',
-  'siteTour.apply.steps.body': 'Always see which step you are on. You can go back and edit earlier choices.',
-  'siteTour.apply.form.title': 'Input area',
-  'siteTour.apply.form.body': 'Make selections and fill in details in this panel.',
-  'siteTour.apply.sidebar.title': 'Registration summary',
-  'siteTour.apply.sidebar.body': 'Review your series, level, schedule, and fee in real time.',
-  'siteTour.apply.sidebar.real':
-    'Payment confirms your seat. On exam day, start the live test from My Page.',
-
-  'siteTour.cbt.welcome.title': 'CBT exam entry',
-  'siteTour.cbt.welcome.body':
-    'When you have an eligible registration, create a session here to start the exam.',
-  'siteTour.cbt.welcome.real':
-    'Most users enter via My Page → Enter exam. Use "Take Demo Exam" in the nav for practice.',
-  'siteTour.cbt.certs.title': 'Series & level',
-  'siteTour.cbt.certs.body': 'Pick an eligible series and level to create your exam session.',
-  'siteTour.cbt.certs.real':
-    'Live: full proctoring + termination rules. Demo: same UI, practice-only, never terminates.',
-  'siteTour.cbt.requirements.title': 'Environment requirements',
-  'siteTour.cbt.requirements.body': 'PC, webcam, microphone, fullscreen, and a single display are required.',
-
-  // Generic fallback tour — used on any page without a curated walkthrough.
-  'siteTour.generic.welcome.title': 'Welcome',
-  'siteTour.generic.welcome.body':
-    'Here is a quick orientation. It appears automatically only on your first visit, then stays tucked away behind the Site guide button in the bottom-right corner — promise it will not nag you again.',
-  'siteTour.generic.nav.title': 'Top navigation',
-  'siteTour.generic.nav.body':
-    'Jump to registration, my page, results, verification, and support from here.',
-  'siteTour.generic.help.title': 'Need a refresher? Look bottom-right.',
-  'siteTour.generic.help.body':
-    'The Site guide button in the bottom-right corner of every page replays this guide whenever you want.',
-
-  // Mobile-only usage guide — shown once to phone visitors.
-  'siteTour.mobileGuide.badge': 'Mobile guide',
-  'siteTour.mobileGuide.title': 'AXIS works great on your phone',
-  'siteTour.mobileGuide.subtitle':
-    'Almost everything — from registration to certificates — is available on mobile. Just one exception: taking an exam requires a PC.',
-  'siteTour.mobileGuide.can1.title': 'Register & pay',
-  'siteTour.mobileGuide.can1.body': 'Pick a series and level, schedule your session, and pay right from your phone.',
-  'siteTour.mobileGuide.can2.title': 'Manage My Page',
-  'siteTour.mobileGuide.can2.body': 'Check registrations, scores, and certificates anytime, anywhere.',
-  'siteTour.mobileGuide.can3.title': 'Results & verification',
-  'siteTour.mobileGuide.can3.body': 'Pass announcements and certificate verification work on mobile too.',
-  'siteTour.mobileGuide.pc.title': 'Exams require a PC',
-  'siteTour.mobileGuide.pc.body':
-    'Demo and real exams need webcam proctoring and a fullscreen environment, so they can only be taken on a desktop or laptop. Please switch to a PC on exam day.',
-  'siteTour.mobileGuide.confirm': 'Got it',
-  'siteTour.mobileGuide.close': 'Close',
-  'siteTour.mobileGuide.next': 'Next',
-  'siteTour.mobileGuide.skip': 'Skip',
-  'siteTour.mobileGuide.prev': 'Back',
 
   // ── Cert Guide (CertGuidePage) — body content lives in a per-language data map in the page
   'certGuide.hero.subtitle': 'Explore the AXIS certification framework\nbuilt for the AI era',
@@ -2125,4 +1797,29 @@ export const en = {
   'notice.tag.important': 'Important',
   'notice.tag.notice': 'Notice',
   'notice.tag.info': 'Info',
+
+  // ── Site guide (bottom-right mascot widget + spotlight tour) ──
+  'guide.widget.hint': 'Need a hand?',
+  'guide.widget.label': 'Site guide',
+  'guide.widget.aria': 'Open site guide',
+  'guide.popover.title': 'Hi there! 👋',
+  'guide.popover.greeting': 'First time here?\nLet me give you a quick tour of AXIS.',
+  'guide.popover.start': 'Start tour',
+  'guide.popover.later': 'Maybe later',
+  'guide.tour.prev': 'Back',
+  'guide.tour.next': 'Next',
+  'guide.tour.done': 'Done',
+  'guide.tour.skip': 'Skip',
+
+  // Step copy
+  'guide.step.hero.title': 'Welcome to AXIS',
+  'guide.step.hero.body': 'AXIS lets you take certification exams online with live remote proctoring. Ready to look around?',
+  'guide.step.quick.title': 'Quick links',
+  'guide.step.quick.body': 'Jump straight to the essentials here — certification info, exam registration, and result lookup.',
+  'guide.step.nav.title': 'Top menu',
+  'guide.step.nav.body': 'Reach any page anytime from the top menu — About, Certifications, Apply, Results, and more.',
+  'guide.step.demo.title': 'Free demo exam',
+  'guide.step.demo.body': 'Try the real exam environment without signing in. New here? Practice this first.',
+  'guide.step.apply.title': 'Exam registration',
+  'guide.step.apply.body': 'Follow the steps on the left: pick a level → choose a session → review your info → pay. Done!',
 } as const;

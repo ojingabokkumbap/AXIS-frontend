@@ -17,6 +17,7 @@ export const ko = {
   'gnb.guide': '자격안내',
   'gnb.applyNav': '시험 접수',
   'gnb.cbtNav': '데모응시',
+  'gnb.demoBadge': '체험하기',
   'gnb.announce': '합격자발표',
   'gnb.verify': '자격검증',
   'gnb.support': '고객센터',
@@ -1513,336 +1514,8 @@ export const ko = {
   'fsgate.title': '시험 응시 준비 완료',
   'fsgate.body': '시험은 전체화면에서만 진행됩니다. 아래 버튼을 누르면 전체화면이 활성화되고 시험이 시작됩니다.',
   'fsgate.body2': '전체화면을 벗어나면 경고가 누적되며, 3회 누적 시 시험이 강제 종료됩니다.',
-  // ── Demo Tour (game-style spotlight tutorial) ─────────
-  'demoTour.controls.next': '다음',
-  'demoTour.controls.prev': '이전',
-  'demoTour.controls.skip': '튜토리얼 건너뛰기',
-  'demoTour.controls.finish': '시작하기',
-  'demoTour.controls.realExam': '실제 시험에서는',
-  'demoTour.controls.replay': '튜토리얼 다시 보기',
-  'demoTour.controls.progress': '{i} / {n} 단계',
-
-  // 1) Intro tour — 인트로 화면(시작 전)
-  'demoTour.intro.welcome.title': '데모 시험 튜토리얼에 오신 것을 환영합니다',
-  'demoTour.intro.welcome.body':
-    '데모는 ① 준비 → ② 시험 → ③ 결과 → ④ 체험용 자격증 → ⑤ 검증 체험 순으로 진행됩니다. 각 화면마다 최대 5단계 가이드가 자동으로 시작됩니다.',
-  'demoTour.intro.welcome.real':
-    '실제 시험에서는 이 안내가 표시되지 않습니다. 지금 미리 익혀두세요.',
-
-  'demoTour.intro.picker.title': '시험 종류와 등급 선택',
-  'demoTour.intro.picker.body':
-    '여기서 체험할 시리즈(AXIS / AXIS-C / AXIS-H)와 등급(L3/L2/L1)을 자유롭게 바꿀 수 있습니다.',
-  'demoTour.intro.picker.real':
-    '실제 시험에서는 접수한 시리즈와 등급으로 고정됩니다. 변경 불가.',
-
-  'demoTour.intro.rules.title': '감독 규칙 — 데모도 실제와 동일',
-  'demoTour.intro.rules.body':
-    '전체화면 유지, 카메라/마이크 ON, 단일 디스플레이. 이 모든 규칙이 데모에서도 그대로 적용됩니다.',
-  'demoTour.intro.rules.real':
-    '실제 시험에서는 3회 위반 시 자동 강제 종료되고, 부정행위 확정 시 2년간 응시가 제한됩니다.',
-
-  'demoTour.intro.start.title': '준비되면 여기를 누르세요',
-  'demoTour.intro.start.body':
-    '시작 버튼을 누르는 순간 전체화면 모드로 전환되고 타이머가 시작됩니다.',
-  'demoTour.intro.start.real':
-    '실제 시험에서도 동일한 흐름이지만, 사전 본인인증(신분증 OCR + 얼굴 대조)을 먼저 통과해야 합니다.',
-
-  'demoTour.intro.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
-  'demoTour.intro.help.body':
-    '화면 오른쪽 아래의 「사이트 가이드」 나침반 버튼을 누르면 이 페이지 가이드를 언제든 다시 볼 수 있습니다.',
-
-  // 1b) Gate tour — 전체화면 진입 화면
-  'demoTour.gate.welcome.title': '전체화면 진입 화면',
-  'demoTour.gate.welcome.body':
-    '시작 버튼을 누른 뒤 브라우저가 전체화면을 허용하지 않으면 이 화면이 나타납니다. 실제 시험과 동일한 보안 단계입니다.',
-  'demoTour.gate.welcome.real':
-    '실제 시험에서도 전체화면 없이는 문제 화면에 진입할 수 없습니다.',
-
-  'demoTour.gate.enter.title': '전체화면 허용',
-  'demoTour.gate.enter.body':
-    '아래 버튼을 눌러 전체화면을 켜면 시험 화면으로 이동합니다. 카메라·마이크도 함께 활성화됩니다.',
-  'demoTour.gate.enter.real':
-    '전체화면을 벗어나면 경고가 누적되며, 실제 시험에서는 3회 시 강제 종료됩니다.',
-
-  'demoTour.gate.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
-  'demoTour.gate.help.body':
-    '오른쪽 아래 「사이트 가이드」 버튼에서 이 화면 가이드를 다시 재생할 수 있습니다.',
-
-  // 2) Runner tour — 라이브 시험 화면
-  'demoTour.runner.timer.title': '남은 시간 — 서버가 진짜 시계',
-  'demoTour.runner.timer.body':
-    '왼쪽 위 타이머는 서버에서 내려오는 시간입니다. 화면을 새로고침하거나 새 창을 열어도 시간은 멈추지 않습니다.',
-  'demoTour.runner.timer.real':
-    '실제 시험에서도 서버 시간이 절대 기준. 마감 시점에 자동으로 답안이 제출됩니다.',
-
-  'demoTour.runner.toolbar.title': '화면 배치 · 확대/축소 · 알림',
-  'demoTour.runner.toolbar.body':
-    '문제·답안 배치, 글자 크기, 테마를 바꿀 수 있습니다. 벨 아이콘에서 감독 알림을 확인하고, 하단의 시선·음성·이탈 카운터로 위반 누적을 볼 수 있습니다.',
-  'demoTour.runner.toolbar.real':
-    '실제 시험에서도 100% 동일. 시험 도중 언제든지 본인에게 편한 화면으로 조정하세요.',
-
-  'demoTour.runner.question.title': '문제 카드 — 읽고 답하기',
-  'demoTour.runner.question.body':
-    '문항을 읽고 보기를 클릭해 답을 선택합니다. 답안은 즉시 자동 저장되며 언제든 변경 가능합니다.',
-  'demoTour.runner.question.real':
-    '실제 시험에서도 동일. 단, 답안 변경 시 서버 버전 충돌(중복 탭 등)이 감지되면 경고가 발생합니다.',
-
-  'demoTour.runner.sheet.title': '오른쪽 답안표기란 — 빠른 이동',
-  'demoTour.runner.sheet.body':
-    '문제 번호를 눌러 바로 이동하고, 답한 문제는 색으로 표시됩니다. 깃발(🚩)을 달면 나중에 다시 보기 쉬워요.',
-  'demoTour.runner.sheet.real':
-    '실제 시험과 100% 동일한 UI입니다. 익숙해 두세요.',
-
-  'demoTour.runner.violations.title': '위반 카운터 — 데모도 카운트됩니다',
-  'demoTour.runner.violations.body':
-    '시선 이탈(GAZE), 음성(VOICE), 화면 이탈(LEAVE)이 누적되면 여기에 표시됩니다.',
-  'demoTour.runner.violations.real':
-    '데모는 절대 강제 종료되지 않지만, 실제 시험은 각 항목 3회 누적 시 즉시 강제 종료 + 2년 응시 제한 가능.',
-
-  'demoTour.runner.submit.title': '제출 버튼',
-  'demoTour.runner.submit.body':
-    '모든 문제를 풀었다면 여기서 제출하세요. 데모는 즉시 채점되어 결과 리포트로 이동합니다. 위반 카운터는 데모에서도 기록되지만 강제 종료는 없습니다.',
-  'demoTour.runner.submit.real':
-    '실제 시험: 객관식은 즉시 채점, 서술형/실기는 전문가 검토를 거쳐 7~14일 내 결과 발표.',
-
-  // 2b) Fullscreen-exit overlay tour — 시험 중 전체화면 이탈 모달
-  'demoTour.fsExit.welcome.title': '전체화면 이탈 경고',
-  'demoTour.fsExit.welcome.body':
-    'Esc 키나 브라우저 조작으로 전체화면을 벗어나면 이 경고가 표시됩니다. 즉시 복귀해야 시험을 계속할 수 있습니다.',
-  'demoTour.fsExit.welcome.real':
-    '실제 시험에서도 동일합니다. 전체화면 이탈은 감독 위반으로 기록됩니다.',
-
-  'demoTour.fsExit.warn.title': '경고 누적 카운터',
-  'demoTour.fsExit.warn.body':
-    '이탈할 때마다 경고가 1회씩 누적됩니다. 데모에서도 카운터는 올라가지만 강제 종료는 없습니다.',
-  'demoTour.fsExit.warn.real':
-    '실제 시험: 3회 누적 시 즉시 강제 종료되며, 부정행위 확정 시 2년간 응시가 제한될 수 있습니다.',
-
-  'demoTour.fsExit.demo.title': '데모 모드 안전망',
-  'demoTour.fsExit.demo.body':
-    '초록색 안내처럼, 데모에서는 아무리 경고가 쌓여도 시험이 강제 종료되지 않습니다. 연습 목적으로 위반 패턴을 익혀보세요.',
-  'demoTour.fsExit.demo.real':
-    '실제 시험에는 이 안전망이 없습니다. 한 번의 실수도 기록됩니다.',
-
-  'demoTour.fsExit.resume.title': '전체화면 복귀 버튼',
-  'demoTour.fsExit.resume.body':
-    '이 버튼을 눌러 즉시 전체화면으로 돌아가세요. 시험 타이머는 계속 진행 중입니다.',
-  'demoTour.fsExit.resume.real':
-    '실제 시험에서도 동일한 버튼으로 복귀합니다. 복귀하지 않으면 감독관이 개입할 수 있습니다.',
-
-  'demoTour.fsExit.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
-  'demoTour.fsExit.help.body':
-    '오른쪽 아래 「사이트 가이드」 버튼에서 전체화면 이탈 가이드를 다시 재생할 수 있습니다.',
-
-  // 3) Result tour — 결과 리포트 화면
-  'demoTour.result.score.title': '점수 요약',
-  'demoTour.result.score.body':
-    '과목별 득점과 전체 점수를 확인하세요. 데모는 통과/불합격 판정 없이 점수만 보여줍니다.',
-  'demoTour.result.score.real':
-    '실제 시험: 과목 40% 미달이면 즉시 과락 처리. 전체 60% 이상 + 모든 과목 40% 이상이어야 합격.',
-
-  'demoTour.result.tabs.title': '리포트 탭 — 3가지 관점',
-  'demoTour.result.tabs.body':
-    '① 감독 요약(위반 목록), ② 실전 코칭(AI 분석), ③ 점수 참고용 탭으로 나뉩니다. 탭을 눌러 내용을 전환하세요.',
-  'demoTour.result.tabs.real':
-    '실제 시험 결과 발표 후에도 유사한 형식으로 성적·감독 기록을 확인할 수 있습니다.',
-
-  'demoTour.result.coaching.title': 'AI 행동 분석 코칭',
-  'demoTour.result.coaching.body':
-    '데모 중 발생한 모든 위반 행동을 스크린샷과 함께 보여드립니다. 실수 패턴을 미리 파악할 수 있어요.',
-  'demoTour.result.coaching.real':
-    '실제 시험에서는 이 분석이 감독관에게 실시간으로 전달되고, 본인은 이의제기 시에만 열람 가능합니다.',
-
-  'demoTour.result.cert.title': '체험용 자격증 발급',
-  'demoTour.result.cert.body':
-    '"체험용 자격증 받기"를 누르면 워터마크가 박힌 데모 인증서가 발급됩니다.',
-  'demoTour.result.cert.real':
-    '실제 시험 합격 시에는 KRIVET PQI 등록 정식 자격증이 발급되며 3년간 유효합니다.',
-
-  'demoTour.result.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
-  'demoTour.result.help.body':
-    '오른쪽 아래 「사이트 가이드」 버튼에서 결과 리포트 가이드를 다시 재생할 수 있습니다.',
-
-  // 4) Certificate tour — 체험용 자격증 화면
-  'demoTour.cert.welcome.title': '체험용 자격증 화면',
-  'demoTour.cert.welcome.body':
-    '합격 후 받게 될 자격증 양식을 미리 확인하는 페이지입니다. DEMO- 접두사가 붙으며 법적 효력은 없습니다.',
-  'demoTour.cert.welcome.real':
-    '실제 합격 시에는 KRIVET 등록 정식 번호가 발급되고 3년간 유효합니다.',
-
-  'demoTour.cert.info.title': '체험용 안내',
-  'demoTour.cert.info.body':
-    '이 자격증은 연습용이며 서버에 영구 저장되지 않습니다. 실제 자격증과 동일한 PDF·QR 검증 흐름만 체험합니다.',
-  'demoTour.cert.info.real':
-    '정식 자격증은 마이페이지에서 언제든 다운로드·재발급할 수 있습니다.',
-
-  'demoTour.cert.preview.title': 'PDF 미리보기',
-  'demoTour.cert.preview.body':
-    '실제 자격증과 같은 레이아웃·워터마크·QR 코드가 포함됩니다. 확대·인쇄도 가능합니다.',
-  'demoTour.cert.preview.real':
-    '정식 자격증 PDF도 동일한 형식이며, QR로 공개 검증 페이지에서 진위 확인이 가능합니다.',
-
-  'demoTour.cert.continue.title': '검증 체험으로 이동',
-  'demoTour.cert.continue.body':
-    '자격 검증해보기를 누르면 QR 스캔 → 검증 페이지 흐름을 체험할 수 있습니다.',
-  'demoTour.cert.continue.real':
-    '실제 자격증도 동일한 QR 검증 URL로 진위 확인이 가능합니다.',
-
-  'demoTour.cert.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
-  'demoTour.cert.help.body':
-    '오른쪽 아래 「사이트 가이드」 버튼에서 이 화면 가이드를 다시 재생할 수 있습니다.',
-
-  // 5) Verify tour — 자격 검증 체험 화면
-  'demoTour.verify.welcome.title': '자격 검증 체험 화면',
-  'demoTour.verify.welcome.body':
-    '발급된 체험용 자격증의 QR을 스캔하면 공개 검증 페이지로 이동합니다. 데모 번호는 "체험용"으로 표시됩니다.',
-  'demoTour.verify.welcome.real':
-    '실제 자격증 QR도 동일한 검증 페이지에서 소지자·등급·유효기간을 확인할 수 있습니다.',
-
-  'demoTour.verify.qr.title': 'QR 코드 · 검증 미리보기',
-  'demoTour.verify.qr.body':
-    '왼쪽 QR을 스캔하거나 링크를 열면 검증 결과가 표시됩니다. 오른쪽에서 결과 형식을 미리 볼 수 있습니다.',
-  'demoTour.verify.qr.real':
-    '기업·기관도 자격증 번호로 bulk 검증 API를 사용할 수 있습니다.',
-
-  'demoTour.verify.apply.title': '실제 시험 접수',
-  'demoTour.verify.apply.body':
-    '데모 체험이 끝났다면 여기서 정식 시험 접수로 이동할 수 있습니다.',
-  'demoTour.verify.apply.real':
-    '접수 → 결제 → 마이페이지에서 응시 가능 시험을 확인하세요.',
-
-  'demoTour.verify.mypage.title': '마이페이지로',
-  'demoTour.verify.mypage.body':
-    '접수 내역·응시 가능 시험·성적·자격증을 마이페이지에서 관리합니다.',
-
-  'demoTour.verify.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
-  'demoTour.verify.help.body':
-    '오른쪽 아래 「사이트 가이드」 버튼에서 검증 체험 가이드를 다시 재생할 수 있습니다.',
-
   'fsgate.btn': '전체화면으로 시험 시작',
   'fsgate.hint': '브라우저가 화면 공유를 요청합니다. 전체 화면을 선택해 주세요. 감독관이 실시간으로 모니터링합니다.',
-
-  // ── Site-wide onboarding tours ───────────────────────────
-  'siteTour.controls.next': '다음',
-  'siteTour.controls.prev': '이전',
-  'siteTour.controls.skip': '가이드 건너뛰기',
-  'siteTour.controls.finish': '완료',
-  'siteTour.controls.realExam': '실제 시험과의 차이',
-  'siteTour.controls.help': '사이트 가이드',
-  'siteTour.controls.progress': '{i} / {n} 단계',
-
-  'siteTour.journey.title': 'AXIS 이용 가이드',
-  'siteTour.journey.subtitle':
-    '접수부터 실전 시험까지, 4단계로 안내합니다. 데모(연습)와 실제 시험의 차이도 함께 확인하세요.',
-  'siteTour.journey.step1.title': '시험 접수',
-  'siteTour.journey.step1.body': '원하는 시리즈·등급·회차를 선택하고 결제합니다.',
-  'siteTour.journey.step2.title': '마이페이지 관리',
-  'siteTour.journey.step2.body': '접수 내역, 응시 가능 시험, 성적, 자격증을 한곳에서 확인합니다.',
-  'siteTour.journey.step3.title': '데모 시험 (연습)',
-  'siteTour.journey.step3.body': '실제와 동일한 UI·감독 환경에서 연습합니다. 강제 종료 없음.',
-  'siteTour.journey.step4.title': '실전 시험 응시',
-  'siteTour.journey.step4.body': '마이페이지 → 응시하기에서 본인인증 후 정식 시험에 입장합니다.',
-  'siteTour.journey.badge.demo': '데모',
-  'siteTour.journey.badge.real': '실전',
-  'siteTour.journey.startTour': '홈 화면 가이드 시작',
-  'siteTour.journey.skip': '나중에 볼게요',
-
-  'siteTour.home.welcome.title': 'AXIS에 오신 것을 환영합니다',
-  'siteTour.home.welcome.body':
-    '이 가이드는 홈 화면의 주요 메뉴와, 데모(연습) vs 실제 시험의 차이를 설명합니다.',
-  'siteTour.home.nav.title': '상단 메뉴',
-  'siteTour.home.nav.body':
-    '자격 안내, 시험 접수, 합격자 발표, 자격 검증, 고객센터 등 모든 기능에 접근할 수 있습니다.',
-  'siteTour.home.hero.title': '시작하기 — 접수 또는 안내',
-  'siteTour.home.hero.body': '「시험 접수」로 정식 응시를 신청하거나, 「자격 안내」에서 시험 형식을 먼저 확인하세요.',
-  'siteTour.home.hero.real':
-    '실제 시험은 접수·결제 완료 후 마이페이지에서 응시합니다. 홈에서 바로 시험이 시작되지 않습니다.',
-  'siteTour.home.demoNav.title': '데모 응시 — 연습 모드',
-  'siteTour.home.demoNav.body':
-    '로그인 후 이 메뉴에서 무료 데모 시험을 체험할 수 있습니다. UI와 감독 규칙을 미리 익히세요.',
-  'siteTour.home.demoNav.real':
-    '데모: 강제 종료 없음, 점수는 참고용, 자격증 효력 없음. 실전: 3회 위반 시 강제 종료, 정식 채점·합격 판정.',
-  'siteTour.home.quick.title': '바로가기 카드',
-  'siteTour.home.quick.body': '자주 쓰는 페이지로 빠르게 이동할 수 있습니다.',
-
-  'siteTour.mypage.welcome.title': '마이페이지 — 시험 허브',
-  'siteTour.mypage.welcome.body':
-    '접수부터 성적·자격증까지 모든 시험 관련 정보가 모여 있습니다.',
-  'siteTour.mypage.tabs.title': '탭 메뉴',
-  'siteTour.mypage.tabs.body':
-    '접수 내역, 응시 가능 시험, 성적 조회, 자격증, 프로필을 탭으로 전환합니다.',
-  'siteTour.mypage.registrations.title': '접수 내역',
-  'siteTour.mypage.registrations.body':
-    '결제 대기 중인 접수는 여기서 결제를 완료하거나, 시험 전까지 취소할 수 있습니다.',
-  'siteTour.mypage.registrations.real':
-    '실제 시험은 접수·결제가 완료되어야 「응시 가능 시험」 탭에 표시됩니다.',
-  'siteTour.mypage.exams.title': '응시 가능 시험 — 실전 입장',
-  'siteTour.mypage.exams.body':
-    '「응시하기」를 누르면 본인인증 → 환경 점검 → 전체화면 시험으로 이어집니다.',
-  'siteTour.mypage.exams.real':
-    '실전 시험만 합격·성적·자격증에 반영됩니다. 데모는 이 탭에 나타나지 않습니다.',
-  'siteTour.mypage.demo.title': '데모는 상단 메뉴에서',
-  'siteTour.mypage.demo.body':
-    '실전 전 연습은 상단 「데모응시」 메뉴에서 무료로 체험하세요.',
-  'siteTour.mypage.demo.real':
-    '데모는 언제든 반복 가능. 실전은 접수한 회차·시간대에만 1회(재응시 규정 별도) 응시.',
-
-  'siteTour.apply.welcome.title': '시험 접수 — 5단계',
-  'siteTour.apply.welcome.body':
-    '사전 확인 → 시리즈·등급 → 일정 → 정보 확인 → 결제 순으로 진행됩니다.',
-  'siteTour.apply.welcome.real':
-    '접수·결제 완료 후 마이페이지에서 실전 시험에 입장합니다. 데모와 별개입니다.',
-  'siteTour.apply.steps.title': '진행 단계 표시',
-  'siteTour.apply.steps.body': '현재 어느 단계인지 항상 확인할 수 있습니다. 뒤로 돌아가 수정도 가능합니다.',
-  'siteTour.apply.form.title': '입력 영역',
-  'siteTour.apply.form.body': '각 단계의 선택·입력은 이 영역에서 진행합니다.',
-  'siteTour.apply.sidebar.title': '접수 요약',
-  'siteTour.apply.sidebar.body': '선택한 시리즈, 등급, 일정, 금액을 실시간으로 확인합니다.',
-  'siteTour.apply.sidebar.real':
-    '결제 완료 후 좌석이 확정되며, 시험 당일 마이페이지에서 실전 응시가 가능합니다.',
-
-  'siteTour.cbt.welcome.title': 'CBT 시험 입장',
-  'siteTour.cbt.welcome.body':
-    '등록된 시험이 있을 때 이 화면에서 세션을 생성해 시험을 시작합니다.',
-  'siteTour.cbt.welcome.real':
-    '일반적으로 마이페이지 → 응시하기 경로를 사용합니다. 데모는 상단 「데모응시」 메뉴를 이용하세요.',
-  'siteTour.cbt.certs.title': '시리즈 · 등급 선택',
-  'siteTour.cbt.certs.body': '응시 자격이 있는 시리즈와 등급을 선택해 세션을 생성합니다.',
-  'siteTour.cbt.certs.real':
-    '실전: 본인인증·감독·강제 종료 규칙 적용. 데모: 동일 UI이나 연습용, 강제 종료 없음.',
-  'siteTour.cbt.requirements.title': '응시 환경 요건',
-  'siteTour.cbt.requirements.body': 'PC, 웹캠, 마이크, 전체화면, 단일 모니터가 필요합니다.',
-
-  // 범용 폴백 가이드 — 별도 안내가 없는 모든 페이지에서 표시.
-  'siteTour.generic.welcome.title': '환영합니다',
-  'siteTour.generic.welcome.body':
-    '이 페이지를 빠르게 안내해 드릴게요. 처음 방문할 때 한 번만 자동으로 보여드리고, 이후에는 화면 오른쪽 아래 「사이트 가이드」 버튼에 얌전히 숨어 있을 거예요. 약속드립니다.',
-  'siteTour.generic.nav.title': '상단 메뉴',
-  'siteTour.generic.nav.body':
-    '시험 접수, 마이페이지, 합격 발표, 자격 검증, 고객센터 등 모든 기능에 접근할 수 있습니다.',
-  'siteTour.generic.help.title': '다시 보고 싶다면? 오른쪽 아래를 보세요.',
-  'siteTour.generic.help.body':
-    '모든 페이지 오른쪽 아래의 「사이트 가이드」 버튼을 누르면 언제든 이 가이드를 다시 볼 수 있습니다.',
-
-  // 모바일 전용 이용 안내 — 폰 방문자에게 1회 표시.
-  'siteTour.mobileGuide.badge': '모바일 이용 안내',
-  'siteTour.mobileGuide.title': '스마트폰으로도 편하게 이용하세요',
-  'siteTour.mobileGuide.subtitle':
-    '접수부터 자격증 확인까지 대부분의 기능을 모바일에서 이용할 수 있습니다. 단 하나, 시험 응시만 PC가 필요해요.',
-  'siteTour.mobileGuide.can1.title': '시험 접수 · 결제',
-  'siteTour.mobileGuide.can1.body': '시리즈·등급 선택부터 결제까지 모바일에서 바로 진행할 수 있습니다.',
-  'siteTour.mobileGuide.can2.title': '마이페이지 관리',
-  'siteTour.mobileGuide.can2.body': '접수 내역, 성적 조회, 자격증 발급을 언제 어디서든 확인하세요.',
-  'siteTour.mobileGuide.can3.title': '합격자 발표 · 자격 검증',
-  'siteTour.mobileGuide.can3.body': '합격 확인과 자격증 진위확인도 모바일에서 지원됩니다.',
-  'siteTour.mobileGuide.pc.title': '시험 응시는 PC에서만',
-  'siteTour.mobileGuide.pc.body':
-    '데모·실전 시험은 웹캠 감독과 전체화면 환경이 필요해 데스크톱/노트북에서만 응시할 수 있습니다. 시험 당일에는 꼭 PC로 접속해 주세요.',
-  'siteTour.mobileGuide.confirm': '확인했어요',
-  'siteTour.mobileGuide.close': '닫기',
-  'siteTour.mobileGuide.next': '다음',
-  'siteTour.mobileGuide.skip': '건너뛰기',
-  'siteTour.mobileGuide.prev': '이전',
 
   // ── 자격 안내 (CertGuidePage) — 본문 콘텐츠는 페이지 내 언어별 데이터 맵 사용
   'certGuide.hero.subtitle': 'AI 시대를 선도하는\nAXIS 자격 체계를 확인하세요',
@@ -2156,4 +1829,29 @@ export const ko = {
   'notice.tag.important': '중요',
   'notice.tag.notice': '공지',
   'notice.tag.info': '안내',
+
+  // ── 사이트 가이드 (우측하단 마스코트 위젯 + 스포트라이트 투어) ──
+  'guide.widget.hint': '가이드가 필요하세요?',
+  'guide.widget.label': '이용 가이드',
+  'guide.widget.aria': '이용 가이드 열기',
+  'guide.popover.title': '반가워요! 👋',
+  'guide.popover.greeting': '처음 오셨나요?\nAXIS 이용 방법을 짧게 안내해 드릴게요.',
+  'guide.popover.start': '둘러보기 시작',
+  'guide.popover.later': '다음에',
+  'guide.tour.prev': '이전',
+  'guide.tour.next': '다음',
+  'guide.tour.done': '완료',
+  'guide.tour.skip': '건너뛰기',
+
+  // 스텝 문안
+  'guide.step.hero.title': 'AXIS에 오신 걸 환영해요',
+  'guide.step.hero.body': 'AXIS는 온라인으로 응시하고 실시간 감독까지 받는 자격 검정 플랫폼이에요. 여기서 시작해볼까요?',
+  'guide.step.quick.title': '빠른 바로가기',
+  'guide.step.quick.body': '자격 안내, 시험 접수, 결과 조회 같은 핵심 기능을 여기서 한 번에 이동할 수 있어요.',
+  'guide.step.nav.title': '상단 메뉴',
+  'guide.step.nav.body': '소개·자격안내·접수·결과 등 모든 페이지를 상단 메뉴에서 언제든 찾아갈 수 있어요.',
+  'guide.step.demo.title': '무료 데모 응시',
+  'guide.step.demo.body': '실제 시험 환경을 로그인 없이 미리 체험해볼 수 있어요. 처음이라면 여기서 먼저 연습해 보세요.',
+  'guide.step.apply.title': '시험 접수',
+  'guide.step.apply.body': '왼쪽 단계 안내를 따라 자격 등급 선택 → 회차 선택 → 정보 확인 → 결제 순으로 접수하면 끝나요.',
 } as const;

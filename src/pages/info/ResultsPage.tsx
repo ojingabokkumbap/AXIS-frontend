@@ -500,7 +500,7 @@ export default function ResultsPage() {
         onChange={(k) => setActiveTab(k)}
       />
 
-      <main ref={mainRef} className="mx-auto py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-lg:break-keep" style={{ maxWidth: 'var(--spacing-content-w)' }}>
+      <main ref={mainRef} className="mx-auto py-8 sm:py-12 lg:py-16 px-5 sm:px-6 lg:px-8 max-lg:break-keep" style={{ maxWidth: 'var(--spacing-content-w)' }}>
 
         {activeTab === 'sessions' && (
           <>

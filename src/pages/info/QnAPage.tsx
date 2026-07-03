@@ -1348,7 +1348,7 @@ export default function QnAPage() {
       {/* Tab content */}
       <div className="flex-1">
         <div
-          className="mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-8 lg:pt-10 pb-16 lg:pb-20 max-lg:break-keep"
+          className="mx-auto px-5 sm:px-6 lg:px-8 pt-6 sm:pt-8 lg:pt-10 pb-16 lg:pb-20 max-lg:break-keep"
           style={{ maxWidth: 'var(--spacing-content-w)' }}
         >
           {activeTab === 'notice' && renderNotice()}

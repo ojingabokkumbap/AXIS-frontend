@@ -18,14 +18,14 @@ const INK_900 = '#191919';
 const GRAY_300 = '#737373';
 const GRAY_500 = '#525252';
 
-const SECTION = 'py-[64px] lg:py-[120px] px-6 lg:px-10';
+const SECTION = 'py-8 sm:py-[64px] lg:py-[120px] px-5 sm:px-6 lg:px-10';
 const WRAP = 'mx-auto max-w-[1280px]';
-const H_SEC = 'text-[26px] lg:text-[34px] font-semibold leading-[1.15] tracking-[-0.025em]';
-const H_CARD = 'text-[19px] lg:text-[22px] font-semibold leading-[1.3] tracking-[-0.015em]';
-const T_SMALL = 'text-[14px] lg:text-[15px] leading-[1.5]';
+const H_SEC = 'text-[20px] sm:text-[26px] lg:text-[34px] font-semibold leading-[1.25] sm:leading-[1.15] tracking-[-0.025em]';
+const H_CARD = 'text-[15px] sm:text-[19px] lg:text-[22px] font-semibold leading-[1.35] sm:leading-[1.3] tracking-[-0.015em]';
+const T_SMALL = 'text-[12px] sm:text-[14px] lg:text-[15px] leading-[1.5]';
 
 const CTA_BASE =
-  'inline-flex items-center justify-center h-12 min-w-29.5 px-6 rounded-[10px] text-[16px] lg:text-[17px] font-semibold';
+  'inline-flex items-center justify-center h-10 sm:h-12 min-w-0 sm:min-w-29.5 px-5 sm:px-6 rounded-[10px] text-[14px] sm:text-[16px] lg:text-[17px] font-semibold';
 
 export function HomeScheduleSection() {
   const navigate = useNavigate();
@@ -141,11 +141,11 @@ export function HomeScheduleSection() {
     <section id="home-schedule" className={SECTION} style={{ background: SURFACE_ALT }}>
       <div className={WRAP}>
         <div className="flex flex-wrap items-end justify-between gap-6 reveal">
-          <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>{t('home.sched.title')}</h2>
+          <h2 className={`${H_SEC} mt-0 sm:mt-4`} style={{ color: INK_900 }}>{t('home.sched.title')}</h2>
           <MoreLink to="/apply">{t('home.sched.viewAll')}</MoreLink>
         </div>
 
-        <div className="mt-10 lg:mt-10 space-y-3">
+        <div className="mt-5 sm:mt-10 space-y-2.5 sm:space-y-3">
           {loading && (
             <div className="reveal p-8 text-center" style={{ background: SURFACE, borderRadius: 20, border: `1px solid ${BORDER}` }}>
               <span className={T_SMALL} style={{ color: GRAY_300 }}>{t('home.sched.loading')}</span>
@@ -161,7 +161,7 @@ export function HomeScheduleSection() {
           {!loading && rows.map((row) => (
             <div
               key={row.key}
-              className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 p-5 sm:p-6 lg:p-8 reveal"
+              className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 p-4 sm:p-6 lg:p-8 reveal"
               style={{ background: SURFACE, borderRadius: 20, border: `1px solid ${BORDER}` }}
             >
               <span className={`shrink-0 sm:min-w-24 ${T_SMALL} font-semibold`} style={{ color: row.statusColor }}>
@@ -189,7 +189,7 @@ function MoreLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="group inline-flex items-center gap-2 h-11 lg:h-12 px-5 lg:px-6 rounded-full text-[14px] lg:text-[15px] font-semibold border-2 transition-colors border-[#191919] text-[#191919] bg-transparent hover:bg-black hover:!text-white"
+      className="group inline-flex items-center gap-1.5 sm:gap-2 h-9 sm:h-11 lg:h-12 px-3.5 sm:px-5 lg:px-6 rounded-full text-[13px] sm:text-[14px] lg:text-[15px] font-semibold border-2 transition-colors border-[#191919] text-[#191919] bg-transparent hover:bg-black hover:!text-white"
     >
       <span className="group-hover:text-white">{children}</span>
       <svg

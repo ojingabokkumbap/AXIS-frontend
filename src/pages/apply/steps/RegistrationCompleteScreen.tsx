@@ -40,7 +40,7 @@ export default function RegistrationCompleteScreen({ regId }: { regId: string })
   }, [regId]);
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-8 sm:py-10 text-center">
+    <div className="max-w-lg mx-auto px-5 py-8 sm:py-10 text-center">
       <div className="w-14 h-14 sm:w-16 sm:h-16 bg-[#DCFCE7] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-5">
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7 sm:w-8 sm:h-8">
           <polyline points="20 6 9 17 4 12" />

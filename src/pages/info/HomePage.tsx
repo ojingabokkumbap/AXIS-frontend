@@ -39,17 +39,18 @@ const ACCENT = '#3b82f6';        /* Tailwind blue-500 */
 const SURFACE = '#FFFFFF';       /* 카드 / 강조 섹션 베이스 */
 const SURFACE_ALT = '#F7F7F8';   /* 교차 섹션 베이스 (살짝 진한 옅은 회색) */
 
-const SECTION = 'py-[64px] lg:py-[120px] px-6 lg:px-10';
+const SECTION = 'py-8 sm:py-[64px] lg:py-[120px] px-5 sm:px-6 lg:px-10';
 const WRAP = 'mx-auto max-w-[1280px]';
 
-/* Type scale — 페이지 전체 통일 (이 페이지가 다른 화면들의 기준이 됨) */
-const H_HERO = 'text-[30px] sm:text-[40px] lg:text-[54px] font-semibold leading-[1.25] break-keep lg:break-normal';
-const H_SEC = 'text-[26px] lg:text-[34px] font-semibold leading-[1.15] tracking-[-0.025em]';
-const H_DISPLAY_CARD = 'text-[22px] lg:text-[26px] font-semibold leading-[1.3] tracking-[-0.02em]'; /* 큰 카드 제목 */
-const H_CARD = 'text-[19px] lg:text-[22px] font-semibold leading-[1.3] tracking-[-0.015em]';        /* 카드 제목 */
-const T_LEAD = 'text-[17px] lg:text-[20px] leading-[1.55] tracking-[-0.01em]';
-const T_BODY = 'text-[15px] lg:text-[17px] leading-[1.65] tracking-[-0.005em]';
-const T_SMALL = 'text-[14px] lg:text-[15px] leading-[1.5]';
+/* Type scale — 페이지 전체 통일 (이 페이지가 다른 화면들의 기준이 됨)
+   모바일은 OPIc 앱처럼 한 단계 작게, sm/lg 이상은 기존 스케일 유지 */
+const H_HERO = 'text-[26px] sm:text-[40px] lg:text-[54px] font-semibold leading-[1.25] break-keep lg:break-normal';
+const H_SEC = 'text-[20px] sm:text-[26px] lg:text-[34px] font-semibold leading-[1.25] sm:leading-[1.15] tracking-[-0.025em]';
+const H_DISPLAY_CARD = 'text-[17px] sm:text-[22px] lg:text-[26px] font-semibold leading-[1.3] tracking-[-0.02em]'; /* 큰 카드 제목 */
+const H_CARD = 'text-[15px] sm:text-[19px] lg:text-[22px] font-semibold leading-[1.35] sm:leading-[1.3] tracking-[-0.015em]';        /* 카드 제목 */
+const T_LEAD = 'text-[14px] sm:text-[17px] lg:text-[20px] leading-[1.6] sm:leading-[1.55] tracking-[-0.01em]';
+const T_BODY = 'text-[13px] sm:text-[15px] lg:text-[17px] leading-[1.6] sm:leading-[1.65] tracking-[-0.005em]';
+const T_SMALL = 'text-[12px] sm:text-[14px] lg:text-[15px] leading-[1.5]';
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -126,8 +127,7 @@ export default function HomePage() {
 
       {/* ── Hero ── */}
       <section
-        className="relative w-full flex items-center justify-center overflow-hidden"
-        style={{ height: '100vh' }}
+        className="relative w-full flex items-center justify-center overflow-hidden min-h-[78svh] sm:min-h-screen py-10 sm:py-0"
       >
         <div className="absolute inset-0">
           <video
@@ -149,7 +149,7 @@ export default function HomePage() {
 
         <div className="relative z-10 text-center px-6 max-w-full">
           <h1
-            className={`${H_HERO} text-white mb-6`}
+            className={`${H_HERO} text-white mb-4 sm:mb-6`}
             style={{ animation: 'fadeUp .8s cubic-bezier(.16,1,.3,1) .2s both' }}
           >
             {t('home.hero.title1')}<br />
@@ -166,7 +166,7 @@ export default function HomePage() {
             </span>
           </h1>
           <p
-            className={`${T_LEAD} mb-10 text-gray-300`}
+            className={`${T_LEAD} mb-6 sm:mb-10 text-gray-300`}
             style={{ animation: 'fadeUp .8s cubic-bezier(.16,1,.3,1) .5s both' }}
           >
             {t('home.hero.sub')}
@@ -176,27 +176,18 @@ export default function HomePage() {
             className="flex flex-col items-center gap-4"
             style={{ animation: 'fadeUp .8s cubic-bezier(.16,1,.3,1) .8s both' }}
           >
-            <div className="flex gap-3 justify-center flex-wrap">
-              <PillButton onClick={() => navigate('/apply')} tone="light">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center w-full max-w-[320px] sm:max-w-none">
+              <PillButton onClick={() => navigate('/apply')} tone="light" className="w-full sm:w-auto">
                 {t('home.hero.ctaApply')}
               </PillButton>
-              <PillButton onClick={() => navigate('/guide')} tone="ghost-light">
+              <PillButton onClick={() => navigate('/guide')} tone="ghost-light" className="w-full sm:w-auto">
                 {t('home.hero.ctaGuide')} →
               </PillButton>
-            </div>
-            <div className="flex flex-col items-center gap-2 pt-1">
-              <PillButton onClick={() => navigate('/demo/AXIS/L3')} tone="demo">
-                <HeroDemoIcon />
-                {t('home.hero.ctaDemo')}
-              </PillButton>
-              <p className="text-[13px] lg:text-[14px] text-gray-300/90 tracking-[-0.01em]">
-                {t('home.hero.demoHint')}
-              </p>
             </div>
           </div>
         </div>
 
-        <a href="#main" className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 no-underline">
+        <a href="#main" className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden sm:flex flex-col items-center gap-1.5 no-underline">
           <div className="w-px h-5 bg-faint" />
           <span className="text-[9px] font-medium tracking-[4px] text-faint uppercase font-en">SCROLL</span>
         </a>
@@ -208,10 +199,10 @@ export default function HomePage() {
         <section data-tour="home-quick" className={SECTION}>
           <div className={WRAP}>
             <div className="max-w-205 reveal">
-              <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>바로가기</h2>
+              <h2 className={`${H_SEC} mt-0 sm:mt-4`} style={{ color: INK_900 }}>바로가기</h2>
             </div>
 
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="mt-6 sm:mt-10 grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
               {[
                 { title: t('gnb.guide'), desc: t('home.quick.guideDesc'), to: '/guide', icon: 'guide' as const },
                 { title: t('gnb.applyNav'), desc: t('home.quick.applyDesc'), to: '/apply', icon: 'apply' as const },
@@ -221,20 +212,21 @@ export default function HomePage() {
                 <Link
                   key={q.to}
                   to={q.to}
-                  className="group flex flex-col p-6 lg:p-8 no-underline transition-all hover:shadow-sm reveal"
-                  style={{ background: '#F1F5FF', borderRadius: 20 }}
+                  className="group flex flex-col p-4 sm:p-6 lg:p-8 no-underline transition-all hover:shadow-sm reveal rounded-2xl sm:rounded-[20px]"
+                  style={{ background: '#F1F5FF' }}
                 >
                   <span
-                    className="flex items-center justify-center"
-                    style={{ width: 44, height: 44, borderRadius: 12, background: '#2563EB', color: '#fff' }}
+                    className="flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 rounded-[10px] sm:rounded-xl"
+                    style={{ background: '#2563EB', color: '#fff' }}
                     aria-hidden="true"
                   >
                     <QuickLinkIcon name={q.icon} />
                   </span>
-                  <div className={`mt-5 ${H_CARD}`} style={{ color: INK_900 }}>{q.title}</div>
-                  <p className={`mt-2 h-16 ${T_BODY}`} style={{ color: GRAY_500 }}>{q.desc}</p>
+                  <div className={`mt-3 sm:mt-5 ${H_CARD}`} style={{ color: INK_900 }}>{q.title}</div>
+                  {/* 모바일: 아이콘+제목만 노출(앱 숏컷 스타일). 설명·CTA는 sm 이상에서만. */}
+                  <p className={`hidden sm:block sm:mt-2 sm:h-16 ${T_BODY}`} style={{ color: GRAY_500 }}>{q.desc}</p>
                   <span
-                    className="mt-6 inline-flex w-fit text-[14px] font-semibold underline underline-offset-4 transition-colors group-hover:text-blue-700"
+                    className="hidden sm:mt-6 sm:inline-flex w-fit text-[13px] sm:text-[14px] font-semibold underline underline-offset-4 transition-colors group-hover:text-blue-700"
                     style={{ color: INK_900 }}
                   >
                     자세히 보기
@@ -251,15 +243,15 @@ export default function HomePage() {
         <section className={SECTION}>
           <div className={WRAP}>
             <div className="max-w-205 reveal">
-              <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>
+              <h2 className={`${H_SEC} mt-0 sm:mt-4`} style={{ color: INK_900 }}>
                 {t('home.security.title') || '공정한 원격검정을 위한 다중 본인확인 체계'}
               </h2>
-              <p className={`${T_LEAD} mt-5`} style={{ color: GRAY_500 }}>
+              <p className={`${T_LEAD} mt-3 sm:mt-5`} style={{ color: GRAY_500 }}>
                 {t('home.security.sub') || 'AXIS는 다음 절차로 응시자 본인 확인과 시험 공정성을 확보합니다.'}
               </p>
             </div>
 
-            <div className="mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-6 gap-y-12 whitespace-pre-line">
+            <div className="mt-8 sm:mt-12 lg:mt-16 grid grid-cols-2 lg:grid-cols-5 gap-x-4 sm:gap-x-6 gap-y-8 sm:gap-y-10 lg:gap-y-12 whitespace-pre-line">
               {[
                 { icon: 'nice' as const,    title: t('home.security.card.nice.title' as never),    desc: t('home.security.card.nice.desc' as never) },
                 { icon: 'idcard' as const,  title: t('home.security.card.idcard.title' as never),  desc: t('home.security.card.idcard.desc' as never) },
@@ -271,8 +263,8 @@ export default function HomePage() {
                   <div style={{ color: INK_900 }}>
                     <SecurityIcon name={s.icon} />
                   </div>
-                  <h3 className={`mt-5 ${H_CARD}`} style={{ color: INK_900 }}>{s.title}</h3>
-                  <p className={`mt-3 ${T_BODY}`} style={{ color: GRAY_500 }}>{s.desc}</p>
+                  <h3 className={`mt-3 sm:mt-5 ${H_CARD}`} style={{ color: INK_900 }}>{s.title}</h3>
+                  <p className={`mt-2 sm:mt-3 ${T_BODY}`} style={{ color: GRAY_500 }}>{s.desc}</p>
                 </div>
               ))}
             </div>
@@ -281,11 +273,11 @@ export default function HomePage() {
 
         <section className={SECTION} style={{ background: SURFACE_ALT }}>
           <div className={WRAP}>
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 lg:gap-20">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-8 sm:gap-12 lg:gap-20">
 
               {/* 좌측: 타이틀 + 설명 */}
               <div className="reveal">
-                <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>{t('home.cert.title')}</h2>
+                <h2 className={`${H_SEC} mt-0 sm:mt-4`} style={{ color: INK_900 }}>{t('home.cert.title')}</h2>
                 <p className={`${T_LEAD} mt-4`} style={{ color: GRAY_500 }}>
                   {t('home.cert.leadSub' as never)}
                 </p>
@@ -339,15 +331,15 @@ export default function HomePage() {
                       <div
                         className="overflow-hidden"
                         style={{
-                          maxHeight: open ? 360 : 0,
+                          maxHeight: open ? 640 : 0,
                           opacity: open ? 1 : 0,
                           transition: 'max-height .4s cubic-bezier(.16,1,.3,1), opacity .3s ease',
                         }}
                       >
-                        <div className="pb-10 px-8">
+                        <div className="pb-6 px-1 sm:pb-10 sm:px-8">
                           <div>
                             {c.levels.map(lv => (
-                              <div key={lv.l} className="flex items-center justify-between gap-6 py-4" style={{ borderColor: BORDER }}>
+                              <div key={lv.l} className="flex items-center justify-between gap-4 sm:gap-6 py-3 sm:py-4" style={{ borderColor: BORDER }}>
                                 <strong className={`${H_CARD} font-en`} style={{ color: INK_900 }}>{lv.l}</strong>
                                 <span className={`${T_LEAD} text-right`} style={{ color: GRAY_500 }}>{lv.d}</span>
                               </div>
@@ -370,16 +362,16 @@ export default function HomePage() {
             <div
               className="reveal overflow-hidden"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-10">
+              <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-6 sm:gap-8 lg:gap-10">
 
                 <div className="flex flex-col">
                   <div>
-                    <h2 className={` mb-10 ${H_SEC}`}>
+                    <h2 className={`mb-5 sm:mb-10 ${H_SEC}`}>
                       {t('home.eval.title' as never)}
                     </h2>
                   </div>
 
-                  <div className="mt-6 lg:mt-8 space-y-5 lg:space-y-6">
+                  <div className="mt-0 sm:mt-6 lg:mt-8 space-y-4 sm:space-y-5 lg:space-y-6">
                     {[
                       { level: 'L3', title: t('home.eval.l3.title' as never), desc: t('home.eval.l3.desc' as never) },
                       { level: 'L2', title: t('home.eval.l2.title' as never), desc: t('home.eval.l2.desc' as never) },
@@ -415,22 +407,22 @@ export default function HomePage() {
           <div className={WRAP}>
             <div className="flex flex-wrap items-end justify-between gap-6 reveal">
               <div className="max-w-205">
-                <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>{t('home.results.title')}</h2>
-                <p className={`${T_LEAD} mt-5`} style={{ color: GRAY_500 }}>{t('home.results.sub' as never)}</p>
+                <h2 className={`${H_SEC} mt-0 sm:mt-4`} style={{ color: INK_900 }}>{t('home.results.title')}</h2>
+                <p className={`${T_LEAD} mt-3 sm:mt-5`} style={{ color: GRAY_500 }}>{t('home.results.sub' as never)}</p>
               </div>
               <MoreLink to="/results">{t('home.results.more' as never)}</MoreLink>
             </div>
 
-            <div className="mt-10 lg:mt-10 space-y-3">
+            <div className="mt-5 sm:mt-10 space-y-2.5 sm:space-y-3">
               <ScheduleRow
                 status={t('home.results.status.done' as never)} statusColor="#059669"
                 title="AXIS L3" meta={t('home.results.demo.doneMeta' as never, { round: t('home.results.demo.round' as never) })} sub=""
-                cta={<Link to="/results" className="inline-flex items-center justify-center h-12 min-w-29.5 px-6 rounded-[10px] text-[16px] lg:text-[17px] font-semibold bg-blue-700" style={{ color: '#fff' }}>{t('home.results.cta.view' as never)}</Link>}
+                cta={<Link to="/results" className="inline-flex items-center justify-center h-10 sm:h-12 min-w-0 sm:min-w-29.5 px-5 sm:px-6 rounded-[10px] text-[14px] sm:text-[16px] lg:text-[17px] font-semibold bg-blue-700" style={{ color: '#fff' }}>{t('home.results.cta.view' as never)}</Link>}
               />
               <ScheduleRow
                 status={t('home.results.status.grading' as never)} statusColor="#D97706"
                 title="AXIS-C L3" meta={t('home.results.demo.gradingMeta' as never, { round: t('home.results.demo.round' as never) })} sub=""
-                  cta={<span className="inline-flex items-center justify-center h-12 min-w-29.5 px-6 rounded-[10px] text-[16px] lg:text-[17px] font-semibold bg-gray-200 text-gray-500">{t('home.results.cta.pending' as never)}</span>}
+                  cta={<span className="inline-flex items-center justify-center h-10 sm:h-12 min-w-0 sm:min-w-29.5 px-5 sm:px-6 rounded-[10px] text-[14px] sm:text-[16px] lg:text-[17px] font-semibold bg-gray-200 text-gray-500 tex" style={{ color: '#fff' }}>{t('home.results.cta.pending' as never)}</span>}
               />
             </div>
 
@@ -442,12 +434,12 @@ export default function HomePage() {
           <div className={WRAP}>
             <div className="flex flex-wrap items-end justify-between gap-6 reveal">
               <div>
-                <h2 className={`${H_SEC} mt-4`} style={{ color: INK_900 }}>{t('home.notices.title' as never)}</h2>
+                <h2 className={`${H_SEC} mt-0 sm:mt-4`} style={{ color: INK_900 }}>{t('home.notices.title' as never)}</h2>
               </div>
               <MoreLink to="/qna?tab=notice">{t('home.notices.more' as never)}</MoreLink>
             </div>
 
-            <div className="mt-12 lg:mt-16">
+            <div className="mt-6 sm:mt-12 lg:mt-16">
               {homeNotices.length === 0 ? (
                 <p className={`${T_BODY} text-center py-10`} style={{ color: GRAY_300 }}>
                   {t('home.notices.empty' as never)}
@@ -479,7 +471,7 @@ function MoreLink({ to, children }: { to: string; children: React.ReactNode }) {
   return (
     <Link
       to={to}
-      className="group inline-flex items-center gap-2 h-11 lg:h-12 px-5 lg:px-6 rounded-full text-[14px] lg:text-[15px] font-semibold border-2 transition-colors border-[#191919] text-[#191919] bg-white hover:bg-black hover:!text-white"
+      className="group inline-flex items-center gap-1.5 sm:gap-2 h-9 sm:h-11 lg:h-12 px-3.5 sm:px-5 lg:px-6 rounded-full text-[13px] sm:text-[14px] lg:text-[15px] font-semibold border-2 transition-colors border-[#191919] text-[#191919] bg-white hover:bg-black hover:!text-white"
     >
       <span className="group-hover:text-white">{children}</span>
       <svg
@@ -508,10 +500,12 @@ function PillButton({
   children,
   onClick,
   tone,
+  className = '',
 }: {
   children: React.ReactNode;
   onClick: () => void;
   tone: 'dark' | 'ghost' | 'light' | 'ghost-light' | 'demo';
+  className?: string;
 }) {
   const styles: Record<typeof tone, React.CSSProperties> = {
     dark: { background: INK_900, color: '#fff', border: `1px solid ${INK_900}` },
@@ -531,9 +525,9 @@ function PillButton({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex items-center gap-2 h-13 px-7 text-[16px] font-semibold transition-all ${
+      className={`inline-flex items-center justify-center gap-2 h-13 px-7 text-[16px] font-semibold transition-all touch-manipulation ${
         tone === 'demo' ? 'hover:bg-[rgba(37,99,235,0.34)] hover:border-[rgba(191,219,254,0.75)]' : 'hover:opacity-90'
-      }`}
+      } ${className}`}
       style={{ borderRadius: 50, ...styles[tone] }}
     >
       {children}
@@ -571,7 +565,7 @@ function ScheduleRow({
 }) {
   return (
     <div
-      className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 p-5 sm:p-6 lg:p-8 reveal"
+      className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 p-4 sm:p-6 lg:p-8 reveal"
       style={{ background: SURFACE, borderRadius: 20, border: `1px solid ${BORDER}` }}
     >
       <span className={`shrink-0 sm:min-w-24 ${T_SMALL} font-semibold`} style={{ color: statusColor }}>{status}</span>

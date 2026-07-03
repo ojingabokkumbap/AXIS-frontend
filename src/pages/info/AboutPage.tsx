@@ -64,7 +64,7 @@ export default function AboutPage() {
         onChange={(k) => setActiveTab(k)}
       />
 
-      <main ref={mainRef} className="mx-auto py-16 " style={{ maxWidth: 'var(--spacing-content-w)' }}>
+      <main ref={mainRef} className="mx-auto py-16 px-5 sm:px-6 lg:px-8" style={{ maxWidth: 'var(--spacing-content-w)' }}>
 
         {activeTab === 'about' && (
           <>
@@ -90,7 +90,8 @@ export default function AboutPage() {
             <section className="mb-14 reveal">
               <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>AXIS 시리즈</h2>
               <p className={`${T_BODY} mb-5`} style={{ color: GRAY_500 }}>AXIS는 단일 자격이 아니라, 직무와 산업에 맞게 설계된 시리즈입니다.</p>
-              <div className={TABLE_WRAP}>
+              {/* Desktop: 표 / Mobile: 카드 */}
+              <div className={`${TABLE_WRAP} hidden md:block`}>
                 <table className="data-table" style={{ minWidth: 500 }}>
                   <thead>
                     <tr>
@@ -123,6 +124,21 @@ export default function AboutPage() {
                   </tbody>
                 </table>
               </div>
+              <div className="md:hidden mt-4 flex flex-col gap-3 break-keep">
+                {[
+                  { name: 'AXIS', sub: 'AI 실무역량검정', desc: '전 직종 재직자를 위한 범용 AI 실무역량검정. 코딩 없이 AI로 업무 성과를 내는 능력을 검증합니다.' },
+                  { name: 'AXIS-C', sub: 'AI 코딩자동화', desc: '현업 자동화 담당자·비개발 실무자를 위한 AI 코딩·자동화 실무역량검정. 코딩 전문가가 아니어도 AI 도구로 업무를 자동화하고 검증하는 역량을 평가합니다.' },
+                  { name: 'AXIS-H', sub: '의료기관 AI', desc: '원무·행정·간호 등 의료기관 종사자를 위한 AI 실무역량검정. 진단·치료를 제외한 비임상 업무에 AI를 적용하는 역량을 평가합니다.' },
+                ].map((row) => (
+                  <div key={row.name} className="rounded-lg border border-[#e5e7eb] p-4">
+                    <div className="flex items-baseline flex-wrap gap-x-2 gap-y-0.5 mb-2 pb-2 border-b border-[#f0f0f0]">
+                      <strong className="text-[17px] font-semibold" style={{ color: INK_900 }}>{row.name}</strong>
+                      <span className="text-[14px]" style={{ color: GRAY_300 }}>{row.sub}</span>
+                    </div>
+                    <p className="text-[15px] leading-[1.7]" style={{ color: GRAY_500 }}>{row.desc}</p>
+                  </div>
+                ))}
+              </div>
             </section>
           </>
         )}
@@ -135,7 +151,8 @@ export default function AboutPage() {
                 AXIS는 <strong className="text-ink font-semibold px-1 rounded-sm bg-sky-100">L3 Starter, L2 Practitioner, L1 Leader</strong> 세 단계로 구성됩니다.
                 등급 체계는 3개 자격 공통입니다.
               </p>
-              <div className={TABLE_WRAP}>
+              {/* Desktop: 표 / Mobile: 카드 */}
+              <div className={`${TABLE_WRAP} hidden md:block`}>
                 <table className="data-table" style={{ minWidth: 500 }}>
                   <thead>
                     <tr>
@@ -148,6 +165,29 @@ export default function AboutPage() {
                     <tr><td><strong>L1 Leader</strong></td><td>AX 리더</td><td>객관식 25 + 실행계획서 + 서술형 2</td><td>AI 도입 실행계획, 변화관리, 거버넌스</td></tr>
                   </tbody>
                 </table>
+              </div>
+              <div className="md:hidden mt-4 flex flex-col gap-3 break-keep">
+                {[
+                  { grade: 'L3 Starter', target: 'AI 입문자', method: '객관식 40 + 실습 4', skill: 'AI 기초 이해, 기초 프롬프트, 윤리' },
+                  { grade: 'L2 Practitioner', target: '실무 활용자', method: '사례형 객관식 30 + 실습 3과제', skill: 'AI 도구 선택, 고급 프롬프트, 산출물 검증' },
+                  { grade: 'L1 Leader', target: 'AX 리더', method: '객관식 25 + 실행계획서 + 서술형 2', skill: 'AI 도입 실행계획, 변화관리, 거버넌스' },
+                ].map((row) => (
+                  <div key={row.grade} className="rounded-lg border border-[#e5e7eb] p-4">
+                    <strong className="block text-[17px] font-semibold mb-3 pb-2 border-b border-[#f0f0f0]" style={{ color: INK_900 }}>{row.grade}</strong>
+                    <dl className="flex flex-col gap-2">
+                      {[
+                        { k: '대상', v: row.target },
+                        { k: '평가 방식', v: row.method },
+                        { k: '핵심 역량', v: row.skill },
+                      ].map((f) => (
+                        <div key={f.k} className="flex gap-3">
+                          <dt className="shrink-0 w-[68px] text-[13px] font-medium pt-0.5" style={{ color: GRAY_300 }}>{f.k}</dt>
+                          <dd className="flex-1 min-w-0 text-[15px] leading-[1.6]" style={{ color: GRAY_500 }}>{f.v}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                ))}
               </div>
             </section>
             <div className="w-10 h-px bg-border mb-14" />
@@ -195,7 +235,7 @@ export default function AboutPage() {
 
         <section className="reveal">
           <div
-            className="relative overflow-hidden rounded-[20px] px-7 py-9 lg:px-12 lg:py-12"
+            className="relative overflow-hidden rounded-2xl px-5 py-8 sm:rounded-[20px] sm:px-7 sm:py-9 lg:px-12 lg:py-12"
             style={{
               backgroundImage: `url(${ctaBg})`,
               backgroundSize: 'cover',
@@ -203,24 +243,24 @@ export default function AboutPage() {
             }}
           >
             <div className="absolute inset-0 bg-blue-800/50" aria-hidden="true" />
-            <div className="relative mx-auto text-center">
-              <p className={`${H_SEC} text-white`}>
+            <div className="relative mx-auto max-w-2xl text-center">
+              <p className="text-[19px] sm:text-[26px] lg:text-[34px] font-semibold leading-[1.4] sm:leading-[1.3] tracking-[-0.02em] text-white break-keep">
                 AXIS와 함께<br />
                 AI 실무역량을 업그레이드하세요.
               </p>
-              <p className={`mt-4 ${T_BODY} text-blue-100`}>
+              <p className="mt-2.5 sm:mt-4 text-[14px] sm:text-[16px] lg:text-[19px] leading-[1.6] sm:leading-[1.85] tracking-[-0.005em] text-blue-100 break-keep">
                 시험 일정 확인부터 단체 응시 상담까지, 필요한 경로를 바로 선택해보세요.
               </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
                 <Link
                   to="/apply"
-                  className="inline-flex h-12 items-center justify-center rounded-full bg-white px-7 text-[16px] font-semibold text-blue-700 transition-colors hover:bg-blue-50"
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center rounded-full bg-white px-6 sm:px-7 text-[15px] sm:text-[16px] font-semibold text-blue-700 transition-colors hover:bg-blue-50 touch-manipulation"
                 >
                   시험접수 시작하기
                 </Link>
                 <Link
                   to="/qna"
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/85 bg-transparent px-7 text-[16px] font-semibold !text-white hover:!text-white"
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center rounded-full border border-white/85 bg-transparent px-6 sm:px-7 text-[15px] sm:text-[16px] font-semibold !text-white hover:!text-white touch-manipulation"
                 >
                   기업/단체 응시 문의
                 </Link>

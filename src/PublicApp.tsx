@@ -26,8 +26,10 @@ import CertGuidePage from './pages/info/CertGuidePage';
 import ResultsPage from './pages/info/ResultsPage';
 import VerifyCertPage from './pages/info/VerifyCertPage';
 import AboutPage from './pages/info/AboutPage';
-import { OnboardingProvider } from '@/components/onboarding/OnboardingProvider';
 import { MobileExamGuard } from '@/components/MobileExamGuard';
+import { TourProvider } from '@/components/onboarding/TourProvider';
+import { TourOverlay } from '@/components/onboarding/TourOverlay';
+import { GuideWidget } from '@/components/onboarding/GuideWidget';
 
 function RequireAuth({ children }: { children: ReactElement }) {
   const location = useLocation();
@@ -40,8 +42,11 @@ function RequireAuth({ children }: { children: ReactElement }) {
 export default function PublicApp() {
   return (
     <BrowserRouter>
-      <OnboardingProvider>
       <SessionSupersededModalHost />
+      <TourProvider>
+      {/* 모바일/태블릿(lg 미만)에서 한글이 어절 단위로만 줄바꿈되도록 전역 적용.
+          word-break: keep-all 은 상속되므로 하위 모든 공개 페이지 텍스트에 반영된다. */}
+      <div className="max-lg:break-keep">
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
@@ -142,11 +147,9 @@ export default function PublicApp() {
         <Route
           path="/demo/:certType/:level"
           element={
-            <RequireAuth>
-              <MobileExamGuard>
-                <DemoPage />
-              </MobileExamGuard>
-            </RequireAuth>
+            <MobileExamGuard>
+              <DemoPage />
+            </MobileExamGuard>
           }
         />
         <Route
@@ -204,7 +207,10 @@ export default function PublicApp() {
           }
         />
       </Routes>
-      </OnboardingProvider>
+      </div>
+      <GuideWidget />
+      <TourOverlay />
+      </TourProvider>
     </BrowserRouter>
   );
 }

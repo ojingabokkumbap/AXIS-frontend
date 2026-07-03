@@ -13,8 +13,8 @@ const BODY = '#525252';
 const MUTED = '#8C8C8C';
 const DIVIDER = '#E5E5E5';
 
-const colHead = `text-[15px] font-bold mb-5 font-en`;
-const colLink = `block text-[14px] leading-[2.1] no-underline transition-colors text-[${BODY}] hover:text-[${INK}]`;
+const colHead = `text-[14px] sm:text-[15px] font-bold mb-3 sm:mb-5 font-en`;
+const colLink = `block text-[14px] leading-[1.95] sm:leading-[2.1] no-underline transition-colors text-[${BODY}] hover:text-[${INK}]`;
 
 function adminFooterHostLabel(url: string): string {
   try {
@@ -60,20 +60,20 @@ export function SiteFooter() {
       className="bg-white"
       style={{ borderTop: `1px solid #bfbfbf`, color: BODY }}
     >
-      <div className="mx-auto px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 lg:pt-20 pb-8" style={{ maxWidth: 1280 }}>
+      <div className="mx-auto px-5 sm:px-6 lg:px-10 pt-10 sm:pt-16 lg:pt-20 pb-6 sm:pb-8" style={{ maxWidth: 1280 }}>
 
         {/* ── Top: 다칼럼 ── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-8 sm:gap-x-8 sm:gap-y-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 sm:gap-x-8 sm:gap-y-10">
 
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div
-              className="text-[28px] font-extrabold font-en"
+              className="text-[24px] sm:text-[28px] font-extrabold font-en"
               style={{ color: INK, letterSpacing: '-0.02em' }}
             >
               AXIS
             </div>
-            <p className="mt-4 text-[14px] leading-[1.7] max-lg:break-keep" style={{ color: MUTED }}>
+            <p className="mt-3 sm:mt-4 text-[13px] sm:text-[14px] leading-[1.6] sm:leading-[1.7] max-lg:break-keep" style={{ color: MUTED }}>
               AI 시대의 실무 역량을 검증하는<br />
               민간자격 검정 플랫폼
             </p>
@@ -83,7 +83,9 @@ export function SiteFooter() {
           <div>
             <div className={colHead} style={{ color: INK }}>{t('footer.quick')}</div>
             {authFooterLink('/apply', t('footer.q.apply'))}
-            {authFooterLink('/demo/AXIS/L3', t('footer.q.exam'))}
+            <Link to="/demo/AXIS/L3" className={colLink} style={{ color: BODY }}>
+              {t('footer.q.exam')}
+            </Link>
             {authFooterLink('/results', t('footer.q.results'))}
             <Link to="/verify-cert" className={colLink} style={{ color: BODY }}>
               {t('footer.q.verify')}
@@ -101,7 +103,7 @@ export function SiteFooter() {
           {/* 연락처 */}
           <div className="col-span-2 md:col-span-1">
             <div className={colHead} style={{ color: INK }}>{t('footer.contact')}</div>
-            <div className="text-[20px] font-bold font-en mb-1" style={{ color: INK }}>
+            <div className="text-[18px] sm:text-[20px] font-bold font-en mb-1" style={{ color: INK }}>
               {t('footer.phone')}
             </div>
             <a href="mailto:support@axisexam.com" className={colLink} style={{ color: BODY }}>
@@ -111,7 +113,7 @@ export function SiteFooter() {
               {t('footer.hours')}
             </div>
 
-            <div className="mt-5 flex flex-col gap-1.5">
+            <div className="mt-4 sm:mt-5 flex flex-col gap-1.5">
               <a
                 href="https://ainexs.co.kr"
                 target="_blank"
@@ -140,7 +142,7 @@ export function SiteFooter() {
 
         {/* ── Bottom bar ── */}
         <div
-          className="mt-10 md:mt-14 pt-6 flex flex-col gap-4 md:flex-row md:items-start md:justify-between"
+          className="mt-7 md:mt-14 pt-5 sm:pt-6 flex flex-col gap-3 sm:gap-4 md:flex-row md:items-start md:justify-between"
           style={{ borderTop: `1px solid #bfbfbf` }}
         >
           {/* Copyright + 회사 정보 */}

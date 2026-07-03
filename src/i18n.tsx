@@ -10,7 +10,8 @@ const STORAGE_KEY = 'axis.lang';
 
 const dict = { ko, en } as const;
 
-type Key = keyof typeof ko;
+export type I18nKey = keyof typeof ko;
+type Key = I18nKey;
 
 interface I18nCtx {
   lang: Lang;

@@ -62,7 +62,7 @@ export default function ApplyCompletePage() {
       {toast && <MiniToast message={toast} onClose={() => setToast(null)} />}
       <SiteHeader active="apply" />
 
-      <div className="flex-1 max-w-lg w-full mx-auto px-4 py-8 sm:py-12">
+      <div className="flex-1 max-w-lg w-full mx-auto px-5 py-8 sm:py-12">
         <div className="text-center text-[20px] sm:text-[22px] font-extrabold text-[#0F172A] mb-2 break-keep">
           {t('apply.complete.vaTitle' as never)}
         </div>

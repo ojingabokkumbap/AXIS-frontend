@@ -361,7 +361,7 @@ export default function VerifyCertPage() {
 
       <main
         ref={mainRef}
-        className="mx-auto flex-1 w-full min-w-0 py-6 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 max-lg:break-keep"
+        className="mx-auto flex-1 w-full min-w-0 py-6 sm:py-12 lg:py-16 px-5 sm:px-6 lg:px-8 max-lg:break-keep"
         style={{ maxWidth: 'var(--spacing-content-w)' }}
       >
 
@@ -495,10 +495,10 @@ export default function VerifyCertPage() {
           >
             <div className="absolute inset-0 bg-blue-800/50" aria-hidden="true" />
             <div className="relative mx-auto max-w-2xl text-center">
-              <p className={`${H_SEC} text-white`}>
+              <p className="text-[19px] sm:text-[26px] lg:text-[34px] font-semibold leading-[1.4] sm:leading-[1.3] tracking-[-0.02em] text-white break-keep">
                 <span className="block sm:inline">기업·기관 단위로 자격 검증이 필요하신가요?</span>
               </p>
-              <p className={`mt-3 sm:mt-4 ${T_BODY} text-blue-100`}>
+              <p className="mt-2.5 sm:mt-4 text-[14px] sm:text-[16px] lg:text-[19px] leading-[1.6] sm:leading-[1.85] tracking-[-0.005em] text-blue-100 break-keep">
                 API·일괄 검증 연동부터 채용 시스템 통합까지, 규모에 맞게 상담해드립니다.
               </p>
               <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">

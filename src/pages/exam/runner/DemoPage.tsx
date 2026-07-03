@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { demoApi, proctorApi, aiProctorApi, type CertType, type CertLevel } from '@/services/api';
 import { useI18n, LangToggle } from '@/i18n';
+import { ProgressBar } from '@/components/verify/ProgressBar';
 import { EXAM, ExamPageHeader, ExamExitConfirmModal } from '@/pages/exam/shared';
 import {
   useProctorMonitorLive,
@@ -44,19 +45,6 @@ import {
   type WarningEntry,
   type WarningKind,
 } from '../proctor/overlays/LiveWarningOverlay';
-import { TourHelpFab } from '@/components/onboarding/TourHelpFab';
-import { DemoTour, isTourDone, resetAllDemoTours, type DemoTourStep } from './DemoTour';
-
-// ── Demo tour localStorage keys ──────────────────────────
-// Bumping the version (…v1 → …v2) replays the tour for everyone — useful when
-// we materially change the step list.
-const TOUR_KEY_INTRO = 'axis.demoTour.intro.v2';
-const TOUR_KEY_GATE = 'axis.demoTour.gate.v1';
-const TOUR_KEY_RUNNER = 'axis.demoTour.runner.v1';
-const TOUR_KEY_FS_EXIT = 'axis.demoTour.fsExit.v1';
-const TOUR_KEY_RESULT = 'axis.demoTour.result.v2';
-const TOUR_KEY_CERT = 'axis.demoTour.certificate.v1';
-const TOUR_KEY_VERIFY = 'axis.demoTour.verify.v1';
 
 // Display limits shown in the UI cards (cosmetic — gives the feel of the real exam)
 const DISPLAY_LIMITS = {
@@ -435,6 +423,94 @@ function DemoExamPicker({
   );
 }
 
+function DemoFlowShell({
+  step,
+  totalSteps,
+  title,
+  description,
+  badge,
+  children,
+  footer,
+  width = 'max-w-[1120px]',
+}: {
+  step: number;
+  totalSteps: number;
+  title: ReactNode;
+  description?: ReactNode;
+  badge?: ReactNode;
+  children: ReactNode;
+  footer?: ReactNode;
+  width?: string;
+}) {
+  return (
+    <main className="flex-1 min-h-0 overflow-y-auto">
+      <div className={`mx-auto w-full ${width} px-5 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10`}>
+        <div className="mb-5 sm:mb-6">
+          <ProgressBar current={step} total={totalSteps} />
+        </div>
+        <div className="rounded-[28px] border border-[#DCE5F0] bg-white shadow-[0_20px_70px_rgba(15,23,42,0.08)] overflow-hidden">
+          <div className="border-b border-[#E8EEF5] bg-[linear-gradient(180deg,#F8FBFF_0%,#F4F8FC_100%)] px-6 py-6 sm:px-8 sm:py-7">
+            {badge ? <div className="mb-3">{badge}</div> : null}
+            <h1 className="text-[24px] sm:text-[32px] font-semibold tracking-[-0.03em] text-[#0F172A] leading-[1.2]">
+              {title}
+            </h1>
+            {description ? (
+              <p className="mt-3 max-w-[760px] text-[14px] sm:text-[16px] leading-[1.7] text-[#475569] break-keep">
+                {description}
+              </p>
+            ) : null}
+          </div>
+          <div className="px-6 py-6 sm:px-8 sm:py-8">{children}</div>
+          {footer ? <div className="border-t border-[#E8EEF5] bg-[#F8FAFC] px-6 py-4 sm:px-8">{footer}</div> : null}
+        </div>
+      </div>
+    </main>
+  );
+}
+
+function DemoCallout({
+  tone = 'info',
+  title,
+  children,
+}: {
+  tone?: 'info' | 'warn' | 'danger';
+  title: ReactNode;
+  children: ReactNode;
+}) {
+  const styles =
+    tone === 'warn'
+      ? 'border-[#FDE68A] bg-[#FFFBEB]'
+      : tone === 'danger'
+        ? 'border-[#FECACA] bg-[#FEF2F2]'
+        : 'border-[#BFDBFE] bg-[#EFF6FF]';
+  const titleColor =
+    tone === 'warn' ? 'text-[#92400E]' : tone === 'danger' ? 'text-[#B91C1C]' : 'text-[#1D4ED8]';
+
+  return (
+    <section className={`rounded-2xl border px-4 py-4 sm:px-5 ${styles}`}>
+      <h3 className={`text-[14px] sm:text-[15px] font-semibold ${titleColor}`}>{title}</h3>
+      <div className="mt-2 text-[13px] sm:text-[14px] leading-[1.7] text-[#334155]">{children}</div>
+    </section>
+  );
+}
+
+function DemoFact({
+  label,
+  value,
+}: {
+  label: ReactNode;
+  value: ReactNode;
+}) {
+  return (
+    <div className="rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC] px-4 py-4">
+      <div className="text-[12px] font-medium tracking-[0.02em] text-[#64748B]">{label}</div>
+      <div className="mt-1 text-[18px] sm:text-[22px] font-semibold tracking-[-0.02em] text-[#0F172A]">
+        {value}
+      </div>
+    </div>
+  );
+}
+
 export default function DemoPage() {
   const navigate = useNavigate();
   const { t, lang } = useI18n();
@@ -501,329 +577,7 @@ export default function DemoPage() {
   /** Guards against out-of-order demo paper fetches when cert/level changes quickly. */
   const paperFetchIdRef = useRef(0);
 
-  // ── Game-style tutorial tour ─────────────────────────────
-  // Auto-runs once per phase; the "Replay tutorial" button sets `forceOpen`.
-  const [introTourOpen, setIntroTourOpen] = useState(false);
-  const [gateTourOpen, setGateTourOpen] = useState(false);
-  const [runnerTourOpen, setRunnerTourOpen] = useState(false);
-  const [fsExitTourOpen, setFsExitTourOpen] = useState(false);
-  const [resultTourOpen, setResultTourOpen] = useState(false);
-  const [certTourOpen, setCertTourOpen] = useState(false);
-  const [verifyTourOpen, setVerifyTourOpen] = useState(false);
-  const [tourForceReplay, setTourForceReplay] = useState(false);
   const [confirmExitOpen, setConfirmExitOpen] = useState(false);
-  const replayAllTours = useCallback(() => {
-    resetAllDemoTours();
-    setTourForceReplay(true);
-    setIntroTourOpen(true);
-  }, []);
-
-  // Localized tour controls — passed into DemoTour.
-  const tourLabels = useMemo(
-    () => ({
-      next: t('demoTour.controls.next' as never),
-      prev: t('demoTour.controls.prev' as never),
-      skip: t('demoTour.controls.skip' as never),
-      finish: t('demoTour.controls.finish' as never),
-      realExam: t('demoTour.controls.realExam' as never),
-      progress: (i: number, n: number) =>
-        t('demoTour.controls.progress' as never, { i, n }),
-    }),
-    [t],
-  );
-
-  const introTourSteps = useMemo<DemoTourStep[]>(
-    () => [
-      {
-        id: 'welcome',
-        title: t('demoTour.intro.welcome.title' as never),
-        body: t('demoTour.intro.welcome.body' as never),
-        realExam: t('demoTour.intro.welcome.real' as never),
-      },
-      {
-        id: 'picker',
-        target: '[data-tour="intro-picker"]',
-        title: t('demoTour.intro.picker.title' as never),
-        body: t('demoTour.intro.picker.body' as never),
-        realExam: t('demoTour.intro.picker.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'rules',
-        target: '[data-tour="intro-rules"]',
-        title: t('demoTour.intro.rules.title' as never),
-        body: t('demoTour.intro.rules.body' as never),
-        realExam: t('demoTour.intro.rules.real' as never),
-        placement: 'top',
-      },
-      {
-        id: 'start',
-        target: '[data-tour="intro-start"]',
-        title: t('demoTour.intro.start.title' as never),
-        body: t('demoTour.intro.start.body' as never),
-        realExam: t('demoTour.intro.start.real' as never),
-        placement: 'top',
-      },
-      {
-        id: 'help',
-        target: '[data-tour="site-guide-fab"]',
-        title: t('demoTour.intro.help.title' as never),
-        body: t('demoTour.intro.help.body' as never),
-        placement: 'top',
-      },
-    ],
-    [t],
-  );
-
-  const gateTourSteps = useMemo<DemoTourStep[]>(
-    () => [
-      {
-        id: 'welcome',
-        title: t('demoTour.gate.welcome.title' as never),
-        body: t('demoTour.gate.welcome.body' as never),
-        realExam: t('demoTour.gate.welcome.real' as never),
-      },
-      {
-        id: 'enter',
-        target: '[data-tour="gate-enter"]',
-        title: t('demoTour.gate.enter.title' as never),
-        body: t('demoTour.gate.enter.body' as never),
-        realExam: t('demoTour.gate.enter.real' as never),
-        placement: 'top',
-      },
-      {
-        id: 'help',
-        target: '[data-tour="site-guide-fab"]',
-        title: t('demoTour.gate.help.title' as never),
-        body: t('demoTour.gate.help.body' as never),
-        placement: 'top',
-      },
-    ],
-    [t],
-  );
-
-  const runnerTourSteps = useMemo<DemoTourStep[]>(
-    () => [
-      {
-        id: 'timer',
-        target: '[data-tour="runner-timer"]',
-        title: t('demoTour.runner.timer.title' as never),
-        body: t('demoTour.runner.timer.body' as never),
-        realExam: t('demoTour.runner.timer.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'toolbar',
-        target: '[data-tour="runner-toolbar"]',
-        title: t('demoTour.runner.toolbar.title' as never),
-        body: t('demoTour.runner.toolbar.body' as never),
-        realExam: t('demoTour.runner.toolbar.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'question',
-        target: '[data-tour="runner-question"]',
-        title: t('demoTour.runner.question.title' as never),
-        body: t('demoTour.runner.question.body' as never),
-        realExam: t('demoTour.runner.question.real' as never),
-        placement: 'right',
-      },
-      {
-        id: 'sheet',
-        target: '[data-tour="runner-sheet"]',
-        title: t('demoTour.runner.sheet.title' as never),
-        body: t('demoTour.runner.sheet.body' as never),
-        realExam: t('demoTour.runner.sheet.real' as never),
-        placement: 'left',
-      },
-      {
-        id: 'submit',
-        target: '[data-tour="runner-submit"]',
-        title: t('demoTour.runner.submit.title' as never),
-        body: t('demoTour.runner.submit.body' as never),
-        realExam: t('demoTour.runner.submit.real' as never),
-        placement: 'top',
-      },
-    ],
-    [t],
-  );
-
-  const fsExitTourSteps = useMemo<DemoTourStep[]>(
-    () => [
-      {
-        id: 'welcome',
-        title: t('demoTour.fsExit.welcome.title' as never),
-        body: t('demoTour.fsExit.welcome.body' as never),
-        realExam: t('demoTour.fsExit.welcome.real' as never),
-      },
-      {
-        id: 'warn',
-        target: '[data-tour="fs-exit-warn"]',
-        title: t('demoTour.fsExit.warn.title' as never),
-        body: t('demoTour.fsExit.warn.body' as never),
-        realExam: t('demoTour.fsExit.warn.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'demo',
-        target: '[data-tour="fs-exit-demo"]',
-        title: t('demoTour.fsExit.demo.title' as never),
-        body: t('demoTour.fsExit.demo.body' as never),
-        realExam: t('demoTour.fsExit.demo.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'resume',
-        target: '[data-tour="fs-exit-resume"]',
-        title: t('demoTour.fsExit.resume.title' as never),
-        body: t('demoTour.fsExit.resume.body' as never),
-        realExam: t('demoTour.fsExit.resume.real' as never),
-        placement: 'top',
-      },
-      {
-        id: 'help',
-        target: '[data-tour="site-guide-fab"]',
-        title: t('demoTour.fsExit.help.title' as never),
-        body: t('demoTour.fsExit.help.body' as never),
-        placement: 'top',
-      },
-    ],
-    [t],
-  );
-
-  const resultTourSteps = useMemo<DemoTourStep[]>(
-    () => [
-      {
-        id: 'score',
-        target: '[data-tour="result-score"]',
-        title: t('demoTour.result.score.title' as never),
-        body: t('demoTour.result.score.body' as never),
-        realExam: t('demoTour.result.score.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'tabs',
-        target: '[data-tour="result-tabs"]',
-        title: t('demoTour.result.tabs.title' as never),
-        body: t('demoTour.result.tabs.body' as never),
-        realExam: t('demoTour.result.tabs.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'coaching',
-        target: '[data-tour="result-coaching-tab"]',
-        title: t('demoTour.result.coaching.title' as never),
-        body: t('demoTour.result.coaching.body' as never),
-        realExam: t('demoTour.result.coaching.real' as never),
-        placement: 'bottom',
-        onEnter: () => {
-          const btn = document.querySelector('[data-tour="result-coaching-tab"]') as HTMLElement | null;
-          btn?.click();
-        },
-      },
-      {
-        id: 'cert',
-        target: '[data-tour="result-cert-btn"]',
-        title: t('demoTour.result.cert.title' as never),
-        body: t('demoTour.result.cert.body' as never),
-        realExam: t('demoTour.result.cert.real' as never),
-        placement: 'left',
-      },
-      {
-        id: 'help',
-        target: '[data-tour="site-guide-fab"]',
-        title: t('demoTour.result.help.title' as never),
-        body: t('demoTour.result.help.body' as never),
-        placement: 'top',
-      },
-    ],
-    [t],
-  );
-
-  const certTourSteps = useMemo<DemoTourStep[]>(
-    () => [
-      {
-        id: 'welcome',
-        title: t('demoTour.cert.welcome.title' as never),
-        body: t('demoTour.cert.welcome.body' as never),
-        realExam: t('demoTour.cert.welcome.real' as never),
-      },
-      {
-        id: 'info',
-        target: '[data-tour="cert-info"]',
-        title: t('demoTour.cert.info.title' as never),
-        body: t('demoTour.cert.info.body' as never),
-        realExam: t('demoTour.cert.info.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'preview',
-        target: '[data-tour="cert-preview"]',
-        title: t('demoTour.cert.preview.title' as never),
-        body: t('demoTour.cert.preview.body' as never),
-        realExam: t('demoTour.cert.preview.real' as never),
-        placement: 'top',
-      },
-      {
-        id: 'continue',
-        target: '[data-tour="cert-continue"]',
-        title: t('demoTour.cert.continue.title' as never),
-        body: t('demoTour.cert.continue.body' as never),
-        realExam: t('demoTour.cert.continue.real' as never),
-        placement: 'left',
-      },
-      {
-        id: 'help',
-        target: '[data-tour="site-guide-fab"]',
-        title: t('demoTour.cert.help.title' as never),
-        body: t('demoTour.cert.help.body' as never),
-        placement: 'top',
-      },
-    ],
-    [t],
-  );
-
-  const verifyTourSteps = useMemo<DemoTourStep[]>(
-    () => [
-      {
-        id: 'welcome',
-        title: t('demoTour.verify.welcome.title' as never),
-        body: t('demoTour.verify.welcome.body' as never),
-        realExam: t('demoTour.verify.welcome.real' as never),
-      },
-      {
-        id: 'qr',
-        target: '[data-tour="verify-qr"]',
-        title: t('demoTour.verify.qr.title' as never),
-        body: t('demoTour.verify.qr.body' as never),
-        realExam: t('demoTour.verify.qr.real' as never),
-        placement: 'bottom',
-      },
-      {
-        id: 'apply',
-        target: '[data-tour="verify-apply"]',
-        title: t('demoTour.verify.apply.title' as never),
-        body: t('demoTour.verify.apply.body' as never),
-        realExam: t('demoTour.verify.apply.real' as never),
-        placement: 'top',
-      },
-      {
-        id: 'mypage',
-        target: '[data-tour="verify-mypage"]',
-        title: t('demoTour.verify.mypage.title' as never),
-        body: t('demoTour.verify.mypage.body' as never),
-        placement: 'top',
-      },
-      {
-        id: 'help',
-        target: '[data-tour="site-guide-fab"]',
-        title: t('demoTour.verify.help.title' as never),
-        body: t('demoTour.verify.help.body' as never),
-        placement: 'top',
-      },
-    ],
-    [t],
-  );
 
   const recordViolation = useCallback(
     (kind: ViolationRecord['kind'], preCapturedB64?: string | null) => {
@@ -1035,48 +789,6 @@ export default function DemoPage() {
 
   const fsExitActive = live && startedAt != null && !result && fullscreen.state.exited;
 
-  const replayCurrentDemoTour = useCallback(() => {
-    if (result && postStage === 'verify') {
-      setTourForceReplay(true);
-      setVerifyTourOpen(true);
-      return;
-    }
-    if (result && postStage === 'certificate') {
-      setTourForceReplay(true);
-      setCertTourOpen(true);
-      return;
-    }
-    if (result && postStage === 'report') {
-      setTourForceReplay(true);
-      setResultTourOpen(true);
-      return;
-    }
-    if (fsExitActive) {
-      setTourForceReplay(true);
-      setFsExitTourOpen(true);
-      return;
-    }
-    if (startedAt && fullscreen.state.active) {
-      setTourForceReplay(true);
-      setRunnerTourOpen(true);
-      return;
-    }
-    if (startedAt && !fullscreen.state.active) {
-      setTourForceReplay(true);
-      setGateTourOpen(true);
-      return;
-    }
-    replayAllTours();
-  }, [result, postStage, fsExitActive, startedAt, fullscreen.state.active, replayAllTours]);
-
-  const demoHelpFab = (
-    <TourHelpFab
-      onReplay={replayCurrentDemoTour}
-      label={t('siteTour.controls.help' as never)}
-      bottomOffset={live && startedAt != null && !result ? 72 : 20}
-    />
-  );
-
   const display = useDisplayMonitor({
     enabled: !result,
     intervalMs: 5_000,
@@ -1218,70 +930,6 @@ export default function DemoPage() {
         setLoading(false);
       });
   }, [certType, level]);
-
-  // ── Tour auto-triggers ─────────────────────────────────
-  // The intro tour fires once the intro card is on-screen and the paper is loaded.
-  // The runner tour fires once the
-  // user has clicked Start AND fullscreen is active (so the spotlight lands
-  // on the real toolbar). The result tour fires when the report renders.
-  useEffect(() => {
-    if (!paper || startedAt || result) return;
-    if (isTourDone(TOUR_KEY_INTRO) && !tourForceReplay) return;
-    // Wait a frame so the DOM has rendered the picker / start button.
-    const id = window.setTimeout(() => setIntroTourOpen(true), 250);
-    return () => window.clearTimeout(id);
-  }, [paper, startedAt, result, tourForceReplay]);
-
-  useEffect(() => {
-    if (!startedAt || result) return;
-    if (fullscreen.state.active) return;
-    if (fullscreen.state.exited) return;
-    if (isTourDone(TOUR_KEY_GATE) && !tourForceReplay) return;
-    const id = window.setTimeout(() => setGateTourOpen(true), 350);
-    return () => window.clearTimeout(id);
-  }, [startedAt, result, fullscreen.state.active, fullscreen.state.exited, tourForceReplay]);
-
-  useEffect(() => {
-    if (!startedAt || result) return;
-    if (!fullscreen.state.active) return;
-    if (fullscreen.state.exited) return;
-    if (isTourDone(TOUR_KEY_RUNNER) && !tourForceReplay) return;
-    const id = window.setTimeout(() => setRunnerTourOpen(true), 600);
-    return () => window.clearTimeout(id);
-  }, [startedAt, result, fullscreen.state.active, fullscreen.state.exited, tourForceReplay]);
-
-  useEffect(() => {
-    if (!startedAt || result || !live) return;
-    if (!fullscreen.state.exited) {
-      setFsExitTourOpen(false);
-      return;
-    }
-    setRunnerTourOpen(false);
-    if (isTourDone(TOUR_KEY_FS_EXIT) && !tourForceReplay) return;
-    const id = window.setTimeout(() => setFsExitTourOpen(true), 400);
-    return () => window.clearTimeout(id);
-  }, [startedAt, result, live, fullscreen.state.exited, tourForceReplay]);
-
-  useEffect(() => {
-    if (!result || postStage !== 'report') return;
-    if (isTourDone(TOUR_KEY_RESULT) && !tourForceReplay) return;
-    const id = window.setTimeout(() => setResultTourOpen(true), 400);
-    return () => window.clearTimeout(id);
-  }, [result, postStage, tourForceReplay]);
-
-  useEffect(() => {
-    if (!result || postStage !== 'certificate') return;
-    if (isTourDone(TOUR_KEY_CERT) && !tourForceReplay) return;
-    const id = window.setTimeout(() => setCertTourOpen(true), 450);
-    return () => window.clearTimeout(id);
-  }, [result, postStage, tourForceReplay]);
-
-  useEffect(() => {
-    if (!result || postStage !== 'verify') return;
-    if (isTourDone(TOUR_KEY_VERIFY) && !tourForceReplay) return;
-    const id = window.setTimeout(() => setVerifyTourOpen(true), 450);
-    return () => window.clearTimeout(id);
-  }, [result, postStage, tourForceReplay]);
 
   const handleStart = useCallback(async () => {
     // Pre-acquire camera + mic permission BEFORE entering fullscreen.
@@ -1471,18 +1119,6 @@ export default function DemoPage() {
             onContinue={() => setPostStage('verify')}
             onBack={() => setPostStage('report')}
           />
-          <DemoTour
-            open={certTourOpen}
-            steps={certTourSteps}
-            storageKey={TOUR_KEY_CERT}
-            labels={tourLabels}
-            forceOpen={tourForceReplay}
-            onClose={() => {
-              setCertTourOpen(false);
-              setTourForceReplay(false);
-            }}
-          />
-          {demoHelpFab}
         </>
       );
     }
@@ -1499,18 +1135,6 @@ export default function DemoPage() {
             onMyPage={() => navigate('/mypage')}
             onBack={() => setPostStage('certificate')}
           />
-          <DemoTour
-            open={verifyTourOpen}
-            steps={verifyTourSteps}
-            storageKey={TOUR_KEY_VERIFY}
-            labels={tourLabels}
-            forceOpen={tourForceReplay}
-            onClose={() => {
-              setVerifyTourOpen(false);
-              setTourForceReplay(false);
-            }}
-          />
-          {demoHelpFab}
         </>
       );
     }
@@ -1529,18 +1153,6 @@ export default function DemoPage() {
           onIssueCert={() => setPostStage('certificate')}
           onHome={() => navigate('/')}
         />
-        <DemoTour
-          open={resultTourOpen}
-          steps={resultTourSteps}
-          storageKey={TOUR_KEY_RESULT}
-          labels={tourLabels}
-          forceOpen={tourForceReplay}
-          onClose={() => {
-            setResultTourOpen(false);
-            setTourForceReplay(false);
-          }}
-        />
-        {demoHelpFab}
       </>
     );
   }
@@ -1562,7 +1174,7 @@ export default function DemoPage() {
             </button>
 
             <div className={`${EXAM.surface.card} ${EXAM.layout.cardPadding}`}>
-              <div data-tour="intro-picker">
+              <div>
                 <DemoExamPicker certType={certType} level={level} onChange={handleDemoSelection} />
               </div>
               <div
@@ -1643,7 +1255,7 @@ export default function DemoPage() {
                 </ul>
               </div>
 
-              <div data-tour="intro-rules" className={`${EXAM.surface.warningBox} px-[clamp(16px,1.4vw,28px)] py-[clamp(12px,1vw,20px)] mb-[clamp(20px,1.6vw,40px)]`}>
+              <div className={`${EXAM.surface.warningBox} px-[clamp(16px,1.4vw,28px)] py-[clamp(12px,1vw,20px)] mb-[clamp(20px,1.6vw,40px)]`}>
                 <div className={`${EXAM.text.pill} ${EXAM.color.warning} uppercase tracking-wide font-bold mb-1.5`}>
                   {lang === 'ko' ? '감시 규칙 (실제 시험과 동일)' : 'Proctoring rules (same as real exam)'}
                 </div>
@@ -1667,7 +1279,7 @@ export default function DemoPage() {
                 </ul>
               </div>
 
-              <div data-tour="intro-start" className="flex flex-col gap-2.5">
+              <div className="flex flex-col gap-2.5">
                 <button
                   onClick={handleStart}
                   className={`${EXAM.button.primaryLg} ${EXAM.text.buttonLg} w-full!`}
@@ -1683,18 +1295,6 @@ export default function DemoPage() {
             </div>
           </div>
         </main>
-        <DemoTour
-          open={introTourOpen}
-          steps={introTourSteps}
-          storageKey={TOUR_KEY_INTRO}
-          labels={tourLabels}
-          forceOpen={tourForceReplay}
-          onClose={() => {
-            setIntroTourOpen(false);
-            setTourForceReplay(false);
-          }}
-        />
-        {demoHelpFab}
       </div>
     );
   }
@@ -1732,7 +1332,6 @@ export default function DemoPage() {
                   </p>
                   <button
                     type="button"
-                    data-tour="gate-enter"
                     onClick={fullscreen.enterFullscreen}
                     className={`${EXAM.button.primaryLg} ${EXAM.text.buttonLg}`}
                   >
@@ -1748,18 +1347,6 @@ export default function DemoPage() {
             </div>
           </main>
         </div>
-        <DemoTour
-          open={gateTourOpen}
-          steps={gateTourSteps}
-          storageKey={TOUR_KEY_GATE}
-          labels={tourLabels}
-          forceOpen={tourForceReplay}
-          onClose={() => {
-            setGateTourOpen(false);
-            setTourForceReplay(false);
-          }}
-        />
-        {demoHelpFab}
       </>
     );
   }
@@ -1792,7 +1379,7 @@ export default function DemoPage() {
       />
 
       {/* ─── 헤더: Runner 와 동일한 ExamPageHeader. 제한시간/남은시간 우측. ─── */}
-      <div data-tour="runner-timer">
+      <div>
         <ExamPageHeader
           title={` ${certLabel}`}
           limitTimeLabel="제한시간"
@@ -1806,7 +1393,7 @@ export default function DemoPage() {
       <div className="flex-1 min-h-0 flex overflow-hidden">
         <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
           {/* ─── 화면배치 툴바 ─── */}
-          <div data-tour="runner-toolbar">
+          <div>
             <DemoLayoutToolbar
               layout={examLayout}
               onLayoutChange={setExamLayout}
@@ -1826,11 +1413,7 @@ export default function DemoPage() {
           </div>
 
           {/* ─── Body — 문제 카드 영역 ─── */}
-          <main
-            data-tour="runner-question"
-            className="flex-1 min-h-0 flex overflow-hidden bg-[var(--exam-bg)]"
-            style={{ zoom }}
-          >
+          <main className="flex-1 min-h-0 flex overflow-hidden bg-[var(--exam-bg)]" style={{ zoom }}>
             <DemoWrittenView
               questions={paper.questions}
               practicalTasks={paper.practicalTasks}
@@ -1844,7 +1427,7 @@ export default function DemoPage() {
         </div>
 
         {/* 우측 답안표기란 — 전체 높이 고정 컬럼 */}
-        <div data-tour="runner-sheet" className="flex">
+        <div className="flex">
           <DemoAnswerSheetAside
             questions={paper.questions}
             practicalTasks={paper.practicalTasks}
@@ -1860,7 +1443,7 @@ export default function DemoPage() {
       {/* ─── Footer ─── */}
       <footer className="bg-[var(--exam-surface)] border-t text-[13px] border-[var(--exam-border)] flex items-center justify-between gap-4 px-[clamp(16px,2vw,20px)] py-[clamp(8px,0.4vw,8px)] shrink-0">
         {/* 좌측 — 상태 인디케이터 + 홈 (데모 종료 확인 후 이동) */}
-        <div data-tour="runner-violations" className="flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <div className="flex flex-col">
             <span className={`inline-flex items-center gap-1.5 ${EXAM.color.brand}`}>
               <span className="w-2 h-2 rounded-full bg-[var(--exam-accent)] shrink-0" />
@@ -1914,7 +1497,7 @@ export default function DemoPage() {
         </div>
 
         {/* 우측 — 답안제출 */}
-        <div data-tour="runner-submit" className="flex items-center gap-[clamp(8px,0.8vw,16px)] shrink-0">
+        <div className="flex items-center gap-[clamp(8px,0.8vw,16px)] shrink-0">
           <button
             type="button"
             onClick={doSubmit}
@@ -1926,35 +1509,12 @@ export default function DemoPage() {
         </div>
       </footer>
 
-      <DemoTour
-        open={runnerTourOpen && !fsExitActive}
-        steps={runnerTourSteps}
-        storageKey={TOUR_KEY_RUNNER}
-        labels={tourLabels}
-        forceOpen={tourForceReplay}
-        onClose={() => {
-          setRunnerTourOpen(false);
-          setTourForceReplay(false);
-        }}
-      />
-      <DemoTour
-        open={fsExitTourOpen && fsExitActive}
-        steps={fsExitTourSteps}
-        storageKey={TOUR_KEY_FS_EXIT}
-        labels={tourLabels}
-        forceOpen={tourForceReplay}
-        onClose={() => {
-          setFsExitTourOpen(false);
-          setTourForceReplay(false);
-        }}
-      />
       <ExamExitConfirmModal
         open={confirmExitOpen}
         variant="demo"
         onContinue={() => setConfirmExitOpen(false)}
         onExit={handleDemoExitHome}
       />
-      {demoHelpFab}
     </div>
   );
 }

@@ -93,8 +93,31 @@ export function SiteHeader({ active = null, compact = false }: Props) {
     </button>
   );
 
+  const demoNavItem = () => (
+    <div className="relative inline-flex items-center">
+      <button
+        type="button"
+        data-tour="site-nav-demo"
+        onClick={() => navigate('/demo/AXIS/L3')}
+        className={`${navItemClass('cbt')} relative bg-transparent border-none cursor-pointer`}
+        style={{ color: INK, fontFamily: 'inherit' }}
+      >
+        {t('gnb.cbtNav')}
+        <SpeechBubbleBadge className="absolute left-1/2 top-0 z-[1100] -translate-x-[80%]">
+          {t('gnb.demoBadge')}
+        </SpeechBubbleBadge>
+      </button>
+    </div>
+  );
+
   return (
     <>
+      <style>{`
+        @keyframes axis-demo-badge-bob {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(2px); }
+        }
+      `}</style>
       <header
         className="fixed top-0 left-0 right-0 z-[1000]"
         style={{
@@ -104,7 +127,7 @@ export function SiteHeader({ active = null, compact = false }: Props) {
         }}
       >
         <div
-          className="mx-auto flex items-center justify-between gap-2 px-4 sm:px-6 lg:px-8 xl:px-10"
+          className="mx-auto flex items-center justify-between gap-2 px-5 sm:px-6 lg:px-8 xl:px-10"
           style={{ maxWidth: 1280, height: 80 }}
         >
           {/* Logo */}
@@ -173,7 +196,7 @@ export function SiteHeader({ active = null, compact = false }: Props) {
               {authNavItem('apply', t('gnb.applyNav'), '/apply', 'site-nav-apply')}
               {navItem('announce', t('gnb.announce'), '/results')}
               {navItem('verify', t('gnb.verify'), '/verify-cert')}
-              {authNavItem('cbt', t('gnb.cbtNav'), '/demo/AXIS/L3', 'site-nav-demo')}
+              {demoNavItem()}
 
               {/* 고객센터 dropdown */}
               <div
@@ -342,7 +365,10 @@ export function SiteHeader({ active = null, compact = false }: Props) {
             <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { authNavigate(navigate, '/apply'); setMobileOpen(false); }}>{t('gnb.applyNav')}</button>
             <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { navigate('/results'); setMobileOpen(false); }}>{t('gnb.announce')}</button>
             <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { navigate('/verify-cert'); setMobileOpen(false); }}>{t('gnb.verify')}</button>
-            <button type="button" className="flex items-center w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { authNavigate(navigate, '/demo/AXIS/L3'); setMobileOpen(false); }}>{t('gnb.cbtNav')}</button>
+            <button type="button" className="flex items-center justify-between gap-3 w-full min-h-[52px] p-0 text-left text-[18px] font-semibold bg-transparent border-none cursor-pointer" style={{ color: INK, fontFamily: 'inherit', borderBottom: '1px solid #F2F2F2' }} onClick={() => { navigate('/demo/AXIS/L3'); setMobileOpen(false); }}>
+              <span>{t('gnb.cbtNav')}</span>
+              <SpeechBubbleBadge>{t('gnb.demoBadge')}</SpeechBubbleBadge>
+            </button>
             <Link to="/qna" className="flex items-center min-h-[52px] text-[18px] font-semibold no-underline" style={{ color: INK }} onClick={() => setMobileOpen(false)}>{t('gnb.support')}</Link>
 
             {/* Auth section */}
@@ -446,6 +472,27 @@ function DropdownItem({
         <div className="text-[13px] mt-1 leading-[1.55]" style={{ color: MUTED }}>{desc}</div>
       </div>
     </Link>
+  );
+}
+
+function SpeechBubbleBadge({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <span
+      className={`pointer-events-none inline-flex items-center relative rounded-2xl bg-blue-500 px-3 py-2 text-[11px] font-bold leading-none text-white whitespace-nowrap ${className}`}
+      style={{ animation: 'axis-demo-badge-bob 1.6s ease-in-out infinite' }}
+    >
+      {children}
+      <span
+        className="absolute left-[1.3px] top-1/2 h-2.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-blue-500"
+        aria-hidden="true"
+      />
+    </span>
   );
 }
 

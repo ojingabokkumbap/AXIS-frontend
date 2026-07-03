@@ -235,7 +235,7 @@ function ApplyPageInner() {
         subtitle={t('apply.subtitle')}
       />
 
-      <main className="flex-1 w-full mx-auto max-w-[1280px] px-4 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-16">
+      <main className="flex-1 w-full mx-auto max-w-[1280px] px-5 sm:px-6 lg:px-10 py-8 sm:py-10 lg:py-16">
         {loggedIn && (
           <div data-tour="apply-steps">
             <StepIndicator current={step} />

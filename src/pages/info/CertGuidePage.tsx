@@ -328,7 +328,7 @@ export default function CertGuidePage() {
         onChange={(k) => setActiveTab(k)}
       />
 
-      <main ref={revealRef} className="mx-auto py-16 px-8" style={{ maxWidth: 'var(--spacing-content-w)' }}>
+      <main ref={revealRef} className="mx-auto py-16 px-5 sm:px-6 lg:px-8" style={{ maxWidth: 'var(--spacing-content-w)' }}>
 
         {/* Overview */}
         <section className="mb-14 reveal">
@@ -508,7 +508,7 @@ export default function CertGuidePage() {
         {/* CTA banner */}
         <section className="reveal">
           <div
-            className="relative overflow-hidden rounded-[20px] px-7 py-9 lg:px-12 lg:py-12"
+            className="relative overflow-hidden rounded-2xl px-5 py-8 sm:rounded-[20px] sm:px-7 sm:py-9 lg:px-12 lg:py-12"
             style={{
               backgroundImage: `url(${ctaBg})`,
               backgroundSize: 'cover',
@@ -516,25 +516,25 @@ export default function CertGuidePage() {
             }}
           >
             <div className="absolute inset-0 bg-blue-800/50" aria-hidden="true" />
-            <div className="relative mx-auto text-center">
-              <p className="text-[26px] lg:text-[34px] font-semibold leading-[1.3] tracking-[-0.025em] text-white">
+            <div className="relative mx-auto max-w-2xl text-center">
+              <p className="text-[19px] sm:text-[26px] lg:text-[34px] font-semibold leading-[1.4] sm:leading-[1.3] tracking-[-0.025em] text-white break-keep">
                 {t('certGuide.cta.line1' as never)}<br />
                 {t('certGuide.cta.line2' as never)}
               </p>
-              <p className={`mt-4 ${T_BODY} text-blue-100`}>
+              <p className="mt-2.5 sm:mt-4 text-[14px] sm:text-[16px] lg:text-[19px] leading-[1.6] sm:leading-[1.85] tracking-[-0.005em] text-blue-100 break-keep">
                 {t('certGuide.cta.sub' as never)}
               </p>
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3">
                 <Link
                   to="/apply"
-                  className="inline-flex h-12 items-center justify-center rounded-full bg-white px-7 text-[16px] font-semibold text-blue-700 transition-colors hover:bg-blue-50"
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center rounded-full bg-white px-6 sm:px-7 text-[15px] sm:text-[16px] font-semibold text-blue-700 transition-colors hover:bg-blue-50 touch-manipulation"
                 >
                   {t('certGuide.cta.apply' as never)}
                 </Link>
                 <button
                   type="button"
                   onClick={() => setPreviewPdfId('axis-exam-info-b2c')}
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/85 bg-transparent px-7 text-[16px] font-semibold !text-white hover:!text-white"
+                  className="inline-flex min-h-[48px] w-full sm:w-auto items-center justify-center rounded-full border border-white/85 bg-transparent px-6 sm:px-7 text-[15px] sm:text-[16px] font-semibold !text-white hover:!text-white touch-manipulation"
                 >
                   {t('certGuide.cta.info' as never)}
                 </button>

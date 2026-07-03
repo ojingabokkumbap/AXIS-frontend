@@ -26,7 +26,7 @@ export function PageTabs<K extends string>({ tabs, active, onChange, stickyOffse
       style={{ borderBottom: `1px solid ${BORDER}` }}
     >
       <div
-        className="mx-auto flex items-center gap-2 sm:gap-3 lg:gap-5 px-4 sm:px-6 lg:px-10 py-3 overflow-x-auto overflow-y-visible [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="mx-auto flex items-center gap-2 sm:gap-3 lg:gap-5 px-5 sm:px-6 lg:px-10 py-3 overflow-x-auto overflow-y-visible [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{ maxWidth: 1280 }}
       >
         {tabs.map((tab) => {
