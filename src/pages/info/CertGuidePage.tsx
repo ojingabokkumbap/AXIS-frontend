@@ -387,7 +387,7 @@ export default function CertGuidePage() {
         {/* Level table */}
         <section className="mb-14 reveal">
           <h2 className={`${H_CARD} mb-4`} style={{ color: INK_900 }}>{t('certGuide.levels.title' as never)}</h2>
-          <div className={TABLE_WRAP}>
+          <div className={`${TABLE_WRAP} hidden md:block`}>
             <table className="data-table" style={{ minWidth: 500 }}>
               <thead>
                 <tr>
@@ -410,6 +410,35 @@ export default function CertGuidePage() {
                 ))}
               </tbody>
             </table>
+          </div>
+          <div className="md:hidden mt-4 flex flex-col gap-3 break-keep">
+            {data.levels.map((row) => (
+              <div key={row.level} className="rounded-lg border border-[#e5e7eb] p-4">
+                <strong
+                  className="block text-[17px] font-semibold mb-3 pb-2 border-b border-[#f0f0f0]"
+                  style={{ color: INK_900 }}
+                >
+                  {row.level}
+                </strong>
+                <dl className="flex flex-col gap-2">
+                  {[
+                    { k: t('certGuide.levels.th.target' as never), v: row.target },
+                    { k: t('certGuide.levels.th.questions' as never), v: row.questions },
+                    { k: t('certGuide.levels.th.time' as never), v: row.time },
+                    { k: t('certGuide.levels.th.passing' as never), v: row.passing },
+                  ].map((field) => (
+                    <div key={field.k} className="flex gap-3">
+                      <dt className="shrink-0 w-[78px] text-[13px] font-medium pt-0.5" style={{ color: '#737373' }}>
+                        {field.k}
+                      </dt>
+                      <dd className="flex-1 min-w-0 text-[15px] leading-[1.6] m-0" style={{ color: GRAY_500 }}>
+                        {field.v}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+            ))}
           </div>
           {data.levelsFootnote && (
             <p className={`mt-3 ${T_SUB}`} style={{ color: GRAY_500 }}>{data.levelsFootnote}</p>
